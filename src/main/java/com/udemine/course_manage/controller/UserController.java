@@ -34,7 +34,6 @@ import java.util.List;
         }
 
         @DeleteMapping("/{id}")
-
         public String deleteUser(@PathVariable Integer id) {
             userService.deleteUser(id);
             return "Deleted user with id: " + id;

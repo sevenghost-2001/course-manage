@@ -25,7 +25,7 @@ public class CourseService {
             throw new AppException(ErrorCode.TITLE_EXISTED);
         }
 
-        course.setCourse_id(request.getCategory_id());
+        course.setTitle(request.getTitle());
         course.setDescription(request.getDescription());
         course.setCategory_id(request.getCategory_id());
         course.setInstructor_id(request.getInstructor_id());
@@ -43,6 +43,7 @@ public class CourseService {
             throw new RuntimeException("Course not found with by "+id);
         }
         Course course = existingCourseOpt.get();
+        course.setTitle(request.getTitle());
         course.setCourse_id(request.getCategory_id());
         course.setDescription(request.getDescription());
         course.setCategory_id(request.getCategory_id());

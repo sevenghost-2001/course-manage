@@ -13,7 +13,7 @@ public class Course {
     @Column(name = "course_id")
     private int course_id;
 
-    @Column(nullable = false, length = 255, unique = true)
+    @Column(nullable = false, unique = true)
     private String title;
 
     @Column(columnDefinition = "TEXT")

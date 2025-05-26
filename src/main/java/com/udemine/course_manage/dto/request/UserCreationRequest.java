@@ -1,12 +1,14 @@
 package com.udemine.course_manage.dto.request;
 
+import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.Size;
 
 public class UserCreationRequest {
-    @Size(min = 3, message = "Name must be at least 3 characters")
+    @Size(min = 3, message = "USERNAME_INVALID")
     private String name;
+
     private String email;
-    @Size(min = 8, message = "Password must be at least 8 characters")
+    @Size(min = 8, message = "PASSWORD_INVALID")
     private String password;
     private String role; // sẽ convert thành Enum Role trong service
     private Boolean isInstructor;

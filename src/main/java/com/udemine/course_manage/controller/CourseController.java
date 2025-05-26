@@ -17,7 +17,7 @@ public class CourseController{
     CourseService courseService;
 
     @GetMapping
-    ApiResponse<List<Course>> getAllUsers(){
+    ApiResponse<List<Course>> getAllCourses(){
         ApiResponse<List<Course>> apiResponse = new ApiResponse<>();
         apiResponse.setResult(courseService.getAllCourses());
         return apiResponse;
