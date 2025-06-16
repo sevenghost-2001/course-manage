@@ -13,7 +13,6 @@ public interface UserMapper {
     @Mapping(target = "role", expression = "java(com.udemine.course_manage.entity.Role.valueOf(request.getRole().toLowerCase()))")
     @Mapping(target = "isInstructor", expression = "java(request.getIsInstructor() != null ? request.getIsInstructor() : false)")
     User toUser(UserCreationRequest request);
-    @Mapping(target = "createAt",ignore = true)
     @Mapping(target = "role",expression = "java(com.udemine.course_manage.entity.Role.valueOf(request.getRole().toLowerCase()))")
     @Mapping(target = "isInstructor", expression = "java(request.getIsInstructor() != null ? request.getIsInstructor() : false)")
     void updateUser(@MappingTarget User user, UserCreationRequest request);

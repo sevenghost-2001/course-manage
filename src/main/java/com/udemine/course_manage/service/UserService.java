@@ -24,14 +24,25 @@ public class UserService {
     public User createUser(UserCreationRequest request){
 //        User user = new User();
 
-        if(userRepository.existsByname(request.getName()) || userRepository.existsByemail(request.getEmail())){
-            throw new AppException(ErrorCode.INFORMATION_EXISTED);
+        if(userRepository.existsByname(request.getName())){
+//            throw new RuntimeException(ErrorCode.USER_EXISTED);
+            throw new  AppException(ErrorCode.USER_EXISTED);
         }
-
+        if(userRepository.existsByemail(request.getEmail())){
+            throw new AppException(ErrorCode.EMAIL_EXISTED);
+        }
+//        UserCreationRequest request1 = new UserCreationRequest();
+//        UserCreationRequest request2 = new UserCreationRequest("A","a@gmail.com","123456","student",true);
+//        UserCreationRequest request3 = new UserCreationRequest().builder()
+//                .name("A")
+//                .password("123456")
+//                .role("instructor")
+//                .build();
 //        user.setName(request.getName());
 //        user.setEmail(request.getEmail());
 //        user.setPassword(request.getPassword());
 //        user.setRole(Role.valueOf(request.getRole().toLowerCase()));
+
 //        user.setInstructor(request.getIsInstructor() != null ? request.getIsInstructor() : false);
 //        user.onCreate();
         User user = userMapper.toUser(request);

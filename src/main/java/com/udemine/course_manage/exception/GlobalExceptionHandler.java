@@ -15,7 +15,10 @@ public class GlobalExceptionHandler {
         apiResponse.setMessage(ErrorCode.UNCATEGORIZED_EXCEPTION.getMessage());
         return ResponseEntity.badRequest().body(apiResponse);
     }
-
+//    @ExceptionHandler(value = RuntimeException.class)
+//    ResponseEntity<String>handlingRuntimeException(RuntimeException exception){
+//        return ResponseEntity.badRequest().body(exception.getMessage());
+//    }
     @ExceptionHandler(value = AppException.class)
     ResponseEntity<ApiResponse>handlingRuntimeException(AppException exception){
         ErrorCode errorCode = exception.getErrorCode();
@@ -27,7 +30,7 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(value = MethodArgumentNotValidException.class)
     ResponseEntity<ApiResponse>handlingRuntimeException(MethodArgumentNotValidException exception){
-        String enumKey = exception.getFieldError().getDefaultMessage();
+        String enumKey = exception.getFieldError().getDefaultMessage();//"USERNAME_INVALID"
         //Trường hợp key bị sai
         ErrorCode errorCode = ErrorCode.UNCATEGORIZED_EXCEPTION;
         try {
