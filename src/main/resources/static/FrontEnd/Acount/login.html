@@ -1,0 +1,73 @@
+<!-- login.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Course Platform - Login</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css" rel="stylesheet">
+  <link href="../Assets/Css/style.css" rel="stylesheet">
+</head>
+<body>
+     <div class="floating-bubbles">
+    <span style="left: 10%; width: 15px; height: 15px;"></span>
+    <span style="left: 25%; width: 20px; height: 20px;"></span>
+    <span style="left: 40%; width: 10px; height: 10px;"></span>
+    <span style="left: 60%; width: 25px; height: 25px;"></span>
+    <span style="left: 75%; width: 15px; height: 15px;"></span>
+    <span style="left: 90%; width: 12px; height: 12px;"></span>
+  </div>
+  <div class="login-box">
+    <div class="logo">
+      <img src="../Assets/Images/logo.jpg">
+    </div>
+    <h2>Login</h2>
+    <form id="loginForm">
+      <div class="mb-3">
+        <label for="email" class="form-label">Email</label>
+        <input type="email" class="form-control" id="email" placeholder="Enter email" required>
+      </div>
+      <div class="mb-3">
+        <label for="password" class="form-label">Password</label>
+        <input type="password" class="form-control" id="password" placeholder="Enter password" required>
+      </div>
+      <div class="form-check mb-3">
+        <input class="form-check-input" type="checkbox" id="rememberMe">
+        <label class="form-check-label" for="rememberMe">
+          Remember me
+        </label>
+      </div>
+      <button type="submit" class="btn btn-primary w-100">Login</button>
+      <p class="text-center mt-3">Don't have an account? <a href="register.html">Register</a></p>
+    </form>
+    <div class="social-login mt-3">
+      <button class="btn btn-outline-danger">Login with Google</button>
+      <button class="btn btn-outline-primary">Login with Facebook</button>
+    </div>
+  </div>
+  
+ <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+  <script>
+    document.getElementById("loginForm").addEventListener("submit", function(e) {
+      e.preventDefault();
+      const email = document.getElementById("email").value;
+      const password = document.getElementById("password").value;
+      const rememberMe = document.getElementById("rememberMe").checked;
+
+      // Replace with actual login API call
+      alert(`Login request sent for: ${email}, Remember Me: ${rememberMe}`);
+      window.location.href = "dashboard.html";
+    });
+
+    // Optional: Add floating bubbles animation position reset
+    const bubbles = document.querySelectorAll('.floating-bubbles span');
+    bubbles.forEach((bubble, i) => {
+      const delay = Math.random() * 10;
+      const duration = 10 + Math.random() * 10;
+      bubble.style.animationDelay = `${delay}s`;
+      bubble.style.animationDuration = `${duration}s`;
+    });
+  </script>
+</body>
+</html>
