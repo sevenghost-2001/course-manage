@@ -16,23 +16,27 @@ import java.time.LocalDateTime;
 public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "user_id")
      int id;
-    @Column(nullable = false)
+    @Column(name = "fullname", nullable = false)
      String name;
     @Column(nullable = false, unique = true)
      String email;
-    @Column(nullable = false)
+    @Column(name = "passwords", nullable = false)
      String password;
-    @Enumerated(EnumType.STRING)
     @Column(nullable = false)
-     Role role;
+     String role;
     @Column(name = "is_instructor", nullable = false)
      Boolean isInstructor = false;
-    @Column(name = "created_at", updatable = false)
-     LocalDateTime createAt;
+
+    @Column(updatable = false)
+     LocalDateTime updated_at;
+    String biography;
+    int ranks;
+    int levels;
+
+
     @PrePersist
     public void onCreate(){
-        this.createAt = LocalDateTime.now();
+        this.updated_at = LocalDateTime.now();
     }
 }

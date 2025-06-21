@@ -10,10 +10,10 @@ import org.mapstruct.ReportingPolicy;
 
 @Mapper(componentModel = "spring",unmappedTargetPolicy = ReportingPolicy.IGNORE)
 public interface UserMapper {
-    @Mapping(target = "role", expression = "java(com.udemine.course_manage.entity.Role.valueOf(request.getRole().toLowerCase()))")
+    @Mapping(target = "role")
     @Mapping(target = "isInstructor", expression = "java(request.getIsInstructor() != null ? request.getIsInstructor() : false)")
     User toUser(UserCreationRequest request);
-    @Mapping(target = "role",expression = "java(com.udemine.course_manage.entity.Role.valueOf(request.getRole().toLowerCase()))")
+    @Mapping(target = "role")
     @Mapping(target = "isInstructor", expression = "java(request.getIsInstructor() != null ? request.getIsInstructor() : false)")
     void updateUser(@MappingTarget User user, UserCreationRequest request);
 }

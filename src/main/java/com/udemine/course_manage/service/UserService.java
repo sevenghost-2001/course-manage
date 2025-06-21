@@ -1,7 +1,6 @@
 package com.udemine.course_manage.service;
 
 import com.udemine.course_manage.dto.request.UserCreationRequest;
-import com.udemine.course_manage.entity.Role;
 import com.udemine.course_manage.entity.User;
 import com.udemine.course_manage.exception.AppException;
 import com.udemine.course_manage.exception.ErrorCode;
