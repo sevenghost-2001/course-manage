@@ -13,11 +13,14 @@ import lombok.experimental.FieldDefaults;
 public class UserCreationRequest {
     @Size(min = 3, message = "USERNAME_INVALID")
     String name;
-     String email;
+    String email;
     @Size(min = 8, message = "PASSWORD_INVALID")
-     String password;
-     String role; // sẽ convert thành Enum Role trong service
-     Boolean isInstructor;
+    String password;
+    String role; // sẽ convert thành Enum Role trong service
+    Boolean isInstructor;
+    String biography;
+    int ranks;
+    int levels;
 
 }
 
