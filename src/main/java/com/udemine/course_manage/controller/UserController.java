@@ -17,8 +17,11 @@ import java.util.List;
         private UserService userService;
 
         @GetMapping
-        public List<User> getAllUsers(){
-            return userService.getAllUsers();
+        public ApiResponse<List<User>> getAllUsers(){
+
+            ApiResponse<List<User>> apiResponse = new ApiResponse<>();
+            apiResponse.setResult(userService.getAllUsers());
+            return apiResponse;
         }
 
         @PostMapping
