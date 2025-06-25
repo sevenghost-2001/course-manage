@@ -8,6 +8,8 @@ import com.udemine.course_manage.mapper.UserMapper;
 import com.udemine.course_manage.repository.UserRepository;
 import lombok.Builder;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -45,6 +47,10 @@ public class UserService {
 //        user.setInstructor(request.getIsInstructor() != null ? request.getIsInstructor() : false);
 //        user.onCreate();
         User user = userMapper.toUser(request);
+        // Strength/ thuật toán càng phức tạp thì sẽ càng làm chậm hệ thống , mặc định độ phức tạp sẽ là 10
+        PasswordEncoder passwordEncoder = new BCryptPasswordEncoder(10);
+        //Gọi hàm encode để thực hiện mã hóa
+        user.setPassword(passwordEncoder.encode(request.getPassword()));
         return  userRepository.save(user);
     }
 
