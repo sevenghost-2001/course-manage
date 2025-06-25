@@ -12,7 +12,10 @@ public enum ErrorCode {
     USER_NOT_EXISTED(1008,"User not existed"),
     COURSE_NOT_FOUND(1010,"course not found"),
     ROLE_EXISTED(1009, "Role existed"),
-    CATEGORY_NOT_FOUND(1011,"Category not found");
+    CATEGORY_NOT_FOUND(1011,"Category not found"),
+    CODE_EXISTED(1012,"Code existed"),
+    COURSE_DISCOUNT_NOT_FOUND(1013,"course discount not found"),
+    DELETE_DONE(1014,"Delete done");
 
     ErrorCode(int code, String message) {
         this.code = code;

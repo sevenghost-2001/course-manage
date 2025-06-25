@@ -31,5 +31,5 @@ public class Course {
      BigDecimal cost;
     @ManyToOne
     @JoinColumn(name = "id_category", nullable = false)
-    private Category category; // <-- Đây là chỗ đặt @ManyToOne
+    Category category; // <-- Đây là chỗ đặt @ManyToOne
 }
