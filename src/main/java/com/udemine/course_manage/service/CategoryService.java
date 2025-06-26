@@ -19,7 +19,7 @@ public class CategoryService {
     public Category createCategory(CategoryCreationRequest request){
         Category category = new Category();
         if(categoryRepository.existsByname(request.getName())){
-            throw new AppException(ErrorCode.NAME_EXISTED);
+            throw new AppException(ErrorCode.CATEGORY_EXISTED);
         }
         category.setName(request.getName());
         category.setDescription(request.getDescription());
@@ -30,7 +30,7 @@ public class CategoryService {
     public Category updateCategory(Integer id, CategoryCreationRequest request){
         Optional<Category> existingCategoryOpt = categoryRepository.findById(id);
         if(existingCategoryOpt.isEmpty()){
-            throw new RuntimeException("Category not found with by "+id);
+            throw new AppException(ErrorCode.CATEGORY_NOT_FOUND);
         }
         Category category = existingCategoryOpt.get();
         category.setName(request.getName());

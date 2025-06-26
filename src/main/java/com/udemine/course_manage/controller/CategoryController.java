@@ -3,6 +3,8 @@ package com.udemine.course_manage.controller;
 import com.udemine.course_manage.dto.request.ApiResponse;
 import com.udemine.course_manage.dto.request.CategoryCreationRequest;
 import com.udemine.course_manage.entity.Category;
+import com.udemine.course_manage.exception.AppException;
+import com.udemine.course_manage.exception.ErrorCode;
 import com.udemine.course_manage.service.CategoryService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -38,9 +40,11 @@ public class CategoryController {
     }
 
     @DeleteMapping("/{id}")
-    public String deleteCategory(@PathVariable Integer id){
+    ApiResponse<AppException> deleteCategory(@PathVariable int id) {
+        ApiResponse<AppException> apiResponse = new ApiResponse<>();
         categoryService.deleteCategory(id);
-        return "Deleted with by id "+id;
+        AppException appException = new AppException(ErrorCode.DELETE_DONE);
+        apiResponse.setResult(appException);
+        return apiResponse;
     }
-
 }
