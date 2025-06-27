@@ -16,7 +16,8 @@ public enum ErrorCode {
     CODE_EXISTED(1012,"Code existed"),
     COURSE_DISCOUNT_NOT_FOUND(1013,"course discount not found"),
     DELETE_DONE(1014,"Delete done"),
-    CATEGORY_EXISTED(1015,"Category existed");
+    CATEGORY_EXISTED(1015,"Category existed"),
+    REVIEW_NOT_FOUND(1016,"review not found");
 
     ErrorCode(int code, String message) {
         this.code = code;

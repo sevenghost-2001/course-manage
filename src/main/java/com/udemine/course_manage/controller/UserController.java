@@ -3,6 +3,7 @@ package com.udemine.course_manage.controller;
 import com.udemine.course_manage.dto.request.ApiResponse;
 import com.udemine.course_manage.dto.request.UserCreationRequest;
 import com.udemine.course_manage.entity.User;
+import com.udemine.course_manage.exception.ErrorCode;
 import com.udemine.course_manage.service.UserService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -37,8 +38,11 @@ import java.util.List;
         }
 
         @DeleteMapping("/{id}")
-        public String deleteUser(@PathVariable Integer id) {
+        public ApiResponse<String> deleteUser(@PathVariable Integer id) {
             userService.deleteUser(id);
-            return "Deleted user with id: " + id;
+            ApiResponse<String> apiResponse = new ApiResponse<>();
+            apiResponse.setCode(ErrorCode.DELETE_DONE.getCode());
+            apiResponse.setResult(ErrorCode.DELETE_DONE.getMessage());
+            return apiResponse;
         }
     }

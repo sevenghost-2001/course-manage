@@ -4,6 +4,7 @@ package com.udemine.course_manage.controller;
 import com.udemine.course_manage.dto.request.ApiResponse;
 import com.udemine.course_manage.dto.request.RoleCreationRequest;
 import com.udemine.course_manage.entity.Role;
+import com.udemine.course_manage.exception.ErrorCode;
 import com.udemine.course_manage.service.RoleService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -35,8 +36,11 @@ public class RoleController {
     }
 
     @DeleteMapping("/{id}")
-    public String deleteRole(@PathVariable Integer id) {
+    public ApiResponse<String> deleteRole(@PathVariable Integer id) {
         roleService.deleteRole(id);
-        return "Deleted role with id: " + id;
+        ApiResponse<String> apiResponse = new ApiResponse<>();
+        apiResponse.setCode(ErrorCode.DELETE_DONE.getCode());
+        apiResponse.setResult(ErrorCode.DELETE_DONE.getMessage());
+        return apiResponse;
     }
 }

@@ -40,11 +40,12 @@ public class CategoryController {
     }
 
     @DeleteMapping("/{id}")
-    ApiResponse<AppException> deleteCategory(@PathVariable int id) {
-        ApiResponse<AppException> apiResponse = new ApiResponse<>();
+    ApiResponse<String> deleteCategory(@PathVariable int id) {
         categoryService.deleteCategory(id);
-        AppException appException = new AppException(ErrorCode.DELETE_DONE);
-        apiResponse.setResult(appException);
+
+        ApiResponse<String> apiResponse = new ApiResponse<>();
+        apiResponse.setCode(ErrorCode.DELETE_DONE.getCode());
+        apiResponse.setResult(ErrorCode.DELETE_DONE.getMessage());
         return apiResponse;
     }
 }
