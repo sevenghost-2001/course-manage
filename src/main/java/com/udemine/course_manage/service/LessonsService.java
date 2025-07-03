@@ -2,6 +2,7 @@ package com.udemine.course_manage.service;
 
 import com.udemine.course_manage.dto.request.LessonsCreatonRequest;
 import com.udemine.course_manage.entity.Lessons;
+import com.udemine.course_manage.entity.Module;
 import com.udemine.course_manage.exception.AppException;
 import com.udemine.course_manage.exception.ErrorCode;
 import com.udemine.course_manage.mapper.LessonsMapper;
@@ -50,6 +51,12 @@ public class LessonsService {
         lessons.setModule(module);
         return lessonRepository.save(lessons);
 
+    }
+    public void deleteLesson(int id){
+        if(!lessonRepository.existsById(id)){
+            throw new AppException(ErrorCode.LESSONS_NOT_EXIST);
+        }
+        lessonRepository.deleteById(id);
     }
 
 
