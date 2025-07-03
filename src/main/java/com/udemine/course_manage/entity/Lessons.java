@@ -20,12 +20,14 @@ public class Lessons {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     int id;
     String title;
-    String video_url;
+    @Column(name = "video_url")
+    String videoUrl;
     double duration;
-    double watch_duration;
+    @Column(name = "watch_duration")
+    double watchDuration;
     LocalDateTime completed_at;
     @ManyToOne
-    @JoinColumn(name = "id_modules", nullable = false)
+    @JoinColumn(name = "id_module", nullable = false)
     @JsonIgnore
     Module module;
 

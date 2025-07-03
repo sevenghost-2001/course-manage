@@ -9,11 +9,9 @@ import lombok.experimental.FieldDefaults;
 @Builder
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class LessonsCreatonRequest {
-    int id;
     String title;
     String video_url;
     double duration;
     double watch_duration;
     int id_module;
-
 }
