@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Eduverse - Learn from Experts</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link rel="stylesheet" href="Assets/Css/index.css">
+  <style>
+    .carousel-item img {
+      max-height: 500px;
+      object-fit: cover;
+    }
+  </style>
+</head>
+<body>
+
+<nav class="navbar navbar-expand-lg navbar-light bg-white shadow-sm sticky-top">
+  <div class="container">
+    <a class="navbar-brand d-flex align-items-center" href="index.html">
+        <img src="Assets/Images/logo.jpg" alt="Eduverse Logo" class="img-fluid" style="height: 40px;">
+    </a>
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
+        aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarNav">
+      <ul class="navbar-nav ms-auto">
+       <li class="nav-item"><a class="nav-link" href="../FrontEnd/Views/Users/about.html">About Us</a></li>
+        <li class="nav-item"><a class="nav-link" href="../FrontEnd/Views/Users/contact.html">Contact</a></li>
+        <li class="nav-item"><a class="nav-link" href="../FrontEnd/Views/Users/help.html">Help</a></li>
+        <li class="nav-item"><a class="nav-link" href="../FrontEnd/Views/Users/categories.html">Categories</a></li>
+        <li class="nav-item"><a class="nav-link" href="#">Courses</a></li>
+        <li class="nav-item"><a class="nav-link" href="#">Become an Instructor</a></li>
+        <li class="nav-item"><a class="btn btn-outline-primary" href="Account/login.html">Log In</a></li>
+        <li class="nav-item"><a class="btn btn-primary ms-2" href="Account/register.html">Sign Up</a></li>
+      </ul>
+    </div>
+  </div>
+</nav>
+
+<!-- Carousel Section -->
+<div id="mainCarousel" class="carousel slide" data-bs-ride="carousel" data-bs-interval="5000">
+  <div class="carousel-inner">
+    <div class="carousel-item active">
+      <img src="Assets/Images/slide1.png" class="d-block w-100" alt="Slide 1">
+      <div class="carousel-caption d-none d-md-block">
+        <h5>Learning that gets you</h5>
+        <p>Skills for your present (and your future). Get started with us.</p>
+      </div>
+    </div>
+    <div class="carousel-item">
+      <img src="Assets/Images/slide2.png" class="d-block w-100" alt="Slide 2">
+      <div class="carousel-caption d-none d-md-block">
+        <h5>Skills that drive you forward</h5>
+        <p>Get the skills to achieve goals and stay competitive.</p>
+      </div>
+    </div>
+  </div>
+  <button class="carousel-control-prev" type="button" data-bs-target="#mainCarousel" data-bs-slide="prev">
+    <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+    <span class="visually-hidden">Previous</span>
+  </button>
+  <button class="carousel-control-next" type="button" data-bs-target="#mainCarousel" data-bs-slide="next">
+    <span class="carousel-control-next-icon" aria-hidden="true"></span>
+    <span class="visually-hidden">Next</span>
+  </button>
+</div>
+
+<header class="hero text-center py-5">
+  <div class="container">
+    <h1>Expand your career opportunities with Eduverse</h1>
+    <p class="lead mt-3">Learn in-demand skills with our expert-led courses</p>
+    <form class="d-flex justify-content-center mt-4">
+      <input class="form-control w-50" type="search" placeholder="Search for anything...">
+      <button class="btn btn-dark ms-2" type="submit">Search</button>
+    </form>
+  </div>
+</header>
+
+<section class="py-5">
+  <div class="container">
+    <h2 class="mb-4">Top Categories</h2>
+    <div class="d-flex flex-wrap">
+      <button class="btn btn-outline-secondary category-btn">Development</button>
+      <button class="btn btn-outline-secondary category-btn">Business</button>
+      <button class="btn btn-outline-secondary category-btn">Finance & Accounting</button>
+      <button class="btn btn-outline-secondary category-btn">IT & Software</button>
+      <button class="btn btn-outline-secondary category-btn">Design</button>
+      <button class="btn btn-outline-secondary category-btn">Marketing</button>
+    </div>
+  </div>
+</section>
+
+<section class="py-5 bg-light">
+  <div class="container">
+    <h2 class="mb-4">Popular Courses</h2>
+    <div class="row">
+      <!-- course cards here -->
+    </div>
+  </div>
+</section>
+
+<section class="py-5 bg-white">
+  <div class="container">
+    <h2 class="mb-4 text-center">🔥 Hot Deals</h2>
+    <div class="row">
+      <div class="col-md-4">
+        <div class="card">
+          <img src="https://via.placeholder.com/350x200" class="card-img-top" alt="">
+          <div class="card-body">
+            <h5 class="card-title">React Full Guide</h5>
+            <p class="card-text">Now only <strong>$9.99</strong> - Limited time offer!</p>
+          </div>
+        </div>
+      </div>
+      <!-- more deals -->
+    </div>
+  </div>
+</section>
+
+<section class="py-5 bg-light">
+  <div class="container">
+    <h2 class="mb-4 text-center">💡 Featured Courses</h2>
+    <div class="row">
+      <!-- featured courses here -->
+    </div>
+  </div>
+</section>
+
+<section class="py-5">
+  <div class="container">
+    <h2 class="mb-4 text-center">📢 Latest Announcements</h2>
+    <ul class="list-group">
+      <li class="list-group-item">🎉 New AI course launched this week!</li>
+      <li class="list-group-item">🔥 50% off for early bird students!</li>
+      <li class="list-group-item">🎓 Graduation badges now live!</li>
+    </ul>
+  </div>
+</section>
+
+<section class="testimonials py-5 bg-white">
+  <div class="container">
+    <h2 class="mb-5 text-center">What Our Students Say</h2>
+    <div class="row">
+      <!-- testimonials here -->
+    </div>
+  </div>
+</section>
+
+<footer class="footer bg-dark text-light py-4">
+  <div class="container text-center">
+    <p>&copy; 2025 Eduverse. All rights reserved.</p>
+    <p>
+      <a href="#" class="text-light me-3">Privacy Policy</a>
+      <a href="#" class="text-light">Terms</a>
+    </p>
+  </div>
+</footer>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

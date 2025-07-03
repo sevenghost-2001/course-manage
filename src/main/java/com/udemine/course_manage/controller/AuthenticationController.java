@@ -26,6 +26,7 @@ public class AuthenticationController {
         boolean result_request = authenticationService.authenticate(request);
         //Trả về xác thực mật khẩu đúng hay sai trong result
         return ApiResponse.<AuthenticationResponse>builder()
+                .code(1000)
                 .result(AuthenticationResponse.builder()
                         .authenticated(result_request)
                         .build())

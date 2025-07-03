@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Eduverse - Categories</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+  <script>
+    function filterCategories(keyword) {
+      const cards = document.querySelectorAll('.category-card');
+      cards.forEach(card => {
+        const text = card.innerText.toLowerCase();
+        card.style.display = text.includes(keyword.toLowerCase()) ? 'block' : 'none';
+      });
+    }
+  </script>
+  <style>
+    .category-card {
+      transition: transform 0.2s;
+    }
+    .category-card:hover {
+      transform: scale(1.03);
+    }
+    .search-box {
+      max-width: 400px;
+      margin: auto;
+    }
+  </style>
+</head>
+<body>
+  <nav class="navbar navbar-expand-lg navbar-light bg-white shadow-sm sticky-top">
+    <div class="container">
+    <a class="navbar-brand d-flex align-items-center" href="../index.html">
+        <img src="../../Assets/Images/logo.jpg" alt="Eduverse Logo" class="img-fluid" style="height: 40px;">
+    </a>
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
+        aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarNav">
+      <ul class="navbar-nav ms-auto">
+        <li class="nav-item"><a class="nav-link" href="about.html">About Us</a></li>
+        <li class="nav-item"><a class="nav-link" href="contact.html">Contact</a></li>
+        <li class="nav-item"><a class="nav-link" href="help.html">Help</a></li>
+        <li class="nav-item"><a class="nav-link" href="categories.html">Categories</a></li>
+        <li class="nav-item"><a class="nav-link" href="#">Courses</a></li>
+        <li class="nav-item"><a class="nav-link" href="#">Become an Instructor</a></li>
+        <li class="nav-item"><a class="btn btn-outline-primary" href="../../Account/login.html">Log In</a></li>
+        <li class="nav-item"><a class="btn btn-primary ms-2" href="../../Account/register.html">Sign Up</a></li>
+      </ul>
+    </div>
+  </div>
+  </nav>
+
+  <div class="container py-5">
+    <h2 class="text-center mb-4">Explore Course Categories</h2>
+    <div class="search-box mb-4">
+      <input type="text" class="form-control" placeholder="Search categories..." onkeyup="filterCategories(this.value)">
+    </div>
+
+    <div class="row">
+      <div class="col-md-4 mb-4 category-card">
+        <div class="card h-100">
+          <div class="card-body">
+            <h5 class="card-title">Development</h5>
+            <p class="card-text">Web, mobile, and game development courses</p>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-4 mb-4 category-card">
+        <div class="card h-100">
+          <div class="card-body">
+            <h5 class="card-title">Business</h5>
+            <p class="card-text">Learn business strategies, marketing, and management</p>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-4 mb-4 category-card">
+        <div class="card h-100">
+          <div class="card-body">
+            <h5 class="card-title">Design</h5>
+            <p class="card-text">Master graphic, UI/UX, and product design skills</p>
+          </div>
+        </div>
+      </div>
+      <!-- Add more categories as needed -->
+    </div>
+  </div>
+</body>
+</html>
