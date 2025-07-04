@@ -23,7 +23,8 @@ public enum ErrorCode {
     ENROLLMENT_NOT_FOUND(1019,"Enrollment not found"),
     REVENUE_EXISTED(1020,"Revenue existed"),
     REVENUE_NOT_FOUND(1021,"Revenue not found"),
-    MODULE_NOT_EXIST(1022,"Module not exist");
+    MODULE_NOT_EXIST(1022,"Module not exist"),
+    EXERCISE_NOT_FOUND(1023,"Exercise not found"),;
 
     ErrorCode(int code, String message) {
         this.code = code;
