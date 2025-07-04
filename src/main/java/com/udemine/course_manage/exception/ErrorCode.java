@@ -24,7 +24,9 @@ public enum ErrorCode {
     REVENUE_EXISTED(1020,"Revenue existed"),
     REVENUE_NOT_FOUND(1021,"Revenue not found"),
     MODULE_NOT_EXIST(1022,"Module not exist"),
-    EXERCISE_NOT_FOUND(1023,"Exercise not found"),;
+    EXERCISE_NOT_FOUND(1023,"Exercise not found"),
+    SUBMISSION_EXISTED(1024,"Submission existed"),
+    SUBMISSION_NOT_FOUND(1025,"Submission not found"),;
 
     ErrorCode(int code, String message) {
         this.code = code;
