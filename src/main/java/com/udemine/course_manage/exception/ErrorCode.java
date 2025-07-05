@@ -27,7 +27,11 @@ public enum ErrorCode {
     EXERCISE_NOT_FOUND(1023,"Exercise not found"),
     SUBMISSION_EXISTED(1024,"Submission existed"),
     SUBMISSION_NOT_FOUND(1025,"Submission not found"),
-    LATE_SUBMISSION_NOT_FOUND(1026,"Late submission not found"),;
+    LATE_SUBMISSION_NOT_FOUND(1026,"Late submission not found"),
+    LESSON_RESOURCE_NOT_FOUND(1027,"Lesson resource not found"),
+    USER_NOT_INSTRUCTOR(1028,"User is not instructor"),
+    SCORING_NOT_FOUND(1029,"Scoring not found"),
+    SCORING_EXISTED(1030,"Scoring existed"),;
 
     ErrorCode(int code, String message) {
         this.code = code;
