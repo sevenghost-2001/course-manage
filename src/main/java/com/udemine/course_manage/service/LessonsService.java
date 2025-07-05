@@ -20,6 +20,7 @@ public class LessonsService {
     @Autowired
     private ModuleRepository moduleRepository;
     public List<Lessons> getAllLessons(){
+
         return  lessonRepository.findAll();
     }
     public Lessons createLessons(LessonsCreatonRequest request){

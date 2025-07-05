@@ -31,6 +31,9 @@ public enum ErrorCode {
     LESSON_RESOURCE_NOT_FOUND(1027,"Lesson resource not found"),
     USER_NOT_INSTRUCTOR(1028,"User is not instructor"),
     SCORING_NOT_FOUND(1029,"Scoring not found"),
+    MESSAGE_EXISTED(1090,"Message existed"),
+    USER_NOT_EXIST(1099,"user not exist"),
+    NOTIFICATION_NOT_EXIST(1098,"Notification not existed"),
     SCORING_EXISTED(1030,"Scoring existed"),;
 
     ErrorCode(int code, String message) {
