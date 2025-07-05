@@ -32,7 +32,8 @@ public enum ErrorCode {
     USER_NOT_INSTRUCTOR(1028,"User is not instructor"),
     SCORING_NOT_FOUND(1029,"Scoring not found"),
     SCORING_EXISTED(1030,"Scoring existed"),
-    LESSON_COMMENT_NOT_FOUND(1031,"Lesson comment not found"),;
+    LESSON_COMMENT_NOT_FOUND(1031,"Lesson comment not found"),
+    MESSAGE_NOT_FOUND(1032,"Message not found");
 
     ErrorCode(int code, String message) {
         this.code = code;
