@@ -17,6 +17,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -32,43 +33,41 @@ public class UserService {
     private UserMapper userMapper;
 
     public User createUser(UserCreationRequest request){
-//        User user = new User();
-
         if(userRepository.existsByname(request.getName())){
-            throw new  AppException(ErrorCode.USER_EXISTED);
+            throw new AppException(ErrorCode.USER_EXISTED);
         }
+
         if(userRepository.existsByemail(request.getEmail())){
             throw new AppException(ErrorCode.EMAIL_EXISTED);
         }
+
         User user = userMapper.toUser(request);
-        // Strength/ thuật toán càng phức tạp thì sẽ càng làm chậm hệ thống , mặc định độ phức tạp sẽ là 10
         PasswordEncoder passwordEncoder = new BCryptPasswordEncoder(10);
-        //Gọi hàm encode để thực hiện mã hóa
         user.setPassword(passwordEncoder.encode(request.getPassword()));
+
+        // Nếu role null thì mặc định là USER
+        String roleName = request.getRole() != null ? request.getRole() : "USER";
+        user.setIsInstructor(roleName.equalsIgnoreCase("INSTRUCTOR"));
+
+        Role role = roleRepository.findByName(roleName)
+                .orElseThrow(() -> new AppException(ErrorCode.ROLE_NOT_FOUND));
+
+        // Lưu user trước để có ID
         User savedUser = userRepository.save(user);
 
-
-
-        //Nếu thuộc tính role rỗng thì gán là USER
-        String roleName = request.getRole() != null ? request.getRole() : "USER";
-        //nếu roleName là INSTRUCTOR thì gán is_instructor là true
-        if(roleName.equals("INSTRUCTOR")){
-            savedUser.setIsInstructor(true);
-        } else {
-            savedUser.setIsInstructor(false);
-        }
-
-        Optional<Role> role = roleRepository.findByName(roleName);
-        if(role.isEmpty()){
-            throw new AppException(ErrorCode.ROLE_NOT_FOUND);
-
-        }
-
+        // Tạo userRole
         UserRole userRole = new UserRole();
         userRole.setUser(savedUser);
-        userRole.setRole(role.get());
+        userRole.setRole(role);
         userRoleRepository.save(userRole);
-        return  savedUser;
+
+        // Gán vào danh sách userRoles để getRoles() hoạt động
+        if (savedUser.getUserRoles() == null) {
+            savedUser.setUserRoles(new ArrayList<>());
+        }
+        savedUser.getUserRoles().add(userRole);
+
+        return savedUser;
     }
 
     public User updateUser(Integer id, UserCreationRequest request){
@@ -77,13 +76,9 @@ public class UserService {
         if(existingUserOpt.isEmpty()){
             throw new AppException(ErrorCode.USER_NOT_EXISTED);
         }
-
         User user = existingUserOpt.get();
         userMapper.updateUser(user,request);
         User savedUser = userRepository.save(user);
-
-
-
         //Nếu thuộc tính role rỗng thì gán là USER
         String roleName = request.getRole() != null ? request.getRole() : "USER";
         //nếu roleName là INSTRUCTOR thì gán is_instructor là true
@@ -95,13 +90,19 @@ public class UserService {
         Optional<Role> role = roleRepository.findByName(roleName);
         if(role.isEmpty()){
             throw new AppException(ErrorCode.ROLE_NOT_FOUND);
-
         }
 
-        UserRole userRole = new UserRole();
-        userRole.setUser(savedUser);
-        userRole.setRole(role.get());
-        userRoleRepository.save(userRole);
+        // Kiểm tra user đã có role này chưa
+        boolean alreadyHasRole = savedUser.getUserRoles() != null &&
+                savedUser.getUserRoles().stream()
+                        .anyMatch(ur -> ur.getRole().getName().equalsIgnoreCase(roleName));
+        if(!alreadyHasRole) {
+            UserRole userRole = new UserRole();
+            userRole.setUser(savedUser);
+            userRole.setRole(role.get());
+            user.getUserRoles().add(userRole);//Add trực tiếp
+            userRoleRepository.save(userRole);
+        }
         return savedUser;
     }
 

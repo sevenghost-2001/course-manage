@@ -42,4 +42,24 @@ public class UserRoleService {
         userRole.setUser(user);
         return userRoleRepository.save(userRole);
     }
+
+    public UserRole updateUserRole(int id, UserRoleCreationRequest request){
+        UserRole userRole = userRoleRepository.findById(id)
+                .orElseThrow(() -> new AppException(ErrorCode.USER_ROLE_NOT_FOUND));
+        Role role = roleRepository.findById(request.getId_role())
+                .orElseThrow(() -> new AppException(ErrorCode.ROLE_NOT_FOUND));
+        userRole.setRole(role);
+
+        User user = userRepository.findById(request.getId_user())
+                .orElseThrow(() -> new AppException(ErrorCode.USER_NOT_EXISTED));
+        userRole.setUser(user);
+        return userRoleRepository.save(userRole);
+    }
+
+    public void deleteUserRole(int id){
+        if(!userRoleRepository.existsById(id)){
+            throw new AppException(ErrorCode.USER_ROLE_NOT_FOUND);
+        }
+        userRoleRepository.deleteById(id);
+    }
 }

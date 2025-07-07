@@ -35,7 +35,7 @@ public class User {
     int ranks;
     int levels;
 
-    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true,fetch = FetchType.EAGER)
     @JsonIgnore
     List<UserRole> userRoles;
 

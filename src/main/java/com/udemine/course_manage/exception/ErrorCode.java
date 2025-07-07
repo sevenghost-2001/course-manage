@@ -38,7 +38,8 @@ public enum ErrorCode {
     SCORING_EXISTED(1030,"Scoring existed"),
     LESSON_COMMENT_NOT_FOUND(1031,"Lesson comment not found"),
     USER_ROLE_EXISTED(1032,"User role existed"),
-    ROLE_NOT_FOUND(1033,"Role not found"),;
+    ROLE_NOT_FOUND(1033,"Role not found"),
+    USER_ROLE_NOT_FOUND(1034,"User role not found"),;
 
     ErrorCode(int code, String message) {
         this.code = code;
