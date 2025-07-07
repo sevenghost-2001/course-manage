@@ -16,8 +16,8 @@ public class UserCreationRequest {
     String email;
     @Size(min = 8, message = "PASSWORD_INVALID")
     String password;
-    String role; // sẽ convert thành Enum Role trong service
-    Boolean isInstructor;
+    String role;
+//    Boolean isInstructor;
     String biography;
     int ranks;
     int levels;

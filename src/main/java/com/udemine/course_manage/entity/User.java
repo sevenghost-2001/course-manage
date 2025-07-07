@@ -1,10 +1,13 @@
 package com.udemine.course_manage.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Entity
 @Table(name = "users")
@@ -23,8 +26,6 @@ public class User {
      String email;
     @Column(name = "passwords", nullable = false)
      String password;
-    @Column(nullable = false,name = "roles")
-     String role;
     @Column(name = "is_instructor", nullable = false)
      Boolean isInstructor = false;
 
@@ -33,6 +34,16 @@ public class User {
     String biography;
     int ranks;
     int levels;
+
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonIgnore
+    List<UserRole> userRoles;
+
+    @Transient
+    @JsonProperty("Roles")
+    public List<String> getRoles() {
+        return userRoles != null ? userRoles.stream().map(UserRole::getNameRole).toList() : null;
+    }
 
 
     @PrePersist
