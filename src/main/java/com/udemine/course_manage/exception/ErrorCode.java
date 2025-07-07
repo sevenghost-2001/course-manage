@@ -33,7 +33,8 @@ public enum ErrorCode {
     SCORING_NOT_FOUND(1029,"Scoring not found"),
     SCORING_EXISTED(1030,"Scoring existed"),
     LESSON_COMMENT_NOT_FOUND(1031,"Lesson comment not found"),
-    MESSAGE_NOT_FOUND(1032,"Message not found");
+    MESSAGE_NOT_FOUND(1032,"Message not found"),
+    LESSON_RESPONSE_NOT_FOUND(1033,"Lesson response not found");
 
     ErrorCode(int code, String message) {
         this.code = code;
