@@ -1,4 +1,4 @@
-package com.udemine.course_manage.dto.response;
+package com.udemine.course_manage.dto.request;
 
 import lombok.*;
 import lombok.experimental.FieldDefaults;
@@ -8,7 +8,6 @@ import lombok.experimental.FieldDefaults;
 @AllArgsConstructor
 @Builder
 @FieldDefaults(level = AccessLevel.PRIVATE)
-public class AuthenticationResponse {
+public class IntroSpectRequest {
     String token;
-    boolean authenticated;
 }
