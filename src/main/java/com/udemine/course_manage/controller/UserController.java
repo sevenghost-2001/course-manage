@@ -33,15 +33,17 @@ import java.util.List;
         }
 
         @PutMapping("/{id}")
-        public User updateUser(@PathVariable Integer id, @RequestBody UserCreationRequest request){
-            return userService.updateUser(id,request);
+         ApiResponse<User> updateUser(@PathVariable Integer id, @RequestBody UserCreationRequest request){
+            ApiResponse<User> apiResponse = new ApiResponse<>();
+            apiResponse.setResult(userService.updateUser(id, request));
+            return apiResponse;
         }
 
         @DeleteMapping("/{id}")
         public ApiResponse<String> deleteUser(@PathVariable Integer id) {
             userService.deleteUser(id);
             ApiResponse<String> apiResponse = new ApiResponse<>();
-            apiResponse.setCode(ErrorCode.DELETE_DONE.getCode());
+            apiResponse.setCode(1000);
             apiResponse.setResult(ErrorCode.DELETE_DONE.getMessage());
             return apiResponse;
         }

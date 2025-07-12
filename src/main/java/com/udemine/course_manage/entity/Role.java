@@ -1,9 +1,12 @@
 package com.udemine.course_manage.entity;
 
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
+
+import java.util.List;
 
 @Entity
 @Table(name = "roles")
@@ -20,4 +23,9 @@ public class Role {
     @Column(nullable = false, unique = true)
     String name;
     String description;
+
+    @OneToMany(mappedBy = "role", cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonIgnore
+    List<UserRole> userRoles;
+
 }

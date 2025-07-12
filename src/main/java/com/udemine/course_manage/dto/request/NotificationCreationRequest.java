@@ -1,4 +1,4 @@
-package com.udemine.course_manage.dto.response;
+package com.udemine.course_manage.dto.request;
 
 import lombok.*;
 import lombok.experimental.FieldDefaults;
@@ -8,7 +8,8 @@ import lombok.experimental.FieldDefaults;
 @AllArgsConstructor
 @Builder
 @FieldDefaults(level = AccessLevel.PRIVATE)
-public class AuthenticationResponse {
-    String token;
-    boolean authenticated;
+public class NotificationCreationRequest {
+    String message;
+    String status;
+    int id_user;
 }
