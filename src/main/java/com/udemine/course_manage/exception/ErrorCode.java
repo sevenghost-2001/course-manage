@@ -37,12 +37,13 @@ public enum ErrorCode {
     NOTIFICATION_NOT_EXIST(1098,"Notification not existed"),
     SCORING_EXISTED(1030,"Scoring existed"),
     LESSON_COMMENT_NOT_FOUND(1031,"Lesson comment not found"),
+    LESSON_RESPONSE_NOT_FOUND(1033,"Lesson response not found"),
     USER_ROLE_EXISTED(1032,"User role existed"),
     ROLE_NOT_FOUND(1033,"Role not found"),
     USER_ROLE_NOT_FOUND(1034,"User role not found"),
     REVIEW_REQUEST_NOT_FOUND(1035,"Review request not found"),
     UNAUTHENTICATED(1036,"Unauthenticated"),
-    ERROR_VERIFY(1037,"Error verify"),;
+    ERROR_VERIFY(1037,"Error verify");
 
     ErrorCode(int code, String message) {
         this.code = code;
