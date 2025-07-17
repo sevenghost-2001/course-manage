@@ -24,7 +24,7 @@ public class Role {
     String name;
     String description;
 
-    @OneToMany(mappedBy = "role", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "role", orphanRemoval = true)
     @JsonIgnore
     List<UserRole> userRoles;
 

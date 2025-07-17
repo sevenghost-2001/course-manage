@@ -28,7 +28,6 @@ public class Module {
     @JsonIgnore
     Course course;
 
-    @Transient
     @JsonProperty("Khóa học")//Tên trong ngoặc kép muốn đặt sao cũng được
     public String getNameCourse() {
         return course != null ? course.getTitle(): null;

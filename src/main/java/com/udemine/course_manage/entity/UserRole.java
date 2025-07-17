@@ -30,13 +30,11 @@ public class UserRole {
     @JsonIgnore
     User user;
 
-    @Transient // Chỉ sử dụng trong quá trình chạy, không lưu vào cơ sở dữ liệu
     @JsonProperty("Name of User")
     public String getNameUser() {
         return user != null ? user.getName() : null;
     }
 
-    @Transient // Chỉ sử dụng trong quá trình chạy, không lưu vào cơ sở dữ liệu
     @JsonProperty("Name of Role")
     public String getNameRole() {
         return role != null ? role.getName() : null;

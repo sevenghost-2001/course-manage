@@ -78,6 +78,8 @@ public class UserService {
         }
         User user = existingUserOpt.get();
         userMapper.updateUser(user,request);
+        PasswordEncoder passwordEncoder = new BCryptPasswordEncoder(10);
+        user.setPassword(passwordEncoder.encode(request.getPassword()));
         User savedUser = userRepository.save(user);
         //Nếu thuộc tính role rỗng thì gán là USER
         String roleName = request.getRole() != null ? request.getRole() : "USER";

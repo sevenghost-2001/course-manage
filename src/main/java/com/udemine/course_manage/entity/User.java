@@ -35,11 +35,10 @@ public class User {
     int ranks;
     int levels;
 
-    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true,fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "user", orphanRemoval = true,fetch = FetchType.EAGER)
     @JsonIgnore
     List<UserRole> userRoles;
 
-    @Transient
     @JsonProperty("Roles")
     public List<String> getRoles() {
         return userRoles != null ? userRoles.stream().map(UserRole::getNameRole).toList() : null;
@@ -50,4 +49,5 @@ public class User {
     public void onCreate(){
         this.updated_at = LocalDateTime.now();
     }
+    //Chuyển Entity sang DTO
 }
