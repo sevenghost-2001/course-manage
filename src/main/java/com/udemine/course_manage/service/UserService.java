@@ -12,7 +12,10 @@ import com.udemine.course_manage.repository.RoleRepository;
 import com.udemine.course_manage.repository.UserRepository;
 import com.udemine.course_manage.repository.UserRoleRepository;
 import lombok.Builder;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PostAuthorize;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -21,6 +24,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+@Slf4j
 @Service
 public class UserService {
     @Autowired
@@ -31,6 +35,17 @@ public class UserService {
     private RoleRepository roleRepository;
     @Autowired
     private UserMapper userMapper;
+    @Autowired
+    private PasswordEncoder passwordEncoder;
+    //PostAuthorize được sử dụng để kiểm tra quyền truy cập sau khi phương thức đã thực thi
+    //PreAuthorize được sử dụng để kiểm tra quyền truy cập trước khi phương thức được thực thi
+    //Nếu trùng tên với tên của người dùng đang đăng nhập thì mới cho phép truy cập
+    @PostAuthorize("returnObject.name == authentication.name or hasRole('ADMIN')")
+    public User getUserById(Integer id) {
+        log.info("Fetching user with ID: {}", id);
+        return userRepository.findById(id)
+                .orElseThrow(() -> new AppException(ErrorCode.USER_NOT_EXISTED));
+    }
 
     public User createUser(UserCreationRequest request){
         if(userRepository.existsByname(request.getName())){
@@ -42,7 +57,7 @@ public class UserService {
         }
 
         User user = userMapper.toUser(request);
-        PasswordEncoder passwordEncoder = new BCryptPasswordEncoder(10);
+//        PasswordEncoder passwordEncoder = new BCryptPasswordEncoder(10);
         user.setPassword(passwordEncoder.encode(request.getPassword()));
 
         // Nếu role null thì mặc định là USER
@@ -69,7 +84,7 @@ public class UserService {
 
         return savedUser;
     }
-
+@PostAuthorize("ReturnObject.name == authentication.name or hasRole('ADMIN')") //Kiểm tra quyền truy cập
     public User updateUser(Integer id, UserCreationRequest request){
 //        Sử dụng Optional<T> để kiểm tra dữ liệu có NULL không
         Optional<User> existingUserOpt = userRepository.findById(id);
@@ -107,7 +122,7 @@ public class UserService {
         }
         return savedUser;
     }
-
+    @PreAuthorize("hasRole('ADMIN')") //Chỉ ADMIN mới có quyền xóa người dùng
     public void deleteUser(Integer id){
         if(!userRepository.existsById(id)){
             throw  new AppException(ErrorCode.USER_NOT_EXISTED);

@@ -1,4 +1,4 @@
-package com.udemine.course_manage.config;
+package com.udemine.course_manage.configuration;
 
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;

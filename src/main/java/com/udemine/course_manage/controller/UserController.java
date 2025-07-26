@@ -6,11 +6,15 @@ import com.udemine.course_manage.entity.User;
 import com.udemine.course_manage.exception.ErrorCode;
 import com.udemine.course_manage.service.UserService;
 import jakarta.validation.Valid;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 //    @CrossOrigin("http://localhost:63342")
+    //để inject logger vào class
+    @Slf4j
     @RestController
     @RequestMapping("/api/users")
     public class UserController {
@@ -19,11 +23,25 @@ import java.util.List;
 
         @GetMapping
         public ApiResponse<List<User>> getAllUsers(){
-
             ApiResponse<List<User>> apiResponse = new ApiResponse<>();
             apiResponse.setResult(userService.getAllUsers());
             return apiResponse;
         }
+
+        @GetMapping("/{id}")
+        public ApiResponse<User> getUserById(@PathVariable Integer id) {
+            //Dùng SecurityContextHolder để lấy thông tin người dùng hiện tại
+            var authentication = SecurityContextHolder.getContext().getAuthentication();
+            log.info("Current user: {}", authentication.getName());
+            authentication.getAuthorities().forEach(authority -> {
+                log.info("Authority: {}", authority.getAuthority());
+            });
+            ApiResponse<User> apiResponse = new ApiResponse<>();
+            apiResponse.setResult(userService.getUserById(id));
+            return apiResponse;
+        }
+        public ApiResponse<User> apiResponse = new ApiResponse<>();
+
 
         @PostMapping
         ApiResponse<User> createUser(@RequestBody @Valid UserCreationRequest request){
