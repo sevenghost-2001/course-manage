@@ -4,7 +4,8 @@ import com.udemine.course_manage.dto.request.ApiResponse;
 import com.udemine.course_manage.dto.request.LateSubmissionCreationRequest;
 import com.udemine.course_manage.entity.LateSubmission;
 import com.udemine.course_manage.exception.ErrorCode;
-import com.udemine.course_manage.service.LateSubmissionService;
+import com.udemine.course_manage.service.Imps.LateSubmissionServiceImps;
+import com.udemine.course_manage.service.Services.LateSubmissionService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 

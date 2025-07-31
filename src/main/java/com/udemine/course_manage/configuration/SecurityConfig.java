@@ -1,5 +1,7 @@
 package com.udemine.course_manage.configuration;
 
+import com.udemine.course_manage.utils.JwtHelper;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -24,15 +26,15 @@ import javax.crypto.spec.SecretKeySpec;
 @EnableWebSecurity
 @EnableMethodSecurity
 public class SecurityConfig {
-
+    @Autowired
+    private JwtDecoder jwtDecoder;
+    @Autowired
+    private JwtAuthenticationConverter jwtAuthenticationConverter;
     private final String[] PUBLIC_ENDPOINTS = {
             "/api/users",
             "/auth/token",
             "/auth/introspect"
     };
-    @Value("${Jwt.signerKey}")
-    private String signerKey;
-
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity httpSecurity) throws Exception {
         httpSecurity.authorizeHttpRequests(request ->
@@ -45,28 +47,12 @@ public class SecurityConfig {
         httpSecurity.oauth2ResourceServer(oauth2 ->
                 // jwt() dùng để xác thực token theo chuẩn JWT
                 oauth2.jwt(jwtConfigurer ->
-                        jwtConfigurer.decoder(jwtDecoder())
-                                .jwtAuthenticationConverter(jwtAuthenticationConverter()))
+                        jwtConfigurer.decoder(jwtDecoder)
+                                .jwtAuthenticationConverter(jwtAuthenticationConverter))
         );
         return httpSecurity.build();
     }
-    //chỉnh sửa lại nội dung của token cụ thể ở đây là đổi tiền tố của quyền từ "SCOPE_" thành "ROLE_"
-    @Bean
-    JwtAuthenticationConverter jwtAuthenticationConverter() {
-        JwtGrantedAuthoritiesConverter jwtGrantedAuthoritiesConverter = new JwtGrantedAuthoritiesConverter();
-        jwtGrantedAuthoritiesConverter.setAuthorityPrefix("ROLE_");
-        JwtAuthenticationConverter jwtAuthenticationConverter = new JwtAuthenticationConverter();
-        jwtAuthenticationConverter.setJwtGrantedAuthoritiesConverter(jwtGrantedAuthoritiesConverter);
-        return jwtAuthenticationConverter;
-    }
-    @Bean
-    JwtDecoder jwtDecoder() {
-        SecretKeySpec secretKeySpec = new SecretKeySpec(signerKey.getBytes(),"HS512");
-        return NimbusJwtDecoder
-                .withSecretKey(secretKeySpec)
-                .macAlgorithm(MacAlgorithm.HS512)
-                .build();
-    };
+
 
     @Bean
     PasswordEncoder passwordEncoder() {

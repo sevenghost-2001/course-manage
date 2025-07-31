@@ -4,7 +4,8 @@ import com.udemine.course_manage.dto.request.ApiResponse;
 import com.udemine.course_manage.dto.request.RevenueCreationRequest;
 import com.udemine.course_manage.entity.Revenue;
 import com.udemine.course_manage.exception.ErrorCode;
-import com.udemine.course_manage.service.RevenueService;
+import com.udemine.course_manage.service.Imps.RevenueServiceImps;
+import com.udemine.course_manage.service.Services.RevenueService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 

@@ -43,7 +43,8 @@ public enum ErrorCode {
     USER_ROLE_NOT_FOUND(1034,"User role not found"),
     REVIEW_REQUEST_NOT_FOUND(1035,"Review request not found"),
     UNAUTHENTICATED(1036,"Unauthenticated"),
-    ERROR_VERIFY(1037,"Error verify");
+    ERROR_VERIFY(1037,"Error verify"),
+    INVALID_TOKEN(1038,"Invalid token"),;
 
     ErrorCode(int code, String message) {
         this.code = code;

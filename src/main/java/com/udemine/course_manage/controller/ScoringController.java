@@ -4,7 +4,8 @@ import com.udemine.course_manage.dto.request.ApiResponse;
 import com.udemine.course_manage.dto.request.ScoringCreationRequest;
 import com.udemine.course_manage.entity.Scoring;
 import com.udemine.course_manage.exception.ErrorCode;
-import com.udemine.course_manage.service.ScoringService;
+import com.udemine.course_manage.service.Imps.ScoringServiceImps;
+import com.udemine.course_manage.service.Services.ScoringService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 

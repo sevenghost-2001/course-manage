@@ -4,7 +4,8 @@ import com.udemine.course_manage.dto.request.ApiResponse;
 import com.udemine.course_manage.dto.request.LessonCommentCreationRequest;
 import com.udemine.course_manage.entity.LessonComment;
 import com.udemine.course_manage.exception.ErrorCode;
-import com.udemine.course_manage.service.LessonCommentService;
+import com.udemine.course_manage.service.Imps.LessonCommentServiceImps;
+import com.udemine.course_manage.service.Services.LessonCommentService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 

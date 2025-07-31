@@ -8,7 +8,8 @@ import com.udemine.course_manage.dto.response.AuthenticationResponse;
 import com.udemine.course_manage.dto.response.IntrospectResponse;
 import com.udemine.course_manage.exception.AppException;
 import com.udemine.course_manage.exception.ErrorCode;
-import com.udemine.course_manage.service.AuthenticationService;
+import com.udemine.course_manage.service.Imps.AuthenticationServiceImps;
+import com.udemine.course_manage.service.Services.AuthenticationService;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
@@ -39,13 +40,7 @@ public class AuthenticationController {
     @PostMapping("/introspect")
     ApiResponse<IntrospectResponse> authenticate(@RequestBody IntroSpectRequest request){
         IntrospectResponse result_request;
-        try {
             result_request = authenticationService.introspect(request);
-        } catch (JOSEException e) {
-            throw new AppException(ErrorCode.ERROR_VERIFY);
-        } catch (ParseException e) {
-            throw new AppException(ErrorCode.ERROR_VERIFY);
-        }
         //Trả về xác thực mật khẩu đúng hay sai trong result
         return ApiResponse.<IntrospectResponse>builder()
                 .code(1000)

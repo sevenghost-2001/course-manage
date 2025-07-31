@@ -4,7 +4,8 @@ import com.udemine.course_manage.dto.request.ApiResponse;
 import com.udemine.course_manage.dto.request.SubmissionCreationRequest;
 import com.udemine.course_manage.entity.Submission;
 import com.udemine.course_manage.exception.ErrorCode;
-import com.udemine.course_manage.service.SubmissionService;
+import com.udemine.course_manage.service.Imps.SubmissionServiceImps;
+import com.udemine.course_manage.service.Services.SubmissionService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 

@@ -5,7 +5,8 @@ import com.udemine.course_manage.dto.request.ApiResponse;
 import com.udemine.course_manage.dto.request.EnrollmentCreationRequest;
 import com.udemine.course_manage.entity.Enrollment;
 import com.udemine.course_manage.exception.ErrorCode;
-import com.udemine.course_manage.service.EnrollmentService;
+import com.udemine.course_manage.service.Imps.EnrollmentServiceImps;
+import com.udemine.course_manage.service.Services.EnrollmentService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 

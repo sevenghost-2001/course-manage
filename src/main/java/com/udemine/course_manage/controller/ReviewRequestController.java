@@ -4,9 +4,9 @@ import com.udemine.course_manage.dto.request.ApiResponse;
 import com.udemine.course_manage.dto.request.ReviewRequestCreationRequest;
 import com.udemine.course_manage.entity.ReviewRequest;
 import com.udemine.course_manage.exception.ErrorCode;
-import com.udemine.course_manage.service.ReviewRequestService;
+import com.udemine.course_manage.service.Imps.ReviewRequestServiceImps;
+import com.udemine.course_manage.service.Services.ReviewRequestService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;

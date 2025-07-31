@@ -4,7 +4,8 @@ import com.udemine.course_manage.dto.request.ApiResponse;
 import com.udemine.course_manage.dto.request.LessonResourceCreationRequest;
 import com.udemine.course_manage.entity.LessonResource;
 import com.udemine.course_manage.exception.ErrorCode;
-import com.udemine.course_manage.service.LessonResourceService;
+import com.udemine.course_manage.service.Imps.LessonResourceServiceImps;
+import com.udemine.course_manage.service.Services.LessonResourceService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
