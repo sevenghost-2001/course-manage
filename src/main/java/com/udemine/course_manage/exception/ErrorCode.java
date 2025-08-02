@@ -44,7 +44,8 @@ public enum ErrorCode {
     REVIEW_REQUEST_NOT_FOUND(1035,"Review request not found"),
     UNAUTHENTICATED(1036,"Unauthenticated"),
     ERROR_VERIFY(1037,"Error verify"),
-    INVALID_TOKEN(1038,"Invalid token"),;
+    INVALID_TOKEN(1038,"Invalid token"),
+    Expired_Token(1039,"Expired token"),;
 
     ErrorCode(int code, String message) {
         this.code = code;

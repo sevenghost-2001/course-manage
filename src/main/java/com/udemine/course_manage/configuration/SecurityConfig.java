@@ -1,5 +1,6 @@
 package com.udemine.course_manage.configuration;
 
+import com.udemine.course_manage.utils.CustomAuthenticationEntryPoint;
 import com.udemine.course_manage.utils.JwtHelper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -30,6 +31,9 @@ public class SecurityConfig {
     private JwtDecoder jwtDecoder;
     @Autowired
     private JwtAuthenticationConverter jwtAuthenticationConverter;
+    @Autowired
+    //custom lại kiểu trả lỗi hết hạn token theo chuẩn ApiResponse
+    private CustomAuthenticationEntryPoint customAuthenticationEntryPoint;
     private final String[] PUBLIC_ENDPOINTS = {
             "/api/users",
             "/auth/token",
@@ -40,6 +44,7 @@ public class SecurityConfig {
         httpSecurity.authorizeHttpRequests(request ->
                 //Yêu cầu có quyền Admin để có thể truy cập lấy danh sách người dùng, thông tin cá nhân
                 request.requestMatchers(HttpMethod.GET,"/api/users").hasAuthority("ROLE_ADMIN")
+                        .requestMatchers("/api/courses/*").permitAll()
                         .requestMatchers(HttpMethod.POST,PUBLIC_ENDPOINTS).permitAll()
                         .anyRequest().authenticated());
         httpSecurity.csrf(AbstractHttpConfigurer::disable);
@@ -49,6 +54,7 @@ public class SecurityConfig {
                 oauth2.jwt(jwtConfigurer ->
                         jwtConfigurer.decoder(jwtDecoder)
                                 .jwtAuthenticationConverter(jwtAuthenticationConverter))
+                        .authenticationEntryPoint(customAuthenticationEntryPoint) //Kiểm tra xem đã hết hạn token hay chưa, nếu hết hạn thì sẽ trả về lỗi 401 Unauthorized
         );
         return httpSecurity.build();
     }

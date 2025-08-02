@@ -1,6 +1,9 @@
 package com.udemine.course_manage.service.Imps;
 
 import com.udemine.course_manage.dto.request.CourseCreationRequest;
+import com.udemine.course_manage.dto.response.CategoryResponse;
+import com.udemine.course_manage.dto.response.CourseResponse;
+import com.udemine.course_manage.dto.response.HomePageResponse;
 import com.udemine.course_manage.entity.Category;
 import com.udemine.course_manage.entity.Course;
 import com.udemine.course_manage.exception.AppException;
@@ -12,7 +15,9 @@ import com.udemine.course_manage.service.Services.CourseService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 @Service
@@ -23,21 +28,13 @@ public class CourseServiceImps implements CourseService {
     CategoryRepository categoryRepository;
     @Autowired
     private CourseMapper courseMapper;
-
     @Override
     public Course createCourse(CourseCreationRequest request){
         Course course = new Course();
-
         if(courseRepository.existsByTitle(request.getTitle())){
             throw new AppException(ErrorCode.TITLE_EXISTED);
         }
-
         course = courseMapper.toCourse(request);
-        // Tìm Category theo id_category và set thủ công
-        Category category = categoryRepository.findById(request.getId_category())
-                .orElseThrow(() -> new AppException(ErrorCode.CATEGORY_NOT_FOUND));
-
-        course.setCategory(category);
         return courseRepository.save(course);
     }
 
@@ -48,12 +45,7 @@ public class CourseServiceImps implements CourseService {
             throw new AppException(ErrorCode.COURSE_NOT_FOUND);
         }
         Course course = existingCourseOpt.get();
-        // Dùng MapStruct cập nhật các field đơn giản
-          courseMapper.updateCourse(course,request);
-        // Cập nhật category nếu id_category có thể thay đổi
-        Category category = categoryRepository.findById(request.getId_category())
-                .orElseThrow(() -> new AppException(ErrorCode.CATEGORY_NOT_FOUND));
-        course.setCategory(category);
+        courseMapper.updateCourse(course,request);
         return courseRepository.save(course);
     }
 
@@ -66,8 +58,30 @@ public class CourseServiceImps implements CourseService {
     }
 
     @Override
-    public List<Course> getAllCourses(){
-        return courseRepository.findAll();
+    public List<CourseResponse> getAllCourses(){
+        return courseRepository.findAll().stream().map(course -> courseMapper.toCourseResponse(course)).toList();
+    }
+
+    @Override
+    public HomePageResponse getHomePageData() {
+        List<CourseResponse> popular = courseRepository.findTop8ByOrderByCostDesc().stream()
+                .map(course -> courseMapper.toCourseResponse(course)).toList(); // ví dụ: chi phí cao là phổ biến
+        List<CourseResponse> newest = courseRepository.findTop8ByOrderByIdDesc().stream()
+                .map(course -> courseMapper.toCourseResponse(course)).toList(); // id cao hơn là mới
+        List<Category> allCategories = categoryRepository.findAll();
+
+        Map<String, List<CourseResponse>> byCategory = new HashMap<>();
+        for (Category category : allCategories){
+            List<CourseResponse> list = courseRepository.findTop5ByCategoryId(category.getId()).stream()
+                    .map(course -> courseMapper.toCourseResponse(course)).toList();
+            byCategory.put(category.getName(),list);
+
+        }
+        return HomePageResponse.builder()
+                .popularCourses(popular)
+                .newestCourses(newest)
+                .coursesByCategory(byCategory)
+                .build();
     }
 
 }
