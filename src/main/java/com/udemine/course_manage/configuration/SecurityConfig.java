@@ -46,7 +46,9 @@ public class SecurityConfig {
                 request.requestMatchers(HttpMethod.GET,"/api/users").hasAuthority("ROLE_ADMIN")
                         .requestMatchers("/api/courses/*").permitAll()
                         .requestMatchers(HttpMethod.POST,PUBLIC_ENDPOINTS).permitAll()
+                        .requestMatchers("/auth/*").permitAll()
                         .anyRequest().authenticated());
+
         httpSecurity.csrf(AbstractHttpConfigurer::disable);
         //oath2ResourceServer dùng để xác thực token
         httpSecurity.oauth2ResourceServer(oauth2 ->

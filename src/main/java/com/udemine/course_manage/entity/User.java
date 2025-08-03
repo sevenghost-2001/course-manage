@@ -35,9 +35,18 @@ public class User {
     int ranks;
     int levels;
 
-//    @OneToMany(mappedBy = "user")
-//    List<Teach> teaches;
-    @OneToMany(mappedBy = "user")
+    // Login attempts failed
+    @Column(name = "failed_attempt")
+    int failedAttempts;
+    @Column(name = "account_non_locked")
+    boolean accountNonLocked = true;
+    @Column(name = "lock_time")
+    LocalDateTime lockTime;
+
+
+
+    @OneToMany(mappedBy = "user", orphanRemoval = true,fetch = FetchType.EAGER)
+    @JsonIgnore
     List<UserRole> userRoles;
 
     @OneToMany(mappedBy = "user")

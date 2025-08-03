@@ -43,7 +43,7 @@ import java.util.List;
         }
         public ApiResponse<User> apiResponse = new ApiResponse<>();
 
-
+        // This is signup endpoint, used to create a new user
         @PostMapping
         ApiResponse<User> createUser(@RequestBody @Valid UserCreationRequest request){
             ApiResponse<User> apiResponse = new ApiResponse<>();
@@ -66,4 +66,5 @@ import java.util.List;
             apiResponse.setResult(ErrorCode.DELETE_DONE.getMessage());
             return apiResponse;
         }
+
     }

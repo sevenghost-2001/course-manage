@@ -45,7 +45,10 @@ public enum ErrorCode {
     UNAUTHENTICATED(1036,"Unauthenticated"),
     ERROR_VERIFY(1037,"Error verify"),
     INVALID_TOKEN(1038,"Invalid token"),
-    Expired_Token(1039,"Expired token"),;
+    Expired_Token(1039,"Expired token"),
+    WRONG_PASSWORD(1040,"Wrong password"),
+    ACCOUNT_LOCKED(1041, "Account is locked due to multiple failed login attempts");
+
 
     ErrorCode(int code, String message) {
         this.code = code;

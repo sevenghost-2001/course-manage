@@ -1,4 +1,4 @@
-package com.udemine.course_manage.service.Imps;
+package com.udemine.course_manage.service;
 
 import com.nimbusds.jose.*;
 import com.nimbusds.jose.crypto.MACSigner;
@@ -13,8 +13,8 @@ import com.udemine.course_manage.entity.User;
 import com.udemine.course_manage.exception.AppException;
 import com.udemine.course_manage.exception.ErrorCode;
 import com.udemine.course_manage.repository.UserRepository;
-import com.udemine.course_manage.service.Services.AuthenticationService;
 import lombok.AccessLevel;
+import lombok.Data;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import lombok.experimental.NonFinal;
@@ -28,6 +28,7 @@ import org.springframework.util.CollectionUtils;
 
 import java.text.ParseException;
 import java.time.Instant;
+import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
 import java.util.Date;
 import java.util.StringJoiner;
@@ -43,6 +44,10 @@ public class AuthenticationServiceImps implements AuthenticationService {
     @NonFinal
     @Value("${jwt.signerkey}")
     protected String SIGNER_KEY;
+    PasswordEncoder passwordEncoder;
+
+    // Số lần thử đăng nhập không thành công trước khi khóa tài khoản
+    private static final int MAX_FAILED_ATTEMPTS = 3;
 
     @Override
     public IntrospectResponse introspect(IntroSpectRequest request) {
@@ -87,12 +92,30 @@ public class AuthenticationServiceImps implements AuthenticationService {
        User user = userRepository.findByName(request.getName())
                 .orElseThrow(() -> new AppException(ErrorCode.USER_NOT_EXISTED));
 
-        PasswordEncoder passwordEncoder = new BCryptPasswordEncoder(10);
-        boolean authenticated = passwordEncoder.matches(request.getPassword(),user.getPassword());
-        if(!authenticated){
-            throw new AppException(ErrorCode.UNAUTHENTICATED);
+        // Check if account is locked
+        if (!user.isAccountNonLocked()) {
+            if (user.getLockTime() != null &&
+                    user.getLockTime().plusMinutes(1).isBefore(LocalDateTime.now())) {
+                // Auto-unlock after 15 mins
+                resetFailedAttempts(user);
+            } else {
+                throw new AppException(ErrorCode.ACCOUNT_LOCKED);
+            }
         }
-        var token = generateToken(user);
+
+        // Check password
+        PasswordEncoder passwordEncoder = new BCryptPasswordEncoder(10);
+        boolean authenticated = passwordEncoder.matches(request.getPassword(), user.getPassword());
+
+        if (!authenticated) {
+            handleFailedAttempt(user);
+            throw new AppException(ErrorCode.WRONG_PASSWORD);
+        }
+
+        // Successful login → reset counter
+        resetFailedAttempts(user);
+
+        String token = generateToken(user);
 
         return AuthenticationResponse.builder()
                 .token(token)
@@ -138,5 +161,23 @@ public class AuthenticationServiceImps implements AuthenticationService {
             });
         }
         return stringJoiner.toString();
+    }
+    private void handleFailedAttempt(User user) {
+        int newAttempts = user.getFailedAttempts() + 1;
+        user.setFailedAttempts(newAttempts);
+
+        if (newAttempts >= MAX_FAILED_ATTEMPTS) {
+            user.setAccountNonLocked(false);
+            user.setLockTime(LocalDateTime.now());
+        }
+
+        userRepository.save(user);
+    }
+
+    public void resetFailedAttempts(User user) {
+        user.setFailedAttempts(0);
+        user.setAccountNonLocked(true);
+        user.setLockTime(null);
+        userRepository.save(user);
     }
 }
