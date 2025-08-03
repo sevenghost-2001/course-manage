@@ -64,7 +64,7 @@ public class CourseServiceImps implements CourseService {
 
     @Override
     public HomePageResponse getHomePageData() {
-        List<CourseResponse> popular = courseRepository.findTop8ByOrderByCostDesc().stream()
+        List<CourseResponse> popular = courseRepository.findTop8ByOrderByCostDesc().stream()//lộn thứ tự
                 .map(course -> courseMapper.toCourseResponse(course)).toList(); // ví dụ: chi phí cao là phổ biến
         List<CourseResponse> newest = courseRepository.findTop8ByOrderByIdDesc().stream()
                 .map(course -> courseMapper.toCourseResponse(course)).toList(); // id cao hơn là mới

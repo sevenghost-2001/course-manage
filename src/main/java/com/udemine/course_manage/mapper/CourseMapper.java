@@ -39,6 +39,15 @@ public class CourseMapper {
 
     }
 
+    /*
+    //số điểm trung bình của khóa học
+    double averageRating;
+    //số người đã đánh giá khóa học
+    int totalRatings;
+    //Tên giảng viên khóa học
+    String instructorName;
+}
+     */
     public CourseResponse toCourseResponse(Course course) {
         CourseResponse response = new CourseResponse();
         response.setId(course.getId());
@@ -48,6 +57,16 @@ public class CourseMapper {
         response.setDiscountedCost(course.getDiscountedCost());
         response.setImage(course.getImage());
         response.setNameCategory(course.getCategory().getName());
+        response.setAverageRating(course.getReviews().stream()
+                .mapToDouble(review -> review.getRating())
+                .average()
+                .orElse(0.0));
+        response.setTotalRatings((int) course.getReviews().stream().count());
+//        response.setInstructorName(course.getTeaches()
+//                .stream()
+//                .findFirst()
+//                .map(teaches -> teaches.getInstructor().getName())
+//                .orElseThrow(() -> new AppException(ErrorCode.USER_NOT_INSTRUCTOR)));;
         return response;
     }
 }

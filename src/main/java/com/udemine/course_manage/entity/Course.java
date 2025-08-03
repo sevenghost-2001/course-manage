@@ -9,6 +9,7 @@ import org.hibernate.Length;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import java.util.List;
 
 
 @Entity
@@ -37,4 +38,16 @@ public class Course {
     @ManyToOne
     @JoinColumn(name = "id_category", nullable = false)
     Category category; // <-- Đây là chỗ đặt @ManyToOne
+
+    @OneToMany(mappedBy = "course")
+    List<Enrollment> enrollments;
+
+    @OneToMany(mappedBy = "course")
+    List<Review> reviews;
+
+//    @OneToMany(mappedBy = "course")
+//    List<Teach> teaches;
+
+
+
 }

@@ -35,9 +35,13 @@ public class User {
     int ranks;
     int levels;
 
-    @OneToMany(mappedBy = "user", orphanRemoval = true,fetch = FetchType.EAGER)
-    @JsonIgnore
+//    @OneToMany(mappedBy = "user")
+//    List<Teach> teaches;
+    @OneToMany(mappedBy = "user")
     List<UserRole> userRoles;
+
+    @OneToMany(mappedBy = "user")
+    List<Enrollment> enrollments;
 
     @JsonProperty("Roles")
     public List<String> getRoles() {

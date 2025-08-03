@@ -30,5 +30,11 @@ public class CourseResponse {
     @Digits(integer = 8, fraction = 2) // không bắt buộc, dùng để validation
     @Column(precision = 10, scale = 2)
     BigDecimal cost;
-    String nameCategory; // <-- Đây là chỗ đặt @ManyToOne
+    String nameCategory;
+    //số điểm trung bình của khóa học
+    double averageRating;
+    //số người đã đánh giá khóa học
+    int totalRatings;
+    //Tên giảng viên khóa học
+    String instructorName;
 }
