@@ -11,4 +11,6 @@ public interface AuthenticationService {
     AuthenticationResponse authenticate(AuthenticationRequest request);
     String generateToken(User user);
     String buildScope(User user);
+    void handleFailedAttempt(User user);
+    void resetFailedAttempts(User user);
 }

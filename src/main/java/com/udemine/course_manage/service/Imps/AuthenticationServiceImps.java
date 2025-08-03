@@ -1,4 +1,4 @@
-package com.udemine.course_manage.service;
+package com.udemine.course_manage.service.Imps;
 
 import com.nimbusds.jose.*;
 import com.nimbusds.jose.crypto.MACSigner;
@@ -13,6 +13,7 @@ import com.udemine.course_manage.entity.User;
 import com.udemine.course_manage.exception.AppException;
 import com.udemine.course_manage.exception.ErrorCode;
 import com.udemine.course_manage.repository.UserRepository;
+import com.udemine.course_manage.service.Services.AuthenticationService;
 import lombok.AccessLevel;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
@@ -162,7 +163,9 @@ public class AuthenticationServiceImps implements AuthenticationService {
         }
         return stringJoiner.toString();
     }
-    private void handleFailedAttempt(User user) {
+
+    @Override
+    public void handleFailedAttempt(User user) {
         int newAttempts = user.getFailedAttempts() + 1;
         user.setFailedAttempts(newAttempts);
 
@@ -174,6 +177,7 @@ public class AuthenticationServiceImps implements AuthenticationService {
         userRepository.save(user);
     }
 
+    @Override
     public void resetFailedAttempts(User user) {
         user.setFailedAttempts(0);
         user.setAccountNonLocked(true);

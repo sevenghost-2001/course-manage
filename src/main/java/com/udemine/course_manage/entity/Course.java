@@ -27,7 +27,7 @@ public class Course {
      String image;
 //    @Column(nullable = false, unique = true)
      String title;
-     @Column(name = "short_description",length = 5000)
+     @Column(name = "short_description",length = 255)
      String shortDescription;
     @Digits(integer = 8, fraction = 2)
     @Column(name = "discount_cost",precision = 10, scale = 2)
