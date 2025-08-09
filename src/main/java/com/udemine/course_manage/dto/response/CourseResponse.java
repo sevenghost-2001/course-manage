@@ -37,4 +37,5 @@ public class CourseResponse {
     int totalRatings;
     //Tên giảng viên khóa học
     String instructorName;
+    int totalEnrollments;
 }

@@ -37,15 +37,16 @@ public class SecurityConfig {
     private final String[] PUBLIC_ENDPOINTS = {
             "/api/users",
             "/auth/token",
-            "/auth/introspect"
+            "/auth/introspect",
+            "/api/career-paths"
     };
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity httpSecurity) throws Exception {
         httpSecurity.authorizeHttpRequests(request ->
                 //Yêu cầu có quyền Admin để có thể truy cập lấy danh sách người dùng, thông tin cá nhân
-                request.requestMatchers(HttpMethod.GET,"/api/users").hasAuthority("ROLE_ADMIN")
+                request.requestMatchers(HttpMethod.POST,PUBLIC_ENDPOINTS).permitAll()
+                        .requestMatchers(HttpMethod.GET,"/api/users").hasAuthority("ROLE_ADMIN")
                         .requestMatchers("/api/courses/*").permitAll()
-                        .requestMatchers(HttpMethod.POST,PUBLIC_ENDPOINTS).permitAll()
                         .requestMatchers("/auth/*").permitAll()
                         .anyRequest().authenticated());
 

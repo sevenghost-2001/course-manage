@@ -6,20 +6,25 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.experimental.FieldDefaults;
 
+import java.util.List;
+
 @Entity
-@Table(name = "teachs")
+@Table(name = "career_paths")
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 @FieldDefaults(level = lombok.AccessLevel.PRIVATE)
-public class Teach {
+public class CareerPath {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     int id;
-    @ManyToOne
-    @JoinColumn(name = "id_course", nullable = false)
-    Course course;
-    @ManyToOne
-    @JoinColumn(name = "id_user", nullable = false)
-    User instructor;
+    String name;
+    @Lob
+    @Column(columnDefinition = "TEXT")
+    String description;
+
+    String image;
+
+    @OneToMany(mappedBy = "careerPath")
+    List<CarreerToCourse> carreerToCourses;
 }

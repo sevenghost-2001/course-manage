@@ -10,6 +10,8 @@ import com.udemine.course_manage.repository.CategoryRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import java.util.stream.Collectors;
+
 @Component
 public class CourseMapper {
     @Autowired
@@ -62,11 +64,16 @@ public class CourseMapper {
                 .average()
                 .orElse(0.0));
         response.setTotalRatings((int) course.getReviews().stream().count());
-//        response.setInstructorName(course.getTeaches()
-//                .stream()
-//                .findFirst()
-//                .map(teaches -> teaches.getInstructor().getName())
-//                .orElseThrow(() -> new AppException(ErrorCode.USER_NOT_INSTRUCTOR)));;
+        response.setInstructorName(String.valueOf(course.getTeaches()
+                .stream()
+                .map(teaches -> teaches.getInstructor().getName())
+                .collect(Collectors.toList())));
+        if (response.getInstructorName().isEmpty()) {
+            throw new AppException(ErrorCode.USER_NOT_INSTRUCTOR);
+        }
+        response.setTotalEnrollments((int) course.getReviews().stream()
+                .map(user -> user.getUser())
+                .distinct().count());
         return response;
     }
 }

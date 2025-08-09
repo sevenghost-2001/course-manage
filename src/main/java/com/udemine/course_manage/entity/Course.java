@@ -45,8 +45,11 @@ public class Course {
     @OneToMany(mappedBy = "course")
     List<Review> reviews;
 
-//    @OneToMany(mappedBy = "course")
-//    List<Teach> teaches;
+    @OneToMany(mappedBy = "course")
+    List<Teach> teaches;
+
+    @OneToMany(mappedBy = "course")
+    List<Module> modules;
 
 
 

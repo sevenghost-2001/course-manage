@@ -1,6 +1,7 @@
 package com.udemine.course_manage.service.Imps;
 
 import com.udemine.course_manage.dto.request.CourseCreationRequest;
+import com.udemine.course_manage.dto.response.CareerPathResponse;
 import com.udemine.course_manage.dto.response.CategoryResponse;
 import com.udemine.course_manage.dto.response.CourseResponse;
 import com.udemine.course_manage.dto.response.HomePageResponse;
@@ -8,17 +9,16 @@ import com.udemine.course_manage.entity.Category;
 import com.udemine.course_manage.entity.Course;
 import com.udemine.course_manage.exception.AppException;
 import com.udemine.course_manage.exception.ErrorCode;
+import com.udemine.course_manage.mapper.CareerPathMapper;
 import com.udemine.course_manage.mapper.CourseMapper;
+import com.udemine.course_manage.repository.CareerPathRepository;
 import com.udemine.course_manage.repository.CategoryRepository;
 import com.udemine.course_manage.repository.CourseRepository;
 import com.udemine.course_manage.service.Services.CourseService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
+import java.util.*;
 
 @Service
 public class CourseServiceImps implements CourseService {
@@ -28,6 +28,10 @@ public class CourseServiceImps implements CourseService {
     CategoryRepository categoryRepository;
     @Autowired
     private CourseMapper courseMapper;
+    @Autowired
+    private CareerPathRepository careerPathRepository;
+    @Autowired
+    private CareerPathMapper careerPathMapper;
     @Override
     public Course createCourse(CourseCreationRequest request){
         Course course = new Course();
@@ -64,6 +68,8 @@ public class CourseServiceImps implements CourseService {
 
     @Override
     public HomePageResponse getHomePageData() {
+        List<CareerPathResponse> listCareerPath = careerPathRepository.findAll().stream()
+                .map(careerPath -> careerPathMapper.toResponse(careerPath)).toList();
         List<CourseResponse> popular = courseRepository.findTop8ByOrderByCostDesc().stream()//lộn thứ tự
                 .map(course -> courseMapper.toCourseResponse(course)).toList(); // ví dụ: chi phí cao là phổ biến
         List<CourseResponse> newest = courseRepository.findTop8ByOrderByIdDesc().stream()
@@ -78,6 +84,7 @@ public class CourseServiceImps implements CourseService {
 
         }
         return HomePageResponse.builder()
+                .careerPaths(listCareerPath)
                 .popularCourses(popular)
                 .newestCourses(newest)
                 .coursesByCategory(byCategory)

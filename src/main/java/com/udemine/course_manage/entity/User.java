@@ -38,7 +38,7 @@ public class User {
     // Login attempts failed
     @Column(name = "failed_attempt")
     int failedAttempts;
-    @Column(name = "account_non_locked")
+    @Column(name = "account_non_locked",nullable = false)
     boolean accountNonLocked = true;
     @Column(name = "lock_time")
     LocalDateTime lockTime;
@@ -53,6 +53,9 @@ public class User {
 
     @OneToMany(mappedBy = "user")
     List<Enrollment> enrollments;
+
+    @OneToMany(mappedBy = "instructor")
+    List<Teach> teaches;
 
     @JsonProperty("Roles")
     public List<String> getRoles() {

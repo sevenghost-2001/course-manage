@@ -13,6 +13,7 @@ import java.util.Map;
 @Builder
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class HomePageResponse {
+    List<CareerPathResponse> careerPaths;
     List<CourseResponse> popularCourses;
     List<CourseResponse> newestCourses;
     Map<String, List<CourseResponse>> coursesByCategory;
