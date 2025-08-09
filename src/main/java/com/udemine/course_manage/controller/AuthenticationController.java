@@ -53,13 +53,4 @@ public class AuthenticationController {
                 .result(result_request)
                 .build();
     }
-
-//    @PostMapping("/signup")
-//    public ApiResponse<AuthenticationResponse> signUp(@RequestBody SignUpRequest request) {
-//        User user = authenticationService.register(request);
-//        return ApiResponse.<AuthenticationResponse>builder()
-//                .code(1000)
-//                .result(result)
-//                .build();
-//    }
 }

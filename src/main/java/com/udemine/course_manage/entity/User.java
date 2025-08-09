@@ -42,6 +42,8 @@ public class User {
     boolean accountNonLocked = true;
     @Column(name = "lock_time")
     LocalDateTime lockTime;
+    @Column(name = "lockout_count")
+    int lockoutCount;
 
 
 

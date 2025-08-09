@@ -52,7 +52,7 @@ import java.util.List;
         }
 
         @PutMapping("/{id}")
-         ApiResponse<User> updateUser(@PathVariable Integer id, @RequestBody UserCreationRequest request){
+         ApiResponse<User> updateUser(@PathVariable Integer id, @RequestBody @Valid UserCreationRequest request){
             ApiResponse<User> apiResponse = new ApiResponse<>();
             apiResponse.setResult(userService.updateUser(id, request));
             return apiResponse;

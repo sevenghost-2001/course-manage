@@ -1,5 +1,7 @@
 package com.udemine.course_manage.exception;
 
+import com.udemine.course_manage.service.Imps.AuthenticationServiceImps;
+
 public enum ErrorCode {
     USER_EXISTED(1001,"User existed"),
     EMAIL_EXISTED(1002,"Email existed"),
@@ -47,7 +49,13 @@ public enum ErrorCode {
     INVALID_TOKEN(1038,"Invalid token"),
     Expired_Token(1039,"Expired token"),
     WRONG_PASSWORD(1040,"Wrong password"),
-    ACCOUNT_LOCKED(1041, "Account is locked due to multiple failed login attempts");
+    ACCOUNT_LOCKED(1041, "Account is locked due to multiple failed login attempts. Please try again after." + AuthenticationServiceImps.TEMP_LOCK_MINUTES + " minutes."),
+    EMAIL_REQUIRED(1042,"Email is required"),
+    INVALID_EMAIL_FORMAT(1043,"Invalid email format"),
+    PASSWORD_FORMAT_INVALID(1044,"Password must contain at least 1 digit, 1 lower, 1 upper, 1 special, and no space"),
+    RANKS_INVALID(1045,"Ranks must be greater than or equal to 0"),
+    LEVELS_INVALID(1046,"Levels must be greater than or equal to 0"),
+    ACCOUNT_PERMANENTLY_LOCKED(1047, "Account is permanently locked due to too many failed login attempts. Contact Admin to unlock."),;
 
 
     ErrorCode(int code, String message) {

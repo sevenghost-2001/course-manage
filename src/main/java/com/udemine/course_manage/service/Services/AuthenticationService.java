@@ -13,4 +13,5 @@ public interface AuthenticationService {
     String buildScope(User user);
     void handleFailedAttempt(User user);
     void resetFailedAttempts(User user);
+    void temporaryUnlock(User user);
 }

@@ -49,6 +49,8 @@ public class AuthenticationServiceImps implements AuthenticationService {
 
     // Số lần thử đăng nhập không thành công trước khi khóa tài khoản
     private static final int MAX_FAILED_ATTEMPTS = 3;
+    private static final int MAX_LOCKOUTS = 3;          // consecutive temp locks → permanent
+    public static final long TEMP_LOCK_MINUTES = 1;    // cooldown
 
     @Override
     public IntrospectResponse introspect(IntroSpectRequest request) {
@@ -93,12 +95,21 @@ public class AuthenticationServiceImps implements AuthenticationService {
        User user = userRepository.findByName(request.getName())
                 .orElseThrow(() -> new AppException(ErrorCode.USER_NOT_EXISTED));
 
+        // Hard stop if user hit the permanent threshold
+        if (user.getLockoutCount() >= MAX_LOCKOUTS) {
+            throw new AppException(ErrorCode.ACCOUNT_PERMANENTLY_LOCKED);
+        }
+
         // Check if account is locked
         if (!user.isAccountNonLocked()) {
+            // If already permanently locked, never auto-unlock
+            if (user.getLockoutCount() >= MAX_LOCKOUTS) {
+                throw new AppException(ErrorCode.ACCOUNT_PERMANENTLY_LOCKED);
+            }
+            // Temporary lock window
             if (user.getLockTime() != null &&
-                    user.getLockTime().plusMinutes(1).isBefore(LocalDateTime.now())) {
-                // Auto-unlock after 15 mins
-                resetFailedAttempts(user);
+                    user.getLockTime().plusMinutes(TEMP_LOCK_MINUTES).isBefore(LocalDateTime.now())) {
+                temporaryUnlock(user);
             } else {
                 throw new AppException(ErrorCode.ACCOUNT_LOCKED);
             }
@@ -172,14 +183,27 @@ public class AuthenticationServiceImps implements AuthenticationService {
         if (newAttempts >= MAX_FAILED_ATTEMPTS) {
             user.setAccountNonLocked(false);
             user.setLockTime(LocalDateTime.now());
+
+            // Count this as one consecutive lockout event
+            user.setLockoutCount(user.getLockoutCount() + 1);
         }
 
         userRepository.save(user);
     }
 
     @Override
-    public void resetFailedAttempts(User user) {
+    public void temporaryUnlock(User user) {
         user.setFailedAttempts(0);
+        user.setAccountNonLocked(true);
+        user.setLockTime(null);
+        // DO NOT reset lockoutCount here!!! we want consecutive lockouts to accumulate
+        userRepository.save(user);
+    }
+
+    @Override
+    public void resetFailedAttempts(User user) { // use only after a successful login
+        user.setFailedAttempts(0);
+        user.setLockoutCount(0); // ok to clear on success
         user.setAccountNonLocked(true);
         user.setLockTime(null);
         userRepository.save(user);
