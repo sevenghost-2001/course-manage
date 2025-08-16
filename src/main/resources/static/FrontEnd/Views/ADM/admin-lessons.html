@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Admin Lessons</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
+</head>
+<style>
+    body {
+      background-color: #f1f3f5;
+    }
+    .sidebar {
+      height: 100vh;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 220px;
+      background-color: #343a40;
+      color: #fff;
+      padding-top: 60px;
+    }
+    .sidebar a {
+      color: #fff;
+      display: block;
+      padding: 10px 20px;
+      text-decoration: none;
+    }
+    .sidebar a:hover {
+      background-color: #495057;
+    }
+    .main {
+      margin-left: 220px;
+      padding: 20px;
+    }
+  </style>
+<body class="bg-light p-4">
+  <div class="sidebar">
+    <h4 class="text-center">Admin</h4>
+    <a href="../../Views/ADM/admin.html"><i class="bi bi-speedometer2"></i> Dashboard</a>
+    <a href="../../Views/ADM/admin-user.html"><i class="bi bi-people"></i> Users</a>
+    <a href="../../Views/ADM/admin-role.html"><i class="bi bi-people"></i> Role</a>
+    <a href="../../Views/ADM/admin-categories.html"><i class="bi bi-grid"></i> Categories</a>
+    <a href="../../Views/ADM/admin-courses.html"><i class="bi bi-book"></i> Courses</a>
+    <a href="../../Views/ADM/admin-coursediscount.html"><i class="bi bi-book"></i> Course Discount</a>
+    <a href="../../Views/ADM/admin-enrollment.html"><i class="bi bi-grid"></i> Enrollment</a>
+    <a href="../../Views/ADM/admin-exercise.html"><i class="bi bi-book"></i> Exercise</a>
+    <a href="../../Views/ADM/admin-lessons.html"><i class="bi bi-book"></i> Lessons</a>
+    <a href="../../Views/ADM/admin-lessoncomment.html"><i class="bi bi-book"></i> Lessons</a>
+    <a href="../../Views/ADM/admin-lessonresource.html"><i class="bi bi-book"></i> Lessons Resource</a>
+    <a href="../../Views/ADM/admin-module.html"><i class="bi bi-grid"></i> Module</a>
+    <a href="../../Views/ADM/admin-message.html"><i class="bi bi-grid"></i> Message</a>
+    <a href="../../Views/ADM/admin-submission.html"><i class="bi bi-grid"></i> submission</a>
+
+    <a href="#"><i class="bi bi-gear"></i> Settings</a>
+  </div>
+<div class="container">
+  <h2 class="mb-4">Quản lý bài học</h2>
+
+  <!-- Tìm kiếm -->
+  <div class="input-group mb-3">
+    <input type="text" id="searchInput" class="form-control" placeholder="Tìm kiếm bài học...">
+  </div>
+
+  <!-- Nút Thêm -->
+  <button class="btn btn-primary mb-3" data-bs-toggle="modal" data-bs-target="#addLessonModal">➕ Thêm bài học</button>
+
+  <!-- Bảng bài học -->
+  <table class="table table-bordered table-striped" id="lessonTable">
+    <thead class="table-dark">
+      <tr>
+        <th>Tiêu đề</th>
+        <th>Video</th>
+        <th>Thời lượng</th>
+        <th>Xem</th>
+        <th>Hành động</th>
+      </tr>
+    </thead>
+    <tbody id="lessonBody">
+      <!-- Data được chèn bằng JS -->
+    </tbody>
+  </table>
+</div>
+
+<!-- Modal: Thêm bài học -->
+<div class="modal fade" id="addLessonModal" tabindex="-1">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <form id="addLessonForm">
+        <div class="modal-header">
+          <h5 class="modal-title">Thêm bài học</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+        </div>
+        <div class="modal-body">
+          <input type="text" class="form-control mb-2" name="title" placeholder="Tiêu đề" required>
+          <input type="number" class="form-control mb-2" name="duration" placeholder="Thời lượng (phút)" required>
+          <label class="form-label mt-2">Chọn video file (ưu tiên)</label>
+          <input type="file" class="form-control mb-2" id="videoFile" accept="video/*">
+          <label class="form-label">Hoặc nhập URL video</label>
+          <input type="url" class="form-control" name="videoUrl" placeholder="Link video (YouTube, MP4...)">
+        </div>
+        <div class="modal-footer">
+          <button type="submit" class="btn btn-success">Lưu</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+
+<!-- Modal: Sửa bài học -->
+<div class="modal fade" id="editLessonModal" tabindex="-1">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <form id="editLessonForm">
+        <div class="modal-header">
+          <h5 class="modal-title">Sửa bài học</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+        </div>
+        <div class="modal-body">
+          <input type="hidden" name="id">
+          <input type="text" class="form-control mb-2" name="title" placeholder="Tiêu đề" required>
+          <input type="file" class="form-control mb-2" id="videoFile" accept="video/*">
+          <label class="form-label">Hoặc nhập URL video</label>
+          <input type="url" class="form-control" name="videoUrl" placeholder="Link video (YouTube, MP4...)">
+          <input type="number" class="form-control mb-2" name="duration" placeholder="Thời lượng" required>
+        </div>
+        <div class="modal-footer">
+          <button type="submit" class="btn btn-warning">Cập nhật</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+
+<!-- Bootstrap JS + Script -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+<script>
+  let lessons = [];
+
+  // Hiển thị bài học
+  function renderLessons() {
+    const keyword = document.getElementById("searchInput").value.toLowerCase();
+    const tbody = document.getElementById("lessonBody");
+    tbody.innerHTML = "";
+
+    lessons.filter(l => l.title.toLowerCase().includes(keyword)).forEach((lesson, i) => {
+      const row = `
+        <tr>
+          <td>${lesson.title}</td>
+          <td><small>${lesson.originalVideoName || lesson.videoUrl}</small></td>
+          <td>${lesson.duration} phút</td>
+          <td>
+            <video width="200" controls>
+              <source src="${lesson.videoUrl}" type="video/mp4">
+              Trình duyệt không hỗ trợ video.
+            </video>
+          </td>
+          <td>
+            <button class="btn btn-sm btn-warning" onclick="openEditModal(${i})">Sửa</button>
+            <button class="btn btn-sm btn-danger" onclick="confirmDelete(${i})">Xóa</button>
+          </td>
+        </tr>
+      `;
+      tbody.innerHTML += row;
+    });
+  }
+
+  // Thêm bài học
+  document.getElementById("addLessonForm").addEventListener("submit", function(e) {
+    e.preventDefault();
+    const form = e.target;
+    const fileInput = document.getElementById("videoFile");
+    let videoUrl = form.videoUrl.value.trim();
+    let originalVideoName = "";
+
+    if (fileInput.files.length > 0) {
+      const file = fileInput.files[0];
+      videoUrl = URL.createObjectURL(file); // tạo blob tạm
+      originalVideoName = file.name;
+    }
+
+    if (!videoUrl) return alert("Vui lòng chọn video hoặc nhập URL!");
+
+    lessons.push({
+      title: form.title.value,
+      duration: form.duration.value,
+      videoUrl,
+      originalVideoName
+    });
+
+    form.reset();
+    bootstrap.Modal.getInstance(document.getElementById("addLessonModal")).hide();
+    renderLessons();
+  });
+
+  // Sửa bài học
+  function openEditModal(index) {
+  const lesson = lessons[index];
+  const form = document.getElementById("editLessonForm");
+
+  form.id.value = index;
+  form.title.value = lesson.title;
+  // form.videoUrl.value = lesson.videoUrl;
+  form.duration.value = lesson.duration;
+
+  // Gán URL video hiện tại (chỉ để hiển thị, không sửa được)
+  // form.videoUrl.value = lesson.videoUrl || "";
+  // form.videoUrl.disabled = true;
+
+  // Reset input file khi mở lại modal
+  form.videoFile.value = "";
+  form.videoUrl.value = "";
+
+  new bootstrap.Modal(document.getElementById("editLessonModal")).show();
+  }
+
+  document.getElementById("editLessonForm").addEventListener("submit", function(e) {
+    e.preventDefault();
+    const form = e.target;
+    const i = form.id.value;
+    
+    const fileInput = form.querySelector("#videoFile");
+    let videoUrl = lessons[i].videoUrl;
+    let originalVideoName = lessons[i].originalVideoName || "";
+
+    if (fileInput.files.length > 0) {
+      const file = fileInput.files[0];
+      videoUrl = URL.createObjectURL(file);
+      originalVideoName = file.name;
+    }
+
+    lessons[i].title = form.title.value;
+    lessons[i].duration = form.duration.value;
+    lessons[i].videoUrl = videoUrl;
+    lessons[i].originalVideoName = originalVideoName;
+    bootstrap.Modal.getInstance(document.getElementById("editLessonModal")).hide();
+    renderLessons();
+  });
+
+  // Xóa
+  function confirmDelete(index) {
+    if (confirm("Bạn có chắc muốn xóa bài học này không?")) {
+      lessons.splice(index, 1);
+      renderLessons();
+    }
+  }
+
+  // Tìm kiếm
+  document.getElementById("searchInput").addEventListener("input", renderLessons);
+</script>
+</body>
+</html>
