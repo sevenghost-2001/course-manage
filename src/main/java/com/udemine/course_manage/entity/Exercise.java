@@ -31,7 +31,6 @@ public class Exercise {
     Lessons lesson;
 
     //Không lưu vào DB
-    @Transient
     @JsonProperty("Lesson_name")
     public String getLessonName() {
         return lesson != null ? lesson.getTitle() : null;

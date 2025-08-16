@@ -2,10 +2,13 @@ package com.udemine.course_manage.controller;
 
 import com.udemine.course_manage.dto.request.ApiResponse;
 import com.udemine.course_manage.dto.request.CourseCreationRequest;
+import com.udemine.course_manage.dto.response.CourseResponse;
+import com.udemine.course_manage.dto.response.HomePageResponse;
 import com.udemine.course_manage.entity.Course;
-import com.udemine.course_manage.exception.AppException;
 import com.udemine.course_manage.exception.ErrorCode;
-import com.udemine.course_manage.service.CourseService;
+import com.udemine.course_manage.mapper.CourseMapper;
+import com.udemine.course_manage.service.Imps.CourseServiceImps;
+import com.udemine.course_manage.service.Services.CourseService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -16,26 +19,32 @@ import java.util.List;
 @RequestMapping("/api/courses")
 public class CourseController {
     @Autowired
-    CourseService courseService;
+    private CourseService courseService;
+    @Autowired
+    private CourseMapper courseMapper;
 
     @GetMapping
-    ApiResponse<List<Course>> getAllCourses() {
-        ApiResponse<List<Course>> apiResponse = new ApiResponse<>();
+    ApiResponse<List<CourseResponse>> getAllCourses() {
+        ApiResponse<List<CourseResponse>> apiResponse = new ApiResponse<>();
         apiResponse.setResult(courseService.getAllCourses());
         return apiResponse;
     }
 
     @PostMapping
-    ApiResponse<Course> createCourse(@RequestBody @Valid CourseCreationRequest request) {
-        ApiResponse<Course> apiResponse = new ApiResponse<>();
-        apiResponse.setResult(courseService.createCourse(request));
+    ApiResponse<CourseResponse> createCourse(@RequestBody @Valid CourseCreationRequest request) {
+        ApiResponse<CourseResponse> apiResponse = new ApiResponse<>();
+        Course course = courseService.createCourse(request);
+        CourseResponse courseResponse = courseMapper.toCourseResponse(course);
+        apiResponse.setResult(courseResponse);
         return apiResponse;
     }
 
     @PutMapping("/{id}")
-    ApiResponse<Course> updateCourse(@PathVariable Integer id, @RequestBody CourseCreationRequest request) {
-        ApiResponse<Course> apiResponse = new ApiResponse<>();
-        apiResponse.setResult(courseService.updateCourse(id, request));
+    ApiResponse<CourseResponse> updateCourse(@PathVariable Integer id, @RequestBody CourseCreationRequest request) {
+        ApiResponse<CourseResponse> apiResponse = new ApiResponse<>();
+        Course course = courseService.updateCourse(id, request);
+        CourseResponse courseResponse = courseMapper.toCourseResponse(course);
+        apiResponse.setResult(courseResponse);
         return apiResponse;
     }
 
@@ -48,5 +57,13 @@ public class CourseController {
         apiResponse.setResult(ErrorCode.DELETE_DONE.getMessage());
         return apiResponse;
     }
+
+    @GetMapping("/homepage")
+    ApiResponse<?> getHomepage(){
+        ApiResponse<HomePageResponse> apiResponse = new ApiResponse<>();
+        apiResponse.setResult(courseService.getHomePageData());
+        return apiResponse;
+    }
+
 }
 

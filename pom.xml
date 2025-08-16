@@ -43,6 +43,20 @@
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-validation</artifactId>
 		</dependency>
+<!--		 Thêm để sử dụng JWT-->
+		<dependency>
+			<groupId>com.nimbusds</groupId>
+			<artifactId>nimbus-jose-jwt</artifactId>
+			<version>9.30.1</version>
+		</dependency>
+<!--		Thêm để Đây là dependency dùng để cấu hình OAuth2 Resource Server
+— tức là ứng dụng của bạn sẽ xác thực access token (thường là JWT) từ client gửi lên
+(do một Authorization Server cấp phát, như Keycloak, Auth0, hoặc tự build).-->
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-oauth2-resource-server</artifactId>
+		</dependency>
+
 		<!--Thêm để sử dụng hash-->
 		<dependency>
 			<groupId>org.springframework.security</groupId>

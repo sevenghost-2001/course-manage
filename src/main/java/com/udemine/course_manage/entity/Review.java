@@ -24,11 +24,10 @@ public class Review {
     LocalDateTime created_at;
     @ManyToOne
     @JoinColumn(name = "id_user", nullable = false)
-    @JsonIgnore//Ẩn đi user
     User user;
+
     @ManyToOne
     @JoinColumn(name = "id_course", nullable = false)
-    @JsonIgnore//Ẩn đi course
     Course course;
 
     //Thêm 2 thuộc tính để trả về name và title

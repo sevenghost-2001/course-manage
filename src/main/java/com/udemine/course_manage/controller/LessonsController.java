@@ -3,7 +3,8 @@ import com.udemine.course_manage.dto.request.ApiResponse;
 import com.udemine.course_manage.dto.request.LessonsCreatonRequest;
 import com.udemine.course_manage.entity.Lessons;
 import com.udemine.course_manage.exception.ErrorCode;
-import com.udemine.course_manage.service.LessonsService;
+import com.udemine.course_manage.service.Imps.LessonServiceImps;
+import com.udemine.course_manage.service.Services.LessonService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -13,7 +14,7 @@ import java.util.List;
 @RequestMapping("/api/lessons")
 public class LessonsController {
     @Autowired
-    private LessonsService lessonsService;
+    private LessonService lessonsService;
     @GetMapping
     ApiResponse<List<Lessons>> getAllLessons(){
         ApiResponse<List<Lessons>> apiResponse = new ApiResponse<>();

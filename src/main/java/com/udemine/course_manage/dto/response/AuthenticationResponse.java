@@ -9,6 +9,6 @@ import lombok.experimental.FieldDefaults;
 @Builder
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class AuthenticationResponse {
-    // true là xác thực đúng và ngược lại
+    String token;
     boolean authenticated;
 }

@@ -1,5 +1,7 @@
 package com.udemine.course_manage.exception;
 
+import com.udemine.course_manage.service.Imps.AuthenticationServiceImps;
+
 public enum ErrorCode {
     USER_EXISTED(1001,"User existed"),
     EMAIL_EXISTED(1002,"Email existed"),
@@ -31,7 +33,30 @@ public enum ErrorCode {
     LESSON_RESOURCE_NOT_FOUND(1027,"Lesson resource not found"),
     USER_NOT_INSTRUCTOR(1028,"User is not instructor"),
     SCORING_NOT_FOUND(1029,"Scoring not found"),
-    SCORING_EXISTED(1030,"Scoring existed"),;
+    MESSAGE_EXISTED(1090,"Message existed"),
+    MESSAGE_NOT_FOUND(1091,"Message not found"),
+    USER_NOT_EXIST(1099,"user not exist"),
+    NOTIFICATION_NOT_EXIST(1098,"Notification not existed"),
+    SCORING_EXISTED(1030,"Scoring existed"),
+    LESSON_COMMENT_NOT_FOUND(1031,"Lesson comment not found"),
+    LESSON_RESPONSE_NOT_FOUND(1033,"Lesson response not found"),
+    USER_ROLE_EXISTED(1032,"User role existed"),
+    ROLE_NOT_FOUND(1033,"Role not found"),
+    USER_ROLE_NOT_FOUND(1034,"User role not found"),
+    REVIEW_REQUEST_NOT_FOUND(1035,"Review request not found"),
+    UNAUTHENTICATED(1036,"Unauthenticated"),
+    ERROR_VERIFY(1037,"Error verify"),
+    INVALID_TOKEN(1038,"Invalid token"),
+    Expired_Token(1039,"Expired token"),
+    WRONG_PASSWORD(1040,"Wrong password"),
+    ACCOUNT_LOCKED(1041, "Account is locked due to multiple failed login attempts. Please try again after." + AuthenticationServiceImps.TEMP_LOCK_MINUTES + " minutes."),
+    EMAIL_REQUIRED(1042,"Email is required"),
+    INVALID_EMAIL_FORMAT(1043,"Invalid email format"),
+    PASSWORD_FORMAT_INVALID(1044,"Password must contain at least 1 digit, 1 lower, 1 upper, 1 special, and no space"),
+    RANKS_INVALID(1045,"Ranks must be greater than or equal to 0"),
+    LEVELS_INVALID(1046,"Levels must be greater than or equal to 0"),
+    ACCOUNT_PERMANENTLY_LOCKED(1047, "Account is permanently locked due to too many failed login attempts. Contact Admin to unlock."),;
+
 
     ErrorCode(int code, String message) {
         this.code = code;

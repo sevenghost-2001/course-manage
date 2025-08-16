@@ -5,7 +5,8 @@ import com.udemine.course_manage.dto.request.ApiResponse;
 import com.udemine.course_manage.dto.request.RoleCreationRequest;
 import com.udemine.course_manage.entity.Role;
 import com.udemine.course_manage.exception.ErrorCode;
-import com.udemine.course_manage.service.RoleService;
+import com.udemine.course_manage.service.Imps.RoleServiceImps;
+import com.udemine.course_manage.service.Services.RoleService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -17,7 +18,7 @@ import java.util.List;
 public class RoleController {
     @Autowired
     private RoleService roleService;
-
+    
     @GetMapping
     public List<Role> getAllRoles(){
         return roleService.getAllRoles();

@@ -19,7 +19,11 @@ import java.time.LocalDateTime;
 public class CourseCreationRequest {
     String image;
     String title;
-    @Digits(integer = 8, fraction = 2)
+    @Column(length = 5000)
+    String shortDescription;
+    @Column(precision = 10, scale = 2)
+    BigDecimal discountedCost;
+    @Column(precision = 10, scale = 2)
     BigDecimal cost;
     int id_category;
 }

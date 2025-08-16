@@ -3,9 +3,8 @@ package com.udemine.course_manage.controller;
 import com.udemine.course_manage.dto.request.ApiResponse;
 import com.udemine.course_manage.dto.request.CategoryCreationRequest;
 import com.udemine.course_manage.entity.Category;
-import com.udemine.course_manage.exception.AppException;
 import com.udemine.course_manage.exception.ErrorCode;
-import com.udemine.course_manage.service.CategoryService;
+import com.udemine.course_manage.service.Imps.CategoryServiceImps;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -16,7 +15,7 @@ import java.util.List;
 @RequestMapping("/api/categories")
 public class CategoryController {
     @Autowired
-    private CategoryService categoryService;
+    private CategoryServiceImps categoryService;
 
     @GetMapping
     ApiResponse<List<Category>> getAllCategories(){

@@ -4,7 +4,8 @@ import com.udemine.course_manage.dto.request.ApiResponse;
 import com.udemine.course_manage.dto.request.ModuleCreationRequest;
 import com.udemine.course_manage.entity.Module;
 import com.udemine.course_manage.exception.ErrorCode;
-import com.udemine.course_manage.service.ModuleService;
+import com.udemine.course_manage.service.Imps.ModuleServiceImps;
+import com.udemine.course_manage.service.Services.ModuleService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 

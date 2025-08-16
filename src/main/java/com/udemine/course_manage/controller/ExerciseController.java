@@ -4,7 +4,8 @@ import com.udemine.course_manage.dto.request.ApiResponse;
 import com.udemine.course_manage.dto.request.ExerciseCreationRequest;
 import com.udemine.course_manage.entity.Exercise;
 import com.udemine.course_manage.exception.ErrorCode;
-import com.udemine.course_manage.service.ExerciseService;
+import com.udemine.course_manage.service.Imps.ExerciseServiceImps;
+import com.udemine.course_manage.service.Services.ExerciseService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 

@@ -7,6 +7,7 @@ import lombok.*;
 import lombok.experimental.FieldDefaults;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Entity
 @Table(name = "lessons")
@@ -31,7 +32,10 @@ public class Lessons {
     @JsonIgnore
     Module module;
 
-    @Transient
+    @OneToMany(mappedBy = "lesson", orphanRemoval = true)
+    @JsonIgnore
+    List<Exercise> Exercises;
+
     @JsonProperty("lessons IT")
     public String getNameModule(){
         return module != null ? module.getTitle(): null;
