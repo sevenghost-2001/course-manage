@@ -55,7 +55,9 @@ public enum ErrorCode {
     PASSWORD_FORMAT_INVALID(1044,"Password must contain at least 1 digit, 1 lower, 1 upper, 1 special, and no space"),
     RANKS_INVALID(1045,"Ranks must be greater than or equal to 0"),
     LEVELS_INVALID(1046,"Levels must be greater than or equal to 0"),
-    ACCOUNT_PERMANENTLY_LOCKED(1047, "Account is permanently locked due to too many failed login attempts. Contact Admin to unlock."),;
+    ACCOUNT_PERMANENTLY_LOCKED(1047, "Account is permanently locked due to too many failed login attempts. Contact Admin to unlock."),
+    CAREER_PATH_NAME_EXISTED(1048, "Career path name already exists"),
+    CAREER_PATH_NOT_FOUND(1049, "Career path not found"),;
 
 
     ErrorCode(int code, String message) {

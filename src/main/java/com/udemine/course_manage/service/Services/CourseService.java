@@ -13,4 +13,5 @@ public interface CourseService {
     void deleteCourse(Integer id);
     List<CourseResponse> getAllCourses();
     HomePageResponse getHomePageData();
+    CourseResponse getCourseById(Integer id);
 }

@@ -65,5 +65,13 @@ public class CourseController {
         return apiResponse;
     }
 
+    @GetMapping("detail/{id}")
+    ApiResponse<CourseResponse> getCourseDetail(@PathVariable Integer id) {
+        ApiResponse<CourseResponse> apiResponse = new ApiResponse<>();
+        CourseResponse courseResponse = courseService.getCourseById(id);
+        apiResponse.setResult(courseResponse);
+        return apiResponse;
+    }
+
 }
 
