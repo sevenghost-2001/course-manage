@@ -1,0 +1,361 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Lesson Page</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet"/>
+  <style>
+    body{background:#fff;color:#000}
+    .video-container{background:#000;height:500px;display:flex;align-items:center;justify-content:center}
+    .video-container video{max-width:100%;height:auto}
+    .lesson-list{
+      background: #fff;
+      height: 80vh;         /* Chiều cao cố định khung */
+      overflow-y: auto;     /* Cho phép cuộn lên xuống */
+      border-left: 2px solid #ddd;
+      padding: 8px;
+    }
+    .lesson-item{padding:10px;border-bottom:1px solid #333;cursor:pointer;display:flex;justify-content:space-between}
+    .lesson-item:hover{background: #b794f4;}
+    .active-lesson{background:#c3bdd4!important}
+    .lesson-completed{color:#90ee90}
+    .lesson-pending{color:gray}
+    .lesson-tabs{display:flex;border-bottom:2px solid #333;margin-top:15px}
+    .lesson-tabs .tab-btn{flex:1;padding:12px;background:none;border:0;cursor:pointer;font-size:16px;color:#121212}
+    .lesson-tabs .tab-btn.active{border-bottom:3px solid #7c3aed;color:#b794f4;font-weight:700}
+    .tab-content{display:none;padding:15px}
+    .tab-content.active{display:block}
+    /* Q&A */
+    .ask-box textarea{width:100%;min-height:90px;background:#fff;color:#2b2b2b;border:1px solid #333;border-radius:8px;padding:10px}
+    .ask-box .btn{margin-top:8px}
+    .question-item{border-bottom:1px solid #2b2b2b;padding:12px 0}
+    .comment-item{padding:6px 10px;border-left:3px solid #444;margin:6px 0}
+    .comments-box{background:#fff;border-radius:8px;padding:10px;margin-top:8px}
+    .comments-box textarea{width:100%;min-height:60px;background:#fff;color:#000;border:1px solid #333;border-radius:6px;padding:8px}
+  </style>
+</head>
+<body>
+<!-- Navbar -->
+<nav class="navbar navbar-expand-lg navbar-light bg-white shadow-sm sticky-top">
+  <div class="container">
+    <a class="navbar-brand d-flex align-items-center" href="/index.html">
+      <img src="/Assets/Images/logo.jpg" alt="Eduverse Logo" class="img-fluid" style="height: 40px;">
+    </a>
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarNav">
+      <ul class="navbar-nav ms-auto">
+        <li class="nav-item"><a class="nav-link" href="about.html">About</a></li>
+        <li class="nav-item"><a class="nav-link" href="contact.html">Contact</a></li>
+        <li class="nav-item"><a class="nav-link" href="help.html">Help</a></li>
+        <li class="nav-item"><a class="nav-link" href="courses.html">Courses</a></li>
+        <!-- <li class="nav-item"><a class="btn btn-outline-primary" href="../Account/login.html">Log In</a></li>
+        <li class="nav-item"><a class="btn btn-primary ms-2" href="../Account/register.html">Sign Up</a></li> -->
+      </ul>
+    </div>
+  </div>
+</nav>
+<div class="container-fluid">
+  <div class="row">
+    <!-- LEFT: video + tabs -->
+    <div class="col-md-8 p-3">
+      <div class="video-container">
+        <video id="lessonVideo" controls>
+          <source src="https://www.w3schools.com/html/mov_bbb.mp4" type="video/mp4"/>
+          Trình duyệt của bạn không hỗ trợ video.
+        </video>
+      </div>
+      <!-- <div class="container mt-3">
+        <video id="lesson-video" controls width="100%">
+          <source src="http://localhost:8080/api/videos/stream/sample.mp4" type="video/mp4">
+          Trình duyệt của bạn không hỗ trợ video.
+        </video>
+      </div> -->
+
+      <h4 class="mt-3" id="lessonTitle">Bài học: Giới thiệu</h4>
+
+      <!-- Tabs -->
+      <div class="lesson-tabs">
+        <button class="tab-btn active" data-tab="overview">Overview</button>
+        <button class="tab-btn" data-tab="qa">Q&A</button>
+        <button class="tab-btn" data-tab="reviews">Reviews</button>
+      </div>
+
+      <!-- Tab panes -->
+      <div class="tab-content active" id="overview">
+        <h5>Tổng quan</h5>
+        <p>Thông tin khóa học, mô tả bài học…</p>
+      </div>
+
+      <div class="tab-content" id="qa">
+        <h5>Q&A</h5>
+        <div class="ask-box mb-3">
+          <textarea id="questionInput" placeholder="Ask a question..."></textarea>
+          <button class="btn btn-sm btn-primary" id="postQuestionBtn">Post</button>
+        </div>
+        <div id="questionList"></div>
+      </div>
+
+      <div class="tab-content" id="reviews">
+        <h5>Reviews</h5>
+        <p>Đánh giá từ học viên đã học khóa này.</p>
+      </div>
+    </div>
+
+    <!-- RIGHT: lesson list -->
+    <div class="col-md-4 p-0">
+      <div class="lesson-list-wrapper">
+          <div class="accordion" id="course-content"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+
+
+/* ======== Lessons / Sections ======== */
+const sections = [
+  { id:1, title:"Section 1: Introduction & Basics of Asp.Net MVC",
+    lessons:[
+      { id:1, title:"Course Introduction", duration:"10min", completed:false, video:"https://www.w3schools.com/html/mov_bbb.mp4" },
+      { id:2, title:"Intro to ASP.NET MVC & Understanding MVC Architecture", duration:"10min", completed:false, video:"https://www.w3schools.com/html/movie.mp4" },
+      { id:3, title:"Intro to Controllers", duration:"2min", completed:false, video:"https://www.w3schools.com/html/mov_bbb.mp4" },
+      { id:4, title:"Intro to Action Methods", duration:"1min", completed:false, video:"https://www.w3schools.com/html/movie.mp4" }
+    ]},
+  { id:2, title:"Section 2: Additional Basics of Asp.Net MVC",
+    lessons:[
+      { id:5, title:"Where to Start Practical", duration:"1min", completed:false, video:"https://www.w3schools.com/html/movie.mp4" },
+      { id:6, title:"Where to download the Source Code", duration:"1min", completed:false, video:"https://www.w3schools.com/html/mov_bbb.mp4" },
+      { id:7, title:"Asp.Net Mvc (vs) Asp.Net Web Forms", duration:"6min", completed:false, video:"https://www.w3schools.com/html/mov_bbb.mp4" }
+    ]}
+];
+
+const courseContentEl = document.getElementById('course-content');
+const videoPlayer = document.getElementById('lessonVideo');
+const lessonTitle  = document.getElementById('lessonTitle');
+let currentLesson = null;
+
+function renderCourseContent() {
+  courseContentEl.innerHTML = '';
+  sections.forEach((section, idx) => {
+    const sectionId = `section-${section.id}`;
+    const done = section.lessons.filter(l=>l.completed).length;
+
+    courseContentEl.insertAdjacentHTML('beforeend', `
+      <div class="accordion-item card mb-2 bg-white text-drak">
+        <h2 class="accordion-header">
+          <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" 
+                  data-bs-target="#${sectionId}">
+            ${section.title} (${done}/${section.lessons.length})
+          </button>
+        </h2>
+        <div id="${sectionId}" class="collapse">
+          <div class="card-body p-0">
+            ${section.lessons.map((ls,idx)=>`
+              <div class="lesson-item ${ls.completed?'lesson-completed':'lesson-pending'} ${idx>0 && !section.lessons[idx-1].completed?'locked':''}"
+                   data-id="${ls.id}" data-title="${ls.title}" data-video="${ls.video}">
+                <span>
+                  ${ls.completed?'✅':(idx>0 && !section.lessons[idx-1].completed?'🔒':'⬜')} 
+                  ${ls.title}
+                </span>
+                <span>${ls.duration}</span>
+              </div>`).join('')}
+          </div>
+          </div>
+        </div>
+      </div>
+    `);
+  });
+
+  // click to play
+  document.querySelectorAll('.lesson-item').forEach(it=>{
+    it.addEventListener('click', ()=>{
+      if(it.classList.contains('locked')) return; // chặn nếu bị khóa
+      document.querySelectorAll('.lesson-item').forEach(i=>i.classList.remove('active-lesson'));
+      it.classList.add('active-lesson');
+      const title = it.dataset.title;
+      const video = it.dataset.video;
+      videoPlayer.src = video;
+      lessonTitle.textContent = "Bài học: " + title;
+
+      sections.forEach(s=>s.lessons.forEach(l=>{
+        if(l.title === title) currentLesson = l;
+      }));
+    });
+  });
+}
+// Khi xem xong video → đánh completed + mở khóa bài sau
+videoPlayer.addEventListener('ended', ()=>{
+  if(currentLesson){
+    currentLesson.completed = true;
+
+    // update giao diện bài hiện tại
+    const el = document.querySelector(`.lesson-item[data-id="${currentLesson.id}"]`);
+    if(el){
+      el.classList.remove('lesson-pending');
+      el.classList.add('lesson-completed');
+      el.querySelector('span').innerText = '✅ ' + currentLesson.title;
+    }
+
+    // mở khóa bài tiếp theo trong cùng section
+    for(let sec of sections){
+      const idx = sec.lessons.findIndex(l=>l.id === currentLesson.id);
+      if(idx>-1 && idx<sec.lessons.length-1){
+        const nextLesson = sec.lessons[idx+1];
+        const nextEl = document.querySelector(`.lesson-item[data-id="${nextLesson.id}"]`);
+        if(nextEl){
+          nextEl.classList.remove('locked');
+          if(!nextLesson.completed){
+            nextEl.querySelector('span').innerText = '⬜ ' + nextLesson.title;
+          }
+        }
+      }
+    }
+
+    // update số done/total
+    sections.forEach(section=>{
+      if(section.lessons.some(l=>l.id === currentLesson.id)){
+        const done = section.lessons.filter(l=>l.completed).length;
+        const headerBtn = document.querySelector(`[data-bs-target="#section-${section.id}"]`);
+        if(headerBtn){
+          headerBtn.innerHTML = `${section.title} (${done}/${section.lessons.length})`;
+        }
+      }
+    });
+  }
+});
+renderCourseContent();
+
+/* ======== Tabs ======== */
+document.querySelectorAll('.tab-btn').forEach(btn=>{
+  btn.addEventListener('click', ()=>{
+    document.querySelectorAll('.tab-btn').forEach(b=>b.classList.remove('active'));
+    document.querySelectorAll('.tab-content').forEach(c=>c.classList.remove('active'));
+    btn.classList.add('active');
+    document.getElementById(btn.dataset.tab).classList.add('active');
+  });
+});
+
+/* ======== Q&A ======== */
+let qna = [
+  { id:1, title:"Hi, cannot proceed", content:"Please assist", userName:"Anita",
+    comments:[{userName:"Instructor", content:"Try cleaning build and re-run", replies:[]}] }
+];
+
+const questionList = document.getElementById('questionList');
+const questionInput = document.getElementById('questionInput');
+document.getElementById('postQuestionBtn').addEventListener('click', addQuestion);
+
+function getTotalComments(q){
+  let total = 0;
+  q.comments.forEach(c=>{
+    total++;
+    if(c.replies) total += c.replies.length;
+  });
+  return total;
+}
+
+function renderQuestions(){
+  questionList.innerHTML = qna.map(q=>`
+    <div class="question-item">
+      <h6 class="mb-1">${q.title}</h6>
+      <p class="mb-1 text-muted">${q.content||''}</p>
+      <small class="d-block mb-2">by ${q.userName}</small>
+      <button class="btn btn-sm btn-outline-dark" data-action="toggle" data-id="${q.id}">
+        💬 ${getTotalComments(q)} Comments
+      </button>
+      <div id="comments-${q.id}" class="comments-box" style="display:none"></div>
+    </div>
+  `).join('');
+
+  questionList.querySelectorAll('[data-action="toggle"]').forEach(btn=>{
+    btn.addEventListener('click', ()=>{
+      const qId = +btn.dataset.id;
+      const box = document.getElementById(`comments-${qId}`);
+      if(box.style.display==='none'){ renderComments(qId); box.style.display='block'; }
+      else { box.style.display='none'; }
+    });
+  });
+}
+
+function renderComments(qId){
+  const q = qna.find(x=>x.id===qId);
+  const box = document.getElementById(`comments-${qId}`);
+  box.innerHTML = q.comments.map((c,ci)=>`
+    <div class="comment-item">
+      <b>${c.userName}</b>: ${c.content}
+      <div class="ms-3">
+        ${c.replies?.map(r=>`
+          <div class="reply-item"><b>${r.userName}</b>: ${r.content}</div>
+        `).join('')||''}
+        <textarea id="replyInput-${qId}-${ci}" placeholder="Write a reply..."></textarea>
+        <button class="btn btn-sm btn-secondary mt-1" data-action="reply" data-qid="${qId}" data-cid="${ci}">Reply</button>
+      </div>
+    </div>
+  `).join('') + `
+    <textarea id="commentInput-${qId}" placeholder="Write a comment..."></textarea>
+    <button class="btn btn-sm btn-primary mt-2" data-action="comment" data-id="${qId}">Comment</button>
+  `;
+
+  // reply
+  box.querySelectorAll('[data-action="reply"]').forEach(btn=>{
+    btn.addEventListener('click', ()=>{
+      const qid = +btn.dataset.qid;
+      const cid = +btn.dataset.cid;
+      const txt = document.getElementById(`replyInput-${qid}-${cid}`).value.trim();
+      if(!txt) return;
+      let q = qna.find(x=>x.id===qid);
+      q.comments[cid].replies.push({userName:"You", content:txt});
+      renderComments(qid);
+      document.querySelector(`[data-action="toggle"][data-id="${qid}"]`).innerText = `💬 ${getTotalComments(q)} Comments`;
+    });
+  });
+
+  // comment
+  box.querySelector('[data-action="comment"]').addEventListener('click', ()=>{
+    const txt = document.getElementById(`commentInput-${qId}`).value.trim();
+    if(!txt) return;
+    let q = qna.find(x=>x.id===qId);
+    q.comments.push({userName:"You", content:txt, replies:[]});
+    renderComments(qId);
+    document.querySelector(`[data-action="toggle"][data-id="${qId}"]`).innerText = `💬 ${getTotalComments(q)} Comments`;
+  });
+}
+
+function addQuestion(){
+  const raw = questionInput.value.trim();
+  if(!raw) return;
+  const [title,...rest] = raw.split('\n');
+  qna.unshift({ id:Date.now(), title, content:rest.join(' ').trim(), userName:"You", comments:[] });
+  questionInput.value='';
+  renderQuestions();
+}
+renderQuestions();
+</script>
+<script>
+// chặn chuột phải
+document.addEventListener("contextmenu", e => e.preventDefault());
+
+// chặn phím PrintScreen, Ctrl+S, Ctrl+Shift+I
+document.addEventListener("keydown", function(e) {
+  if (e.key === "PrintScreen") {
+    alert("Chụp màn hình đã bị vô hiệu hóa!");
+    e.preventDefault();
+  }
+  if (e.ctrlKey && (e.key === "s" || e.key === "S")) {
+    e.preventDefault();
+    alert("Save đã bị khóa!");
+  }
+  if (e.ctrlKey && e.shiftKey && e.key === "I") {
+    e.preventDefault();
+    alert("DevTools bị chặn!");
+  }
+});
+</script>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

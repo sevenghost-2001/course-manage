@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Admin - Enrollment</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
+</head>
+<style>
+    body {
+      background-color: #f1f3f5;
+    }
+    .sidebar {
+      height: 100vh;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 220px;
+      background-color: #343a40;
+      color: #fff;
+      padding-top: 60px;
+    }
+    .sidebar a {
+      color: #fff;
+      display: block;
+      padding: 10px 20px;
+      text-decoration: none;
+    }
+    .sidebar a:hover {
+      background-color: #495057;
+    }
+    .main {
+      margin-left: 220px;
+      padding: 20px;
+    }
+  </style>
+<body>
+    <div class="sidebar">
+    <h4 class="text-center">Admin</h4>
+    <a href="../../Views/ADM/admin.html"><i class="bi bi-speedometer2"></i> Dashboard</a>
+    <a href="../../Views/ADM/admin-user.html"><i class="bi bi-people"></i> Users</a>
+    <a href="../../Views/ADM/admin-role.html"><i class="bi bi-people"></i> Role</a>
+    <a href="../../Views/ADM/admin-categories.html"><i class="bi bi-grid"></i> Categories</a>
+    <a href="../../Views/ADM/admin-courses.html"><i class="bi bi-book"></i> Courses</a>
+    <a href="../../Views/ADM/admin-coursediscount.html"><i class="bi bi-book"></i> Course Discount</a>
+    <a href="../../Views/ADM/admin-enrollment.html"><i class="bi bi-grid"></i> Enrollment</a>
+    <a href="../../Views/ADM/admin-exercise.html"><i class="bi bi-book"></i> Exercise</a>
+    <a href="../../Views/ADM/admin-lessons.html"><i class="bi bi-book"></i> Lessons</a>
+    <a href="../../Views/ADM/admin-lessoncomment.html"><i class="bi bi-book"></i> Lessons</a>
+    <a href="../../Views/ADM/admin-lessonresource.html"><i class="bi bi-book"></i> Lessons Resource</a>
+    <a href="../../Views/ADM/admin-module.html"><i class="bi bi-grid"></i> Module</a>
+    <a href="../../Views/ADM/admin-message.html"><i class="bi bi-grid"></i> Message</a>
+    <a href="../../Views/ADM/admin-submission.html"><i class="bi bi-grid"></i> submission</a>
+
+    <a href="#"><i class="bi bi-gear"></i> Settings</a>
+  </div>
+<div class="container py-4">
+  <h2 class="mb-4">Enrollment Management</h2>
+
+  <!-- Search -->
+  <div class="mb-3">
+    <input type="text" class="form-control" id="searchInput" placeholder="Search by student or course name...">
+  </div>
+
+  <!-- Enrollment Form -->
+  <form id="enrollmentForm" class="row g-3 mb-4">
+    <div class="col-md-3">
+      <input type="text" class="form-control" id="studentName" placeholder="Student Name" required />
+    </div>
+    <div class="col-md-3">
+      <input type="text" class="form-control" id="courseName" placeholder="Course Name" required />
+    </div>
+    <div class="col-md-3">
+      <input type="date" class="form-control" id="enrollDate" required />
+    </div>
+    <div class="col-md-3">
+      <button type="submit" class="btn btn-primary w-100">Add Enrollment</button>
+    </div>
+  </form>
+
+  <!-- Table -->
+  <div class="table-responsive">
+    <table class="table table-bordered table-hover" id="enrollmentTable">
+      <thead class="table-dark">
+        <tr>
+          <th>Student Name</th>
+          <th>Course Name</th>
+          <th>Enrollment Date</th>
+          <th>Action</th>
+        </tr>
+      </thead>
+      <tbody id="tableBody">
+        <!-- Rows will be added dynamically -->
+      </tbody>
+    </table>
+  </div>
+
+  <!-- Pagination -->
+  <nav>
+    <ul class="pagination" id="pagination"></ul>
+  </nav>
+</div>
+
+<script>
+  const form = document.getElementById("enrollmentForm");
+  const tableBody = document.getElementById("tableBody");
+  const searchInput = document.getElementById("searchInput");
+  const pagination = document.getElementById("pagination");
+
+  const enrollments = [];
+  let currentPage = 1;
+  const rowsPerPage = 10;
+
+  form.addEventListener("submit", function (e) {
+    e.preventDefault();
+
+    const student = document.getElementById("studentName").value.trim();
+    const course = document.getElementById("courseName").value.trim();
+    const date = document.getElementById("enrollDate").value;
+
+    if (!student || !course || !date) return;
+
+    enrollments.push({ student, course, date });
+    form.reset();
+    currentPage = 1;
+    renderTable();
+  });
+
+  function renderTable() {
+    const filtered = enrollments.filter(e =>
+      e.student.toLowerCase().includes(searchInput.value.toLowerCase()) ||
+      e.course.toLowerCase().includes(searchInput.value.toLowerCase())
+    );
+
+    const start = (currentPage - 1) * rowsPerPage;
+    const end = start + rowsPerPage;
+    const pageData = filtered.slice(start, end);
+
+    tableBody.innerHTML = "";
+
+    pageData.forEach((e, index) => {
+      const row = tableBody.insertRow();
+      row.innerHTML = `
+        <td>${e.student}</td>
+        <td>${e.course}</td>
+        <td>${e.date}</td>
+        <td>
+          <button class="btn btn-warning btn-sm me-1" onclick="editEnrollment(${start + index})">Edit</button>
+          <button class="btn btn-danger btn-sm" onclick="deleteEnrollment(${start + index})">Delete</button>
+        </td>
+      `;
+    });
+
+    renderPagination(filtered.length);
+  }
+
+  function renderPagination(totalItems) {
+    const totalPages = Math.ceil(totalItems / rowsPerPage);
+    pagination.innerHTML = "";
+
+    for (let i = 1; i <= totalPages; i++) {
+      const li = document.createElement("li");
+      li.className = `page-item ${i === currentPage ? "active" : ""}`;
+      li.innerHTML = `<a class="page-link" href="#">${i}</a>`;
+      li.addEventListener("click", (e) => {
+        e.preventDefault();
+        currentPage = i;
+        renderTable();
+      });
+      pagination.appendChild(li);
+    }
+  }
+
+  function deleteEnrollment(index) {
+    const e = enrollments[index];
+    if (confirm(`Are you sure you want to delete ${e.student}'s enrollment in ${e.course}?`)) {
+      enrollments.splice(index, 1);
+      renderTable();
+    }
+  }
+
+  function editEnrollment(index) {
+    const e = enrollments[index];
+    const newStudent = prompt("Edit Student Name", e.student);
+    const newCourse = prompt("Edit Course Name", e.course);
+    const newDate = prompt("Edit Enrollment Date", e.date);
+
+    if (newStudent && newCourse && newDate) {
+      enrollments[index] = {
+        student: newStudent,
+        course: newCourse,
+        date: newDate
+      };
+      renderTable();
+    }
+  }
+
+  searchInput.addEventListener("input", () => {
+    currentPage = 1;
+    renderTable();
+  });
+
+  // Initial test data (optional)
+  enrollments.push(
+    { student: "John Doe", course: "Java Basics", date: "2025-07-01" },
+    { student: "Jane Smith", course: "Spring Boot", date: "2025-07-02" },
+    { student: "Tommy", course: "Python Intro", date: "2025-07-03" },
+    { student: "Alice", course: "HTML & CSS", date: "2025-07-04" },
+    { student: "Bob", course: "JavaScript", date: "2025-07-05" },
+    { student: "Charlie", course: "ReactJS", date: "2025-07-06" }
+  );
+  renderTable();
+</script>
+</body>
+</html>

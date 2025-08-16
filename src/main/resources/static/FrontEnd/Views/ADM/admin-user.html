@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Admin - Manage Users</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet"/>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet">
+  <style>
+    body {
+      background-color: #f8f9fa;
+    }
+    .sidebar {
+      height: 100vh;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 220px;
+      background-color: #343a40;
+      color: #fff;
+      padding-top: 60px;
+    }
+    .sidebar a {
+      color: #fff;
+      display: block;
+      padding: 10px 20px;
+      text-decoration: none;
+    }
+    .sidebar a:hover {
+      background-color: #495057;
+    }
+    .main {
+      margin-left: 220px;
+      padding: 20px;
+    }
+  </style>
+</head>
+<body>
+
+<!-- Sidebar -->
+<div class="sidebar">
+  <h4 class="text-center">Admin</h4>
+    <a href="../../Views/ADM/admin.html"><i class="bi bi-speedometer2"></i> Dashboard</a>
+    <a href="../../Views/ADM/admin-user.html"><i class="bi bi-people"></i> Users</a>
+    <a href="../../Views/ADM/admin-role.html"><i class="bi bi-people"></i> Role</a>
+    <a href="../../Views/ADM/admin-categories.html"><i class="bi bi-grid"></i> Categories</a>
+    <a href="../../Views/ADM/admin-courses.html"><i class="bi bi-book"></i> Courses</a>
+    <a href="../../Views/ADM/admin-coursediscount.html"><i class="bi bi-book"></i> Course Discount</a>
+    <a href="../../Views/ADM/admin-enrollment.html"><i class="bi bi-grid"></i> Enrollment</a>
+    <a href="../../Views/ADM/admin-exercise.html"><i class="bi bi-book"></i> Exercise</a>
+    <a href="../../Views/ADM/admin-lessons.html"><i class="bi bi-book"></i> Lessons</a>
+    <a href="../../Views/ADM/admin-lessoncomment.html"><i class="bi bi-book"></i> Lessons</a>
+    <a href="../../Views/ADM/admin-lessonresource.html"><i class="bi bi-book"></i> Lessons Resource</a>
+    <a href="../../Views/ADM/admin-module.html"><i class="bi bi-grid"></i> Module</a>
+    <a href="../../Views/ADM/admin-message.html"><i class="bi bi-grid"></i> Message</a>
+    <a href="../../Views/ADM/admin-submission.html"><i class="bi bi-grid"></i> submission</a>
+
+    <a href="#"><i class="bi bi-gear"></i> Settings</a>
+</div>
+
+<!-- Main Content -->
+<div class="main">
+  <div class="d-flex justify-content-between align-items-center mb-4">
+    <h2>Manage Courses</h2>
+    <div>
+      <input type="text" id="searchInput" class="form-control d-inline w-auto me-2" placeholder="Search course...">
+      <button class="btn btn-success" data-bs-toggle="modal" data-bs-target="#addUserModal">
+        <i class="bi bi-plus-circle"></i> Add User
+      </button>
+    </div>
+  </div>
+
+  <table class="table table-hover table-bordered" id="userTable">
+    <thead class="table-dark">
+      <tr>
+        <th>#</th>
+        <th>Name</th>
+        <th>Email</th>
+        <th>Role</th>
+        <th>Actions</th>
+      </tr>
+    </thead>
+    <tbody id="userTableBody">
+      <!-- JS will insert rows -->
+    </tbody>
+  </table>
+</div>
+
+<!-- Edit User Modal -->
+<div class="modal fade" id="editUserModal" tabindex="-1" aria-labelledby="editUserModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <form id="editUserForm">
+        <div class="modal-header">
+          <h5 class="modal-title" id="editUserModalLabel">Edit User</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <input type="hidden" id="editUserId">
+          <div class="mb-3">
+            <label for="editUserName" class="form-label">Name</label>
+            <input type="text" class="form-control" id="editUserName" required>
+          </div>
+          <div class="mb-3">
+            <label for="editUserEmail" class="form-label">Email</label>
+            <input type="email" class="form-control" id="editUserEmail" required>
+          </div>
+          <div class="mb-3">
+            <label for="editUserRole" class="form-label">Role</label>
+            <select class="form-select" id="editUserRole">
+              <option value="Student">Student</option>
+              <option value="Instructor">Instructor</option>
+              <option value="Admin">Admin</option>
+            </select>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="submit" class="btn btn-primary">Save changes</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+
+<!-- Add User Modal -->
+<div class="modal fade" id="addUserModal" tabindex="-1" aria-labelledby="addUserModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <form id="addUserForm">
+        <div class="modal-header">
+          <h5 class="modal-title" id="addUserModalLabel">Add New User</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+        </div>
+        <div class="modal-body">
+          <div class="mb-3">
+            <label for="addUserName" class="form-label">Name</label>
+            <input type="text" class="form-control" id="addUserName" required>
+          </div>
+          <div class="mb-3">
+            <label for="addUserEmail" class="form-label">Email</label>
+            <input type="email" class="form-control" id="addUserEmail" required>
+          </div>
+          <div class="mb-3">
+            <label for="addUserRole" class="form-label">Role</label>
+            <select class="form-select" id="addUserRole">
+              <option value="Student">Student</option>
+              <option value="Instructor">Instructor</option>
+              <option value="Admin">Admin</option>
+            </select>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="submit" class="btn btn-success">Add User</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+<script>
+  const users = [
+    { id: 1, name: "Alice Nguyen", email: "alice@example.com", role: "Student" },
+    { id: 2, name: "Bob Tran", email: "bob@example.com", role: "Instructor" },
+    { id: 3, name: "Charlie Le", email: "charlie@example.com", role: "Student" },
+    { id: 4, name: "Diana Vo", email: "diana@example.com", role: "Admin" }
+  ];
+
+  const userTableBody = document.getElementById("userTableBody");
+
+  function renderUsers(list) {
+    userTableBody.innerHTML = "";
+    list.forEach((user, index) => {
+      userTableBody.innerHTML += `
+        <tr>
+          <td>${index + 1}</td>
+          <td>${user.name}</td>
+          <td>${user.email}</td>
+          <td>${user.role}</td>
+          <td>
+            <button class="btn btn-sm btn-warning me-1" onclick="openEditUser(${user.id})">
+              <i class="bi bi-pencil-square"></i> Edit
+            </button>
+            <button class="btn btn-sm btn-danger" onclick="deleteUser(${user.id})">
+              <i class="bi bi-trash"></i> Delete
+            </button>
+          </td>
+        </tr>
+      `;
+    });
+  }
+
+  function deleteUser(id) {
+    const confirmDelete = confirm("Are you sure you want to delete this user?");
+    if (confirmDelete) {
+      const index = users.findIndex(u => u.id === id);
+      if (index > -1) {
+        users.splice(index, 1);
+        renderUsers(users);
+      }
+    }
+  }
+
+  function openEditUser(id) {
+    const user = users.find(u => u.id === id);
+    if (user) {
+      document.getElementById("editUserId").value = user.id;
+      document.getElementById("editUserName").value = user.name;
+      document.getElementById("editUserEmail").value = user.email;
+      document.getElementById("editUserRole").value = user.role;
+      const modal = new bootstrap.Modal(document.getElementById('editUserModal'));
+      modal.show();
+    }
+  }
+
+  document.getElementById("editUserForm").addEventListener("submit", function (e) {
+    e.preventDefault();
+    const id = parseInt(document.getElementById("editUserId").value);
+    const name = document.getElementById("editUserName").value;
+    const email = document.getElementById("editUserEmail").value;
+    const role = document.getElementById("editUserRole").value;
+
+    const user = users.find(u => u.id === id);
+    if (user) {
+      user.name = name;
+      user.email = email;
+      user.role = role;
+      renderUsers(users);
+      bootstrap.Modal.getInstance(document.getElementById('editUserModal')).hide();
+    }
+  });
+
+  // Search filter
+  document.getElementById("searchInput").addEventListener("input", function () {
+    const value = this.value.toLowerCase();
+    const filtered = users.filter(u => u.name.toLowerCase().includes(value));
+    renderUsers(filtered);
+  });
+
+  renderUsers(users);
+  document.getElementById("addUserForm").addEventListener("submit", function (e) {
+  e.preventDefault();
+  const name = document.getElementById("addUserName").value.trim();
+  const email = document.getElementById("addUserEmail").value.trim();
+  const role = document.getElementById("addUserRole").value;
+
+  if (name && email) {
+    const newId = users.length > 0 ? Math.max(...users.map(u => u.id)) + 1 : 1;
+    const newUser = { id: newId, name, email, role };
+    users.push(newUser);
+    renderUsers(users);
+    this.reset();
+    bootstrap.Modal.getInstance(document.getElementById('addUserModal')).hide();
+  }
+});
+</script>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

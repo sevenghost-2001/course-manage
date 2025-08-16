@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Quản lý Vai trò</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
+</head>
+<style>
+    body {
+      background-color: #f1f3f5;
+    }
+    .sidebar {
+      height: 100vh;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 220px;
+      background-color: #343a40;
+      color: #fff;
+      padding-top: 60px;
+    }
+    .sidebar a {
+      color: #fff;
+      display: block;
+      padding: 10px 20px;
+      text-decoration: none;
+    }
+    .sidebar a:hover {
+      background-color: #495057;
+    }
+    .main {
+      margin-left: 220px;
+      padding: 20px;
+    }
+  </style>
+<body>
+    <div class="sidebar">
+    <h4 class="text-center">Admin</h4>
+    <a href="../../Views/ADM/admin.html"><i class="bi bi-speedometer2"></i> Dashboard</a>
+    <a href="../../Views/ADM/admin-user.html"><i class="bi bi-people"></i> Users</a>
+    <a href="../../Views/ADM/admin-role.html"><i class="bi bi-people"></i> Role</a>
+    <a href="../../Views/ADM/admin-categories.html"><i class="bi bi-grid"></i> Categories</a>
+    <a href="../../Views/ADM/admin-courses.html"><i class="bi bi-book"></i> Courses</a>
+    <a href="../../Views/ADM/admin-coursediscount.html"><i class="bi bi-book"></i> Course Discount</a>
+    <a href="../../Views/ADM/admin-enrollment.html"><i class="bi bi-grid"></i> Enrollment</a>
+    <a href="../../Views/ADM/admin-exercise.html"><i class="bi bi-book"></i> Exercise</a>
+    <a href="../../Views/ADM/admin-lessons.html"><i class="bi bi-book"></i> Lessons</a>
+    <a href="../../Views/ADM/admin-lessoncomment.html"><i class="bi bi-book"></i> Lessons</a>
+    <a href="../../Views/ADM/admin-lessonresource.html"><i class="bi bi-book"></i> Lessons Resource</a>
+    <a href="../../Views/ADM/admin-module.html"><i class="bi bi-grid"></i> Module</a>
+    <a href="../../Views/ADM/admin-message.html"><i class="bi bi-grid"></i> Message</a>
+    <a href="../../Views/ADM/admin-submission.html"><i class="bi bi-grid"></i> submission</a>
+
+    <a href="#"><i class="bi bi-gear"></i> Settings</a>
+  </div>
+<div class="container mt-5">
+  <h2 class="mb-4">🛡️ Quản lý Vai trò Người dùng</h2>
+
+  <div class="d-flex justify-content-between mb-3">
+    <input type="text" id="searchInput" class="form-control w-50" placeholder="🔍 Tìm kiếm vai trò..."/>
+    <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addModal">➕ Thêm vai trò</button>
+  </div>
+
+  <table class="table table-bordered table-hover">
+    <thead class="table-dark">
+    <tr>
+      <th>#</th>
+      <th>Tên vai trò</th>
+      <th>Mô tả</th>
+      <th>Hành động</th>
+    </tr>
+    </thead>
+    <tbody id="roleTableBody"></tbody>
+  </table>
+
+    <nav>
+    <ul class="pagination" id="pagination"></ul>
+  </nav>
+</div>
+
+<!-- Modal Thêm -->
+<div class="modal fade" id="addModal" tabindex="-1">
+  <div class="modal-dialog">
+    <form id="addForm" class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Thêm vai trò</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+      </div>
+      <div class="modal-body">
+        <div class="mb-3">
+          <label class="form-label">Tên vai trò</label>
+          <input type="text" name="name" class="form-control" required/>
+        </div>
+        <div class="mb-3">
+          <label class="form-label">Mô tả</label>
+          <input type="text" name="description" class="form-control"/>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="submit" class="btn btn-success">Lưu</button>
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Đóng</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<!-- Modal Sửa -->
+<div class="modal fade" id="editModal" tabindex="-1">
+  <div class="modal-dialog">
+    <form id="editForm" class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Sửa vai trò</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+      </div>
+      <div class="modal-body">
+        <input type="hidden" name="index"/>
+        <div class="mb-3">
+          <label class="form-label">Tên vai trò</label>
+          <input type="text" name="name" class="form-control" required/>
+        </div>
+        <div class="mb-3">
+          <label class="form-label">Mô tả</label>
+          <input type="text" name="description" class="form-control"/>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="submit" class="btn btn-success">Cập nhật</button>
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Đóng</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<script>
+  let roles = [];
+  let currentPage = 1;
+  const rowsPerPage = 3;
+
+  const addForm = document.getElementById("addForm");
+  const editForm = document.getElementById("editForm");
+  const tableBody = document.getElementById("roleTableBody");
+  const pagination = document.getElementById("pagination");
+  const searchInput = document.getElementById("searchInput");
+
+  addForm.onsubmit = (e) => {
+    e.preventDefault();
+    const name = addForm.name.value.trim();
+    const description = addForm.description.value.trim();
+    if (!name) return alert("Tên vai trò không được để trống.");
+    roles.push({ name, description });
+    addForm.reset();
+    bootstrap.Modal.getInstance(document.getElementById("addModal")).hide();
+    renderTable();
+  };
+
+  editForm.onsubmit = (e) => {
+    e.preventDefault();
+    const index = editForm.index.value;
+    const name = editForm.name.value.trim();
+    const description = editForm.description.value.trim();
+    if (!name) return alert("Tên vai trò không được để trống.");
+    roles[index] = { name, description };
+    editForm.reset();
+    bootstrap.Modal.getInstance(document.getElementById("editModal")).hide();
+    renderTable();
+  };
+
+  function renderTable() {
+    const keyword = searchInput.value.toLowerCase();
+    const filtered = roles.filter(role => role.name.toLowerCase().includes(keyword));
+    const start = (currentPage - 1) * rowsPerPage;
+    const pageItems = filtered.slice(start, start + rowsPerPage);
+
+    tableBody.innerHTML = pageItems.map((role, i) => `
+      <tr>
+        <td>${start + i + 1}</td>
+        <td>${role.name}</td>
+        <td>${role.description}</td>
+        <td>
+          <button class="btn btn-sm btn-warning" onclick="openEdit(${start + i})">Sửa</button>
+          <button class="btn btn-sm btn-danger" onclick="confirmDelete(${start + i})">Xoá</button>
+        </td>
+      </tr>
+    `).join("");
+
+    renderPagination(filtered.length);
+  }
+
+  function renderPagination(total) {
+    const totalPages = Math.ceil(total / rowsPerPage);
+    pagination.innerHTML = "";
+    for (let i = 1; i <= totalPages; i++) {
+      pagination.innerHTML += `
+        <li class="page-item ${i === currentPage ? 'active' : ''}">
+          <a class="page-link" href="#" onclick="gotoPage(${i})">${i}</a>
+        </li>`;
+    }
+  }
+
+  function gotoPage(p) {
+    currentPage = p;
+    renderTable();
+  }
+
+  function confirmDelete(index) {
+    if (confirm("Bạn có chắc muốn xoá vai trò này?")) {
+      roles.splice(index, 1);
+      renderTable();
+    }
+  }
+
+  function openEdit(index) {
+    const role = roles[index];
+    editForm.index.value = index;
+    editForm.name.value = role.name;
+    editForm.description.value = role.description;
+    new bootstrap.Modal(document.getElementById("editModal")).show();
+  }
+
+  searchInput.oninput = () => {
+    currentPage = 1;
+    renderTable();
+  };
+
+  // Sample data
+  roles = [
+    { name: "Quản trị viên", description: "Quyền cao nhất hệ thống" },
+    { name: "Giảng viên", description: "Quản lý khóa học và bài giảng" },
+    { name: "Học viên", description: "Tham gia khóa học" },
+    { name: "Nhân viên hỗ trợ", description: "Hỗ trợ kỹ thuật và CSKH" }
+  ];
+  renderTable();
+</script>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

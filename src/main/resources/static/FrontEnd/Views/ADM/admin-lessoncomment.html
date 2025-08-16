@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Lesson Comments Admin</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
+  <style>
+    .table td, .table th {
+      vertical-align: middle;
+    }
+    
+    body {
+      background-color: #f1f3f5;
+    }
+    .sidebar {
+      height: 100vh;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 220px;
+      background-color: #343a40;
+      color: #fff;
+      padding-top: 60px;
+    }
+    .sidebar a {
+      color: #fff;
+      display: block;
+      padding: 10px 20px;
+      text-decoration: none;
+    }
+    .sidebar a:hover {
+      background-color: #495057;
+    }
+    .main {
+      margin-left: 220px;
+      padding: 20px;
+    }
+  
+  </style>
+</head>
+<body>
+  <div class="sidebar">
+    <h4 class="text-center">Admin</h4>
+    <a href="../../Views/ADM/admin.html"><i class="bi bi-speedometer2"></i> Dashboard</a>
+    <a href="../../Views/ADM/admin-user.html"><i class="bi bi-people"></i> Users</a>
+    <a href="../../Views/ADM/admin-role.html"><i class="bi bi-people"></i> Role</a>
+    <a href="../../Views/ADM/admin-categories.html"><i class="bi bi-grid"></i> Categories</a>
+    <a href="../../Views/ADM/admin-courses.html"><i class="bi bi-book"></i> Courses</a>
+    <a href="../../Views/ADM/admin-coursediscount.html"><i class="bi bi-book"></i> Course Discount</a>
+    <a href="../../Views/ADM/admin-enrollment.html"><i class="bi bi-grid"></i> Enrollment</a>
+    <a href="../../Views/ADM/admin-exercise.html"><i class="bi bi-book"></i> Exercise</a>
+    <a href="../../Views/ADM/admin-lessons.html"><i class="bi bi-book"></i> Lessons</a>
+    <a href="../../Views/ADM/admin-lessoncomment.html"><i class="bi bi-book"></i> Lessons Comment</a>
+    <a href="../../Views/ADM/admin-lessonresource.html"><i class="bi bi-book"></i> Lessons Resource</a>
+    <a href="../../Views/ADM/admin-module.html"><i class="bi bi-grid"></i> Module</a>
+    <a href="../../Views/ADM/admin-message.html"><i class="bi bi-grid"></i> Message</a>
+    <a href="../../Views/ADM/admin-submission.html"><i class="bi bi-grid"></i> submission</a>
+
+    <a href="#"><i class="bi bi-gear"></i> Settings</a>
+  </div>
+  <div class="container mt-5">
+    <h2 class="mb-4">Quản lý bình luận bài học</h2>
+
+    <input type="text" class="form-control mb-3" placeholder="Tìm kiếm theo tên user hoặc bài học" oninput="searchComment(this.value)" />
+
+    <table class="table table-bordered table-hover">
+      <thead class="table-light">
+        <tr>
+          <th>#</th>
+          <th>Người bình luận</th>
+          <th>Bài học</th>
+          <th>Nội dung</th>
+        </tr>
+      </thead>
+      <tbody id="commentTableBody"></tbody>
+    </table>
+
+    <nav>
+      <ul class="pagination" id="pagination"></ul>
+    </nav>
+  </div>
+
+  <script>
+    let lessonComments = [
+      { id: 1, userName: "Lê Văn Trung", lessonTitle: "Java Cơ bản", content: "Bài này hay lắm!" },
+      { id: 2, userName: "Nguyễn Văn A", lessonTitle: "Java OOP", content: "Chưa hiểu rõ về kế thừa." },
+      { id: 3, userName: "Trần Thị B", lessonTitle: "Spring Boot", content: "Cần thêm ví dụ thực tế." },
+      { id: 4, userName: "Lê Văn Trung", lessonTitle: "Spring Boot", content: "Giải thích chi tiết hơn tí sẽ tốt hơn." },
+      { id: 5, userName: "Nguyễn Văn A", lessonTitle: "Java Collection", content: "Tài liệu rất đầy đủ." },
+      { id: 6, userName: "Mai Thị C", lessonTitle: "Java Cơ bản", content: "Tuyệt vời, dễ hiểu." },
+      { id: 7, userName: "Lê Văn Trung", lessonTitle: "Java Exception", content: "Cần thêm bài tập thực hành." },
+      { id: 8, userName: "Phạm Văn D", lessonTitle: "Java JDBC", content: "Khó hiểu đoạn kết nối CSDL." },
+      { id: 9, userName: "Nguyễn Văn A", lessonTitle: "Java Cơ bản", content: "Video không load được." },
+      { id: 10, userName: "Lê Văn Trung", lessonTitle: "Java OOP", content: "Phần đa hình rất hay." },
+      { id: 11, userName: "Nguyễn Văn B", lessonTitle: "Java Collection", content: "Thiếu phần Set và Map." }
+    ];
+
+    let currentPage = 1;
+    const rowsPerPage = 10;
+
+    function renderTable() {
+      const start = (currentPage - 1) * rowsPerPage;
+      const end = start + rowsPerPage;
+      const filtered = lessonComments.filter(comment =>
+        comment.userName.toLowerCase().includes(searchText.toLowerCase()) ||
+        comment.lessonTitle.toLowerCase().includes(searchText.toLowerCase())
+      );
+      const pageData = filtered.slice(start, end);
+
+      document.getElementById("commentTableBody").innerHTML = pageData.map((c, index) => `
+        <tr>
+          <td>${start + index + 1}</td>
+          <td>${c.userName}</td>
+          <td>${c.lessonTitle}</td>
+          <td>${c.content}</td>
+        </tr>
+      `).join("");
+
+      renderPagination(filtered.length);
+    }
+
+    function renderPagination(totalItems) {
+      const totalPages = Math.ceil(totalItems / rowsPerPage);
+      let html = "";
+      for (let i = 1; i <= totalPages; i++) {
+        html += `<li class="page-item ${i === currentPage ? 'active' : ''}">
+                  <a class="page-link" href="#" onclick="changePage(${i})">${i}</a>
+                 </li>`;
+      }
+      document.getElementById("pagination").innerHTML = html;
+    }
+
+    function changePage(page) {
+      currentPage = page;
+      renderTable();
+    }
+
+    let searchText = "";
+    function searchComment(value) {
+      searchText = value;
+      currentPage = 1;
+      renderTable();
+    }
+
+    // Render lần đầu
+    renderTable();
+  </script>
+</body>
+</html>
