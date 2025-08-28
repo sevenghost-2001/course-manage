@@ -21,13 +21,8 @@ public class LessonsController {
         apiResponse.setResult(lessonsService.getAllLessons());
         return  apiResponse;
     }
+    
 
-    @PostMapping
-    ApiResponse<Lessons> createLessons(@RequestBody LessonsCreatonRequest request){
-        ApiResponse<Lessons> apiResponse = new ApiResponse<>();
-        apiResponse.setResult(lessonsService.createLessons(request));
-        return apiResponse;
-    }
 
     @PutMapping("/{id}")
     ApiResponse<Lessons> updateLessons(@PathVariable int id,@RequestBody LessonsCreatonRequest request){
