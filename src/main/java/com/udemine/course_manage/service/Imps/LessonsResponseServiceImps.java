@@ -1,8 +1,8 @@
 package com.udemine.course_manage.service.Imps;
 
 import com.udemine.course_manage.dto.request.LessonResponseCreationRequest;
-import com.udemine.course_manage.entity.LessonComment;
-import com.udemine.course_manage.entity.LessonResponse;
+import com.udemine.course_manage.entity.LessonsComment;
+import com.udemine.course_manage.entity.LessonsResponse;
 import com.udemine.course_manage.entity.User;
 import com.udemine.course_manage.exception.AppException;
 import com.udemine.course_manage.exception.ErrorCode;
@@ -17,7 +17,7 @@ import java.util.List;
 import java.util.Optional;
 
 @Service
-public class LessonResponseServiceImps implements LessonResponseService {
+public class LessonsResponseServiceImps implements LessonResponseService {
     @Autowired
     private LessonResponseRepository lessonResponseRepository;
     @Autowired
@@ -26,37 +26,37 @@ public class LessonResponseServiceImps implements LessonResponseService {
     private LessonCommentRepository lessonCommentRepository;
 
     @Override
-    public List<LessonResponse> getAllLessonResponses() {
+    public List<LessonsResponse> getAllLessonResponses() {
         return lessonResponseRepository.findAll();
     }
 
     @Override
-    public LessonResponse createLessonResponse(LessonResponseCreationRequest request) {
-        LessonResponse lessonResponse = new LessonResponse();
+    public LessonsResponse createLessonResponse(LessonResponseCreationRequest request) {
+        LessonsResponse lessonResponse = new LessonsResponse();
         lessonResponse.setContent(request.getContent());
         User user = userRepository.findById(request.getUser_id())
                 .orElseThrow(() -> new AppException(ErrorCode.USER_NOT_EXISTED));
         lessonResponse.setUser(user);
 
-        LessonComment lessonComment = lessonCommentRepository.findById(request.getLesson_comment_id())
+        LessonsComment lessonComment = lessonCommentRepository.findById(request.getLesson_comment_id())
                 .orElseThrow(() -> new AppException(ErrorCode.LESSON_COMMENT_NOT_FOUND));
         lessonResponse.setLessonComment(lessonComment);
         return lessonResponseRepository.save(lessonResponse);
     }
 
     @Override
-    public LessonResponse updateLessonResponse(int id, LessonResponseCreationRequest request) {
-        Optional<LessonResponse> optionalLessonResponse = lessonResponseRepository.findById(id);
+    public LessonsResponse updateLessonResponse(int id, LessonResponseCreationRequest request) {
+        Optional<LessonsResponse> optionalLessonResponse = lessonResponseRepository.findById(id);
         if (optionalLessonResponse.isEmpty()) {
             throw new AppException(ErrorCode.LESSON_RESPONSE_NOT_FOUND);
         }
-        LessonResponse lessonResponse = optionalLessonResponse.get();
+        LessonsResponse lessonResponse = optionalLessonResponse.get();
         lessonResponse.setContent(request.getContent());
         User user = userRepository.findById(request.getUser_id())
                 .orElseThrow(() -> new AppException(ErrorCode.USER_NOT_EXISTED));
         lessonResponse.setUser(user);
 
-        LessonComment lessonComment = lessonCommentRepository.findById(request.getLesson_comment_id())
+        LessonsComment lessonComment = lessonCommentRepository.findById(request.getLesson_comment_id())
                 .orElseThrow(() -> new AppException(ErrorCode.LESSON_COMMENT_NOT_FOUND));
         lessonResponse.setLessonComment(lessonComment);
         return lessonResponseRepository.save(lessonResponse);

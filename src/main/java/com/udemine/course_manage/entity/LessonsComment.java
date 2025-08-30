@@ -9,36 +9,37 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.experimental.FieldDefaults;
 
-import java.time.LocalDateTime;
-
 @Entity
-@Table(name = "lesson_resources")
+@Table(name = "lesson_comments")
 @Data
-@NoArgsConstructor
 @AllArgsConstructor
+@NoArgsConstructor
 @Builder
 @FieldDefaults(level = lombok.AccessLevel.PRIVATE)
-public class LessonResource {
+public class LessonsComment {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     int id;
-    String title;
-    @Column(name = "file_url")
-    String fileUrl;
-    @Column(name = "uploaded_at")
-    LocalDateTime uploadedAt;
+    String content;
+    @ManyToOne
+    @JoinColumn(name = "id_user", nullable = false)
+    @JsonIgnore
+    User user; // Người dùng đã bình luận
+
     @ManyToOne
     @JoinColumn(name = "id_lesson", nullable = false)
     @JsonIgnore
-    Lessons lesson;
+    Lessons lesson; // Bài học mà bình luận thuộc về
 
     @Transient
-    @JsonProperty("Lesson_title")
+    @JsonProperty("User Name")
+    public String getUserName() {
+        return user != null ? user.getName() : null;
+    }
+
+    @Transient
+    @JsonProperty("Lesson Title")
     public String getLessonTitle() {
         return lesson != null ? lesson.getTitle() : null;
-    }
-    @PrePersist
-    public void onCreate() {
-        this.uploadedAt = LocalDateTime.now();
     }
 }

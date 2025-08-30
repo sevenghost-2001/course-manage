@@ -6,8 +6,6 @@ import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 
-import java.time.LocalDateTime;
-
 @Entity
 @Table(name = "lesson_responses")
 @Data
@@ -15,7 +13,7 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 @Builder
 @FieldDefaults(level = AccessLevel.PRIVATE)
-public class LessonResponse {
+public class LessonsResponse {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     int id;
@@ -29,7 +27,7 @@ public class LessonResponse {
     @ManyToOne
     @JoinColumn(name = "id_lesson_chat", nullable = false)
     @JsonIgnore
-    LessonComment lessonComment;
+    LessonsComment lessonComment;
 
     @Transient
     @JsonProperty("User")
