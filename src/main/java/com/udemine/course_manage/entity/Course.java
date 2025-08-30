@@ -9,11 +9,13 @@ import org.hibernate.Length;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 
 @Entity
-@Data
+@Getter
+@Setter
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
@@ -35,22 +37,35 @@ public class Course {
     @Digits(integer = 8, fraction = 2) // không bắt buộc, dùng để validation
     @Column(precision = 10, scale = 2)
      BigDecimal cost;
+    @Digits(integer = 1, fraction = 2) // ví dụ: 5.00
+    @Column(name = "average_rating", precision = 3, scale = 2)
+    BigDecimal averageRating;
+    LocalDateTime created_at;
+    String videoDemo;
+    @Column(name = "total_time_duration")
+    double totalTimeModules; // Tổng thời gian của tất cả các module trong khóa học, tính bằng giờ
     @ManyToOne
     @JoinColumn(name = "id_category", nullable = false)
     Category category; // <-- Đây là chỗ đặt @ManyToOne
 
     @OneToMany(mappedBy = "course")
-    List<Enrollment> enrollments;
+    List<Enrollment> enrollments = new ArrayList<>();
 
     @OneToMany(mappedBy = "course")
-    List<Review> reviews;
+    List<Review> reviews = new ArrayList<>();
 
     @OneToMany(mappedBy = "course")
-    List<Teach> teaches;
+    List<Teach> teaches = new ArrayList<>();
 
     @OneToMany(mappedBy = "course")
-    List<Module> modules;
+    List<Module> modules = new ArrayList<>();
 
+    @OneToMany(mappedBy = "course")
+    List<CareerToCourse> careerToCourses = new ArrayList<>();
 
+    @PrePersist
+    void on_create(){
+        this.created_at = LocalDateTime.now();
+    }
 
 }

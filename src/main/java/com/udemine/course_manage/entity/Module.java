@@ -7,6 +7,7 @@ import lombok.*;
 import lombok.experimental.FieldDefaults;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Entity
 @Table(name = "modules")
@@ -23,15 +24,17 @@ public class Module {
     @Column(name = "position_module")
     int position;
     LocalDateTime created_at;
+    @Column(name = "total_duration")
+    double totalTimeLessons;
     @ManyToOne
     @JoinColumn(name = "id_course",nullable = false)
-    @JsonIgnore
     Course course;
-
-    @JsonProperty("Khóa học")//Tên trong ngoặc kép muốn đặt sao cũng được
-    public String getNameCourse() {
-        return course != null ? course.getTitle(): null;
-    }
+    @OneToMany(mappedBy = "module")
+    List<Lessons> lessons;
+//    @JsonProperty("Khóa học")//Tên trong ngoặc kép muốn đặt sao cũng được
+//    public String getNameCourse() {
+//        return course != null ? course.getTitle(): null;
+//    }
     @PrePersist
     void on_create(){
         this.created_at = LocalDateTime.now();

@@ -9,7 +9,8 @@ import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "enrollments")
-@Data
+@Getter
+@Setter
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
@@ -31,15 +32,19 @@ public class Enrollment {
     @Column(name = "is_certificated")
     boolean isCertificated;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "id_user", nullable = false)
     @JsonIgnore     // Hide user info when print json out to Postman --> Comment out if we want to keep it
     User user;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "id_course", nullable = false)
     @JsonIgnore
     Course course;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "id_voucher", nullable = false)
+    Voucher voucher;
 
     @PrePersist
     void on_create()  {this.enrolledAt = LocalDateTime.now();}

@@ -13,6 +13,7 @@ public class GlobalExceptionHandler {
         ApiResponse apiResponse = new ApiResponse();
         apiResponse.setCode(ErrorCode.UNCATEGORIZED_EXCEPTION.getCode());
         apiResponse.setMessage(ErrorCode.UNCATEGORIZED_EXCEPTION.getMessage());
+        exception.printStackTrace(); // log ra console
         return ResponseEntity.badRequest().body(apiResponse);
     }
 //    @ExceptionHandler(value = RuntimeException.class)

@@ -15,10 +15,11 @@ import com.udemine.course_manage.repository.CareerPathRepository;
 import com.udemine.course_manage.repository.CategoryRepository;
 import com.udemine.course_manage.repository.CourseRepository;
 import com.udemine.course_manage.service.Services.CourseService;
+import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
 import java.util.*;
+import java.util.stream.Collectors;
 
 @Service
 public class CourseServiceImps implements CourseService {
@@ -33,6 +34,7 @@ public class CourseServiceImps implements CourseService {
     @Autowired
     private CareerPathMapper careerPathMapper;
     @Override
+    @Transactional
     public Course createCourse(CourseCreationRequest request){
         Course course = new Course();
         if(courseRepository.existsByTitle(request.getTitle())){
@@ -69,8 +71,8 @@ public class CourseServiceImps implements CourseService {
     @Override
     public HomePageResponse getHomePageData() {
         List<CareerPathResponse> listCareerPath = careerPathRepository.findAll().stream()
-                .map(careerPath -> careerPathMapper.toResponse(careerPath)).toList();
-        List<CourseResponse> popular = courseRepository.findTop8ByOrderByCostDesc().stream()//lộn thứ tự
+                .map(careerPath -> careerPathMapper.toResponse(careerPath)) .toList();
+        List<CourseResponse> popular = courseRepository.findTop8ByOrderByCostDesc().stream()
                 .map(course -> courseMapper.toCourseResponse(course)).toList(); // ví dụ: chi phí cao là phổ biến
         List<CourseResponse> newest = courseRepository.findTop8ByOrderByIdDesc().stream()
                 .map(course -> courseMapper.toCourseResponse(course)).toList(); // id cao hơn là mới
@@ -89,6 +91,11 @@ public class CourseServiceImps implements CourseService {
                 .newestCourses(newest)
                 .coursesByCategory(byCategory)
                 .build();
+    }
+
+    @Override
+    public CourseResponse getCourseById(Integer id) {
+        return null;
     }
 
 }

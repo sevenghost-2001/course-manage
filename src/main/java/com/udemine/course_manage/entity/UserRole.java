@@ -3,15 +3,13 @@ package com.udemine.course_manage.entity;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import lombok.experimental.FieldDefaults;
 
 @Entity
 @Table(name = "user_role")
-@Data // giúp minh tự động sinh ra getter, setter, toString, equals, hashCode
+@Getter
+@Setter// giúp minh tự động sinh ra getter, setter, toString, equals, hashCode
 @NoArgsConstructor //tạo hàm khởi tạo không tham số
 @AllArgsConstructor //tạo hàm khởi tạo có tất cả tham số
 @Builder// tạo hàm khởi tạo mà khong cần truyền tất cả tham số

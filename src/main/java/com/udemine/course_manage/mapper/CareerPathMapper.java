@@ -9,13 +9,15 @@ import com.udemine.course_manage.exception.ErrorCode;
 import com.udemine.course_manage.repository.CareerPathRepository;
 import com.udemine.course_manage.repository.CareerToCourseRepository;
 import com.udemine.course_manage.repository.CourseRepository;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
+import java.util.stream.Collectors;
 
 @Service
+@Slf4j
 public class CareerPathMapper {
     @Autowired
     private CourseMapper courseMapper;
@@ -29,14 +31,15 @@ public class CareerPathMapper {
         if (careerPath == null) {
             return null;
         }
-        return CareerPathResponse.builder()
-                .id(careerPath.getId())
-                .name(careerPath.getName())
-                .description(careerPath.getDescription())
-                .image(careerPath.getImage())
-                .courses(careerPath.getCareerToCourses().stream().map(ctc ->
-                        courseMapper.toCourseResponse(ctc.getCourse())).toList())
-                .build();
+            return CareerPathResponse.builder()
+                    .id(careerPath.getId())
+                    .name(careerPath.getName())
+                    .description(careerPath.getDescription())
+                    .image(careerPath.getImage())
+                    .courses(careerPath.getCareerToCourses().stream().map(ctc -> {
+                                return courseMapper.toCourseResponse(ctc.getCourse());
+                            }).toList())
+                    .build();
     }
     public CareerPath toCareerPath(CareerPathRequest request){
         CareerPath careerPath = CareerPath.builder()

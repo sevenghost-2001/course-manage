@@ -1,6 +1,7 @@
 package com.udemine.course_manage.dto.response;
 
 import com.udemine.course_manage.entity.Category;
+import com.udemine.course_manage.entity.Voucher;
 import jakarta.persistence.Column;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
@@ -12,6 +13,8 @@ import lombok.NoArgsConstructor;
 import lombok.experimental.FieldDefaults;
 
 import java.math.BigDecimal;
+import java.time.LocalDateTime;
+import java.util.List;
 
 @Data
 @NoArgsConstructor
@@ -32,10 +35,17 @@ public class CourseResponse {
     BigDecimal cost;
     String nameCategory;
     //số điểm trung bình của khóa học
-    double averageRating;
+    BigDecimal averageRating;
     //số người đã đánh giá khóa học
     int totalRatings;
     //Tên giảng viên khóa học
     String instructorName;
+    LocalDateTime created_at;
     int totalEnrollments;
+    //Voucher của khóa học
+    String voucher;
+    List<ModuleResponse> modules;
+    List<InstructorResponse> instructors;
+    String videoDemo;
+    double totalTimeModules;
 }

@@ -57,7 +57,10 @@ public enum ErrorCode {
     LEVELS_INVALID(1046,"Levels must be greater than or equal to 0"),
     ACCOUNT_PERMANENTLY_LOCKED(1047, "Account is permanently locked due to too many failed login attempts. Contact Admin to unlock."),
     CAREER_PATH_NAME_EXISTED(1048, "Career path name already exists"),
-    CAREER_PATH_NOT_FOUND(1049, "Career path not found"),;
+    CAREER_PATH_NOT_FOUND(1049, "Career path not found"),
+    FILE_SAVE_ERROR(1050, "Error saving file"),
+    FILE_LOAD_ERROR(1051, "Error loading file"),
+    FILE_NOT_FOUND(1052, "File not found"),;
 
 
     ErrorCode(int code, String message) {

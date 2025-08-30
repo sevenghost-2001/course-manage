@@ -16,6 +16,10 @@ spring:
       hibernate:
         dialect: org.hibernate.dialect.MySQL8Dialect
 
+  servlet:
+    multipart:
+      max-file-size: 1GB
+      max-request-size: 1GB
 server:
   port: 8080
   servlet:
@@ -23,3 +27,5 @@ server:
 
 Jwt:
   signerKey: "Hj1qok1EhD77jwWz8aUuSXmCN4VC+WpMFDTqlwD73qkgTlKEIzqH2re9g/S06Vzc"
+file:
+  root-path: C:\Users\HP\OneDrive - Hochiminh City University of Education\Desktop\images

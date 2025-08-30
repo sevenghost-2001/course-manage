@@ -7,6 +7,7 @@ import jakarta.validation.constraints.Digits;
 import jakarta.validation.constraints.Size;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
@@ -17,7 +18,7 @@ import java.time.LocalDateTime;
 @Builder
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class CourseCreationRequest {
-    String image;
+    MultipartFile image;
     String title;
     @Column(length = 5000)
     String shortDescription;
@@ -26,4 +27,5 @@ public class CourseCreationRequest {
     @Column(precision = 10, scale = 2)
     BigDecimal cost;
     int id_category;
+    MultipartFile videoDemo;
 }

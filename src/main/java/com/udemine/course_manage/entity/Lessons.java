@@ -36,10 +36,10 @@ public class Lessons {
     @JsonIgnore
     List<Exercise> Exercises;
 
-    @JsonProperty("lessons IT")
-    public String getNameModule(){
-        return module != null ? module.getTitle(): null;
-    }
+//    @JsonProperty("lessons IT")
+//    public String getNameModule(){
+//        return module != null ? module.getTitle(): null;
+//    }
     @PrePersist
     void  on_completed(){
         this.completed_at = LocalDateTime.now();

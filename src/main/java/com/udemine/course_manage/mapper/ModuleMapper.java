@@ -1,16 +1,29 @@
 package com.udemine.course_manage.mapper;
 
 import com.udemine.course_manage.dto.request.ModuleCreationRequest;
+import com.udemine.course_manage.entity.Course;
 import com.udemine.course_manage.entity.Module;
-import org.mapstruct.Mapper;
-import org.mapstruct.Mapping;
-import org.mapstruct.MappingTarget;
+import com.udemine.course_manage.repository.CourseRepository;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
-@Mapper(componentModel = "spring")
-public interface ModuleMapper {
-    @Mapping(target ="title",source ="title")
-    @Mapping(target = "position",source = "position")
-    @Mapping(target = "course",ignore = true)
-    Module toModule(ModuleCreationRequest request);
-    void updateModule(@MappingTarget Module module, ModuleCreationRequest request);
+@Service
+public class ModuleMapper {
+    @Autowired
+    private CourseRepository courseRepository;
+    public Module toModule(ModuleCreationRequest request){
+        Module module = new Module();
+        module.setTitle(request.getTitle());
+        module.setPosition(request.getPosition());
+        return module;
+    }
+    public void updateModule(Module module, ModuleCreationRequest request){
+        module.setTitle(request.getTitle());
+        module.setPosition(request.getPosition());
+    }
+
+
+
+
+
 }

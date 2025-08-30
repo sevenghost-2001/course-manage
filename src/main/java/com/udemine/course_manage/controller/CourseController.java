@@ -31,7 +31,7 @@ public class CourseController {
     }
 
     @PostMapping
-    ApiResponse<CourseResponse> createCourse(@RequestBody @Valid CourseCreationRequest request) {
+    ApiResponse<CourseResponse> createCourse(@Valid CourseCreationRequest request) {
         ApiResponse<CourseResponse> apiResponse = new ApiResponse<>();
         Course course = courseService.createCourse(request);
         CourseResponse courseResponse = courseMapper.toCourseResponse(course);

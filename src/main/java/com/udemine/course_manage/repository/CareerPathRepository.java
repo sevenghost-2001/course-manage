@@ -12,6 +12,13 @@ import java.util.Optional;
 @Repository
 public interface CareerPathRepository extends JpaRepository<CareerPath, Integer> {
     @Query("""
+        SELECT DISTINCT cp 
+        FROM CareerPath cp
+        LEFT JOIN FETCH cp.careerToCourses ctc
+        LEFT JOIN FETCH ctc.course
+    """)
+    List<CareerPath> findAllWithCourses();
+    @Query("""
             SELECT DISTINCT cp
             FROM CareerPath cp
             JOIN cp.careerToCourses ctc
