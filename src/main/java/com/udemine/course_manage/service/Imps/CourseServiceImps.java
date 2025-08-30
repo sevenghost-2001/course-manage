@@ -91,4 +91,9 @@ public class CourseServiceImps implements CourseService {
                 .build();
     }
 
+    @Override
+    public CourseResponse getCourseById(Integer id) {
+        return null;
+    }
+
 }

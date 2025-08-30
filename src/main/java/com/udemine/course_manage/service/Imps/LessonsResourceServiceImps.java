@@ -1,7 +1,9 @@
 package com.udemine.course_manage.service.Imps;
 
 import com.udemine.course_manage.dto.request.LessonResourceCreationRequest;
-import com.udemine.course_manage.entity.LessonResource;
+import com.udemine.course_manage.dto.request.LessonsCreatonRequest;
+import com.udemine.course_manage.dto.response.LessonsResourceCreationResponse;
+import com.udemine.course_manage.entity.LessonsResource;
 import com.udemine.course_manage.entity.Lessons;
 import com.udemine.course_manage.exception.AppException;
 import com.udemine.course_manage.exception.ErrorCode;
@@ -10,24 +12,26 @@ import com.udemine.course_manage.repository.LessonResourceRepository;
 import com.udemine.course_manage.service.Services.LessonResourceService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
 @Service
-public class LessonResourceServiceImps implements LessonResourceService {
+public class LessonsResourceServiceImps implements LessonResourceService {
     @Autowired
     private LessonResourceRepository lessonResourceRepository;
     @Autowired
     private LessonRepository lessonRepository;
 
     @Override
-    public List<LessonResource> getAllLessonResources() {
+    public List<LessonsResource> getAllLessonResources() {
         return lessonResourceRepository.findAll();
     }
 
+
     @Override
-    public LessonResource createLessonResource(LessonResourceCreationRequest request) {
-        LessonResource lessonResource = new LessonResource();
+    public LessonsResource createLessonResource(LessonResourceCreationRequest request) {
+        LessonsResource lessonResource = new LessonsResource();
         lessonResource.setTitle(request.getTitle());
         lessonResource.setFileUrl(request.getFileUrl());
 
@@ -38,8 +42,8 @@ public class LessonResourceServiceImps implements LessonResourceService {
     }
 
     @Override
-    public LessonResource updateLessonResource(int id, LessonResourceCreationRequest request) {
-        LessonResource lessonResource = lessonResourceRepository.findById(id)
+    public LessonsResource updateLessonResource(int id, LessonResourceCreationRequest request) {
+        LessonsResource lessonResource = lessonResourceRepository.findById(id)
                 .orElseThrow(() -> new AppException(ErrorCode.LESSON_RESOURCE_NOT_FOUND));
         lessonResource.setTitle(request.getTitle());
         lessonResource.setFileUrl(request.getFileUrl());

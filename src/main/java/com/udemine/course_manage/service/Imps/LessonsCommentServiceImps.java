@@ -1,7 +1,7 @@
 package com.udemine.course_manage.service.Imps;
 
 import com.udemine.course_manage.dto.request.LessonCommentCreationRequest;
-import com.udemine.course_manage.entity.LessonComment;
+import com.udemine.course_manage.entity.LessonsComment;
 import com.udemine.course_manage.entity.Lessons;
 import com.udemine.course_manage.entity.User;
 import com.udemine.course_manage.exception.AppException;
@@ -16,7 +16,7 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 
 @Service
-public class LessonCommentServiceImps implements LessonCommentService {
+public class LessonsCommentServiceImps implements LessonCommentService {
     @Autowired
     private LessonCommentRepository lessonCommentRepository;
     @Autowired
@@ -25,13 +25,13 @@ public class LessonCommentServiceImps implements LessonCommentService {
     private LessonRepository lessonRepository;
 
     @Override
-    public List<LessonComment> getAllLessonComments() {
+    public List<LessonsComment> getAllLessonComments() {
         return lessonCommentRepository.findAll();
     }
 
     @Override
-    public LessonComment createLessonComment(LessonCommentCreationRequest request) {
-        LessonComment lessonComment = new LessonComment();
+    public LessonsComment createLessonComment(LessonCommentCreationRequest request) {
+        LessonsComment lessonComment = new LessonsComment();
         lessonComment.setContent(request.getContent());
 
         User user = userRepository.findById(request.getId_user())
@@ -45,8 +45,8 @@ public class LessonCommentServiceImps implements LessonCommentService {
     }
 
     @Override
-    public LessonComment updateLessonComment(int id, LessonCommentCreationRequest request) {
-        LessonComment lessonComment = lessonCommentRepository.findById(id)
+    public LessonsComment updateLessonComment(int id, LessonCommentCreationRequest request) {
+        LessonsComment lessonComment = lessonCommentRepository.findById(id)
                 .orElseThrow(() -> new AppException(ErrorCode.LESSON_COMMENT_NOT_FOUND));
         lessonComment.setContent(request.getContent());
 

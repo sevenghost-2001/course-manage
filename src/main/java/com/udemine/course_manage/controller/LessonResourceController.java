@@ -2,9 +2,8 @@ package com.udemine.course_manage.controller;
 
 import com.udemine.course_manage.dto.request.ApiResponse;
 import com.udemine.course_manage.dto.request.LessonResourceCreationRequest;
-import com.udemine.course_manage.entity.LessonResource;
+import com.udemine.course_manage.entity.LessonsResource;
 import com.udemine.course_manage.exception.ErrorCode;
-import com.udemine.course_manage.service.Imps.LessonResourceServiceImps;
 import com.udemine.course_manage.service.Services.LessonResourceService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -18,22 +17,22 @@ public class LessonResourceController {
     private LessonResourceService lessonResourceService;
 
     @GetMapping
-    ApiResponse<List<LessonResource>> getAllLessonResources() {
-        ApiResponse<List<LessonResource>> apiResponse = new ApiResponse<>();
+    ApiResponse<List<LessonsResource>> getAllLessonResources() {
+        ApiResponse<List<LessonsResource>> apiResponse = new ApiResponse<>();
         apiResponse.setResult(lessonResourceService.getAllLessonResources());
         return apiResponse;
     }
 
     @PostMapping
-    ApiResponse<LessonResource> createLessonResource(@RequestBody LessonResourceCreationRequest request) {
-        ApiResponse<LessonResource> apiResponse = new ApiResponse<>();
+    ApiResponse<LessonsResource> createLessonResource(@RequestBody LessonResourceCreationRequest request) {
+        ApiResponse<LessonsResource> apiResponse = new ApiResponse<>();
         apiResponse.setResult(lessonResourceService.createLessonResource(request));
         return apiResponse;
     }
 
     @PutMapping("/{id}")
-    ApiResponse<LessonResource> updateLessonResource(@PathVariable int id, @RequestBody LessonResourceCreationRequest request) {
-        ApiResponse<LessonResource> apiResponse = new ApiResponse<>();
+    ApiResponse<LessonsResource> updateLessonResource(@PathVariable int id, @RequestBody LessonResourceCreationRequest request) {
+        ApiResponse<LessonsResource> apiResponse = new ApiResponse<>();
         apiResponse.setResult(lessonResourceService.updateLessonResource(id, request));
         return apiResponse;
     }

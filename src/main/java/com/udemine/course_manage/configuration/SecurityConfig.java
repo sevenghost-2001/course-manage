@@ -48,6 +48,7 @@ public class SecurityConfig {
                         .requestMatchers(HttpMethod.GET,"/api/users").hasAuthority("ROLE_ADMIN")
                         .requestMatchers("/api/courses/*").permitAll()
                         .requestMatchers("/auth/*").permitAll()
+                        .requestMatchers(HttpMethod.POST,"/api/lessons").permitAll()
                         .anyRequest().authenticated());
 
         httpSecurity.csrf(AbstractHttpConfigurer::disable);

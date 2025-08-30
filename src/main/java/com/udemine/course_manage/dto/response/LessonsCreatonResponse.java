@@ -1,18 +1,16 @@
-package com.udemine.course_manage.dto.request;
+package com.udemine.course_manage.dto.response;
 
 import lombok.*;
 import lombok.experimental.FieldDefaults;
-import org.springframework.web.multipart.MultipartFile;
 
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
 @FieldDefaults(level = AccessLevel.PRIVATE)
-public class LessonsCreatonRequest {
-    int id;
+public class LessonsCreatonResponse {
     String title;
-    MultipartFile video_url;
+    String video_url;
     double duration;
     double watch_duration;
     int id_module;

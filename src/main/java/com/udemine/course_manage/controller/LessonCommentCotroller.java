@@ -2,9 +2,8 @@ package com.udemine.course_manage.controller;
 
 import com.udemine.course_manage.dto.request.ApiResponse;
 import com.udemine.course_manage.dto.request.LessonCommentCreationRequest;
-import com.udemine.course_manage.entity.LessonComment;
+import com.udemine.course_manage.entity.LessonsComment;
 import com.udemine.course_manage.exception.ErrorCode;
-import com.udemine.course_manage.service.Imps.LessonCommentServiceImps;
 import com.udemine.course_manage.service.Services.LessonCommentService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -19,22 +18,22 @@ public class LessonCommentCotroller {
     private LessonCommentService lessonCommentService;
 
     @GetMapping
-    ApiResponse<List<LessonComment>> getAllLessonComments() {
-        ApiResponse<List<LessonComment>> apiResponse = new ApiResponse<>();
+    ApiResponse<List<LessonsComment>> getAllLessonComments() {
+        ApiResponse<List<LessonsComment>> apiResponse = new ApiResponse<>();
         apiResponse.setResult(lessonCommentService.getAllLessonComments());
         return apiResponse;
     }
 
     @PostMapping
-    ApiResponse<LessonComment> createLessonComment(@RequestBody LessonCommentCreationRequest request) {
-        ApiResponse<LessonComment> apiResponse = new ApiResponse<>();
+    ApiResponse<LessonsComment> createLessonComment(@RequestBody LessonCommentCreationRequest request) {
+        ApiResponse<LessonsComment> apiResponse = new ApiResponse<>();
         apiResponse.setResult(lessonCommentService.createLessonComment(request));
         return apiResponse;
     }
 
     @PutMapping("/{id}")
-    ApiResponse<LessonComment> updateLessonComment(@PathVariable int id, @RequestBody LessonCommentCreationRequest request) {
-        ApiResponse<LessonComment> apiResponse = new ApiResponse<>();
+    ApiResponse<LessonsComment> updateLessonComment(@PathVariable int id, @RequestBody LessonCommentCreationRequest request) {
+        ApiResponse<LessonsComment> apiResponse = new ApiResponse<>();
         apiResponse.setResult(lessonCommentService.updateLessonComment(id, request));
         return apiResponse;
     }
