@@ -132,6 +132,11 @@ public class CourseMapper {
                     moduleResponse.setPosition(moduleResponse.getPosition());
                     moduleResponse.setCreated_at(module.getCreated_at());
                     moduleResponse.setLessons(lessonResponseList);
+                    //Tổng thời gian của tất cả lesson trong module, tính bằng giờ
+                    double totalTimeLessons = module.getLessons().stream()
+                            .mapToDouble(lesson -> lesson.getDuration() != 0 ? lesson.getDuration() : 0)
+                            .sum();
+                    moduleResponse.setTotalTimeLessons(totalTimeLessons);
                     return moduleResponse;
                 })
                 .collect(Collectors.toList());
@@ -163,6 +168,12 @@ public class CourseMapper {
                 .mapToDouble(Module::getTotalTimeLessons)
                 .sum();
         response.setTotalTimeModules(totalTime);
+        // Lấy ra tổng thời gian của tất cả các bài học trong khóa học, tính bằng giờ
+        double totalLessonTime = course.getModules().stream()
+                .flatMap(module -> module.getLessons().stream())
+                .mapToDouble(lesson -> lesson.getDuration() != 0 ? lesson.getDuration() : 0)
+                .sum();
+        response.setTotalTimeModules(totalLessonTime);
         return response;
     }
 }

@@ -40,7 +40,7 @@ public class PasswordResetServiceImpl implements PasswordResetService {
         // Always behave the same regardless of existence to prevent enumeration
         userOpt.ifPresent(user -> {
             // Invalidate other active tokens (optional but good hygiene)
-            tokenRepository.deleteByUserIdAndUsedFalse(user.);
+            tokenRepository.deleteByUserIdAndUsedFalse(user.getId());
 
             String rawToken = TokenUtil.generateToken();               // random 256-bit
             String tokenHash = TokenUtil.sha256(rawToken);             // store only hash

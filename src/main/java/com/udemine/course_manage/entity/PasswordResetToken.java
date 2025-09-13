@@ -22,7 +22,7 @@ public class PasswordResetToken {
 
     // Reference your existing User id (no FK here to keep it simple; you can map @ManyToOne if you prefer)
     @Column(nullable = false)
-    private Long userId;
+    private int userId;
 
     // Base64url(SHA-256) of the raw token; ~43 chars, allow cushion
     @Column(nullable = false, unique = true, length = 64)

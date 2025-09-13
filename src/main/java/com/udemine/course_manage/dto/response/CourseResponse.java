@@ -44,8 +44,9 @@ public class CourseResponse {
     int totalEnrollments;
     //Voucher của khóa học
     String voucher;
-    List<ModuleResponse> modules;
-    List<InstructorResponse> instructors;
     String videoDemo;
     double totalTimeModules;
+    List<ModuleResponse> modules;
+    List<InstructorResponse> instructors;
+
 }

@@ -16,4 +16,5 @@ import java.util.List;
 public class CourseDetailResponse {
     CourseResponse course;
     List<CourseResponse> categoryCourses;
+
 }
