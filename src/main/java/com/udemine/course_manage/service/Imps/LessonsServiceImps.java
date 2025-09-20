@@ -8,6 +8,7 @@ import com.udemine.course_manage.exception.AppException;
 import com.udemine.course_manage.exception.ErrorCode;
 import com.udemine.course_manage.repository.LessonRepository;
 import com.udemine.course_manage.repository.ModuleRepository;
+import com.udemine.course_manage.service.Services.FileStorageService;
 import com.udemine.course_manage.service.Services.LessonService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -24,7 +25,7 @@ public class LessonsServiceImps implements LessonService {
     private ModuleRepository moduleRepository;
 
     @Autowired
-    private FileStorageServiceImp fileStorageServiceImp;
+    private FileStorageService fileStorageServiceImp;
 
     @Override
     public List<Lessons> getAllLessons(){

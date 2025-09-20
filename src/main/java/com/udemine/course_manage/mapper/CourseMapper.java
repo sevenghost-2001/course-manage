@@ -13,6 +13,7 @@ import com.udemine.course_manage.entity.Voucher;
 import com.udemine.course_manage.exception.AppException;
 import com.udemine.course_manage.exception.ErrorCode;
 import com.udemine.course_manage.repository.CategoryRepository;
+import com.udemine.course_manage.repository.ModuleRepository;
 import com.udemine.course_manage.service.Services.FileStorageService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -28,12 +29,15 @@ public class CourseMapper {
     private CategoryRepository categoryRepository;
     @Autowired
     private FileStorageService fileStorageService;
+    @Autowired
+    private ModuleRepository moduleRepository;
     public Course toCourse(CourseCreationRequest request) {
         Course course = new Course();
         if(request.getImage() != null && !request.getImage().isEmpty()){
             fileStorageService.save(request.getImage());
             course.setImage(request.getImage().getOriginalFilename());
         }
+
         course.setTitle(request.getTitle());
         course.setShortDescription(request.getShortDescription());
         course.setCost(request.getCost());
@@ -46,6 +50,7 @@ public class CourseMapper {
             fileStorageService.save(request.getVideoDemo());
             course.setVideoDemo(request.getVideoDemo().getOriginalFilename());
         }
+        course.set_certification(request.getIsCertification());
         return course;
     }
 
@@ -82,6 +87,7 @@ public class CourseMapper {
         response.setId(course.getId());
         response.setTitle(course.getTitle());
         response.setShortDescription(course.getShortDescription());
+        response.setDescription(course.getDescription());
         response.setCost(course.getCost());
         response.setDiscountedCost(course.getDiscountedCost());
         response.setImage(course.getImage());
@@ -96,7 +102,7 @@ public class CourseMapper {
         if (response.getInstructorName().isEmpty()) {
             throw new AppException(ErrorCode.USER_NOT_INSTRUCTOR);
         }
-        response.setTotalEnrollments((int) course.getReviews().stream()
+        response.setTotalEnrollments((int) course.getEnrollments().stream()
                 .map(user -> user.getUser())
                 .distinct().count());
 //        lấy ra voucher thông qua enrollments và set trực tiên vào response
@@ -111,19 +117,7 @@ public class CourseMapper {
                         .orElse("NO_VOUCHER");
             response.setVoucher(code);
         }
-        //Lấy ra danh sách các lesson trong module
-        List<LessonResponse> lessonResponseList = course.getModules().stream()
-                .flatMap(module -> module.getLessons().stream())
-                .map(lesson -> {
-                    LessonResponse lessonResponse = new LessonResponse();
-                    lessonResponse.setTitle(lesson.getTitle());
-                    lessonResponse.setDuration(lesson.getDuration());
-                    lessonResponse.setVideoUrl(lesson.getVideoUrl());
-                    lessonResponse.setWatchDuration(lesson.getWatchDuration());
-                    lessonResponse.setCompleted_at(lesson.getCompleted_at());
-                    return lessonResponse;
-                })
-                .collect(Collectors.toList());
+
         // Lấy ra danh sách các modules trong khóa học
         List<ModuleResponse> moduleResponses = course.getModules().stream()
                 .map(module -> {
@@ -131,7 +125,24 @@ public class CourseMapper {
                     moduleResponse.setTitle(module.getTitle());
                     moduleResponse.setPosition(moduleResponse.getPosition());
                     moduleResponse.setCreated_at(module.getCreated_at());
+                    List<LessonResponse> lessonResponseList = module.getLessons().stream()
+                            .map(lesson -> {
+                                LessonResponse lessonResponse = new LessonResponse();
+                                lessonResponse.setTitle(lesson.getTitle());
+                                lessonResponse.setDuration(lesson.getDuration());
+                                lessonResponse.setVideoUrl(lesson.getVideoUrl());
+                                lessonResponse.setWatchDuration(lesson.getWatchDuration());
+                                lessonResponse.setCompleted_at(lesson.getCompleted_at());
+                                return lessonResponse;
+                            })
+                            .collect(Collectors.toList());
                     moduleResponse.setLessons(lessonResponseList);
+                    double totalTimeLessons = module.getLessons().stream()
+                            .mapToDouble(lesson -> lesson.getDuration())
+                            .sum();
+                    moduleResponse.setTotalTimeLessons(totalTimeLessons);
+                    module.setTotalTimeLessons(totalTimeLessons);
+                    moduleRepository.save(module); // Cập nhật tổng thời gian của module
                     return moduleResponse;
                 })
                 .collect(Collectors.toList());
@@ -141,6 +152,7 @@ public class CourseMapper {
                 .map(teaches -> {
                     InstructorResponse instructorResponse = new InstructorResponse();
                     instructorResponse.setName(teaches.getInstructor().getName());
+                    instructorResponse.setAvatar(teaches.getInstructor().getAvatar());
                     instructorResponse.setBiography(teaches.getInstructor().getBiography());
                     instructorResponse.setTotalCourses(teaches.getInstructor().getTeaches().size());
                     instructorResponse.setTotalStudents(
@@ -163,6 +175,8 @@ public class CourseMapper {
                 .mapToDouble(Module::getTotalTimeLessons)
                 .sum();
         response.setTotalTimeModules(totalTime);
+
+        response.setCertification(course.is_certification());
         return response;
     }
 }

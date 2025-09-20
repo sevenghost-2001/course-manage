@@ -95,7 +95,9 @@ public class CourseServiceImps implements CourseService {
 
     @Override
     public CourseResponse getCourseById(Integer id) {
-        return null;
+        return courseRepository.findById(id)
+                .map(course -> courseMapper.toCourseResponse(course))
+                .orElseThrow(() -> new AppException(ErrorCode.COURSE_NOT_FOUND));
     }
 
 }

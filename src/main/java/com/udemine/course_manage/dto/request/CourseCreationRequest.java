@@ -22,10 +22,12 @@ public class CourseCreationRequest {
     String title;
     @Column(length = 5000)
     String shortDescription;
+    String description;
     @Column(precision = 10, scale = 2)
     BigDecimal discountedCost;
     @Column(precision = 10, scale = 2)
     BigDecimal cost;
     int id_category;
     MultipartFile videoDemo;
+    Boolean isCertification;
 }

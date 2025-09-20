@@ -9,6 +9,7 @@ import com.udemine.course_manage.mapper.ModuleMapper;
 import com.udemine.course_manage.repository.CourseRepository;
 import com.udemine.course_manage.repository.ModuleRepository;
 import com.udemine.course_manage.service.Services.ModuleService;
+import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -31,6 +32,7 @@ public class ModuleServiceImps implements ModuleService {
     }
 
     @Override
+    @Transactional
     public Module createModule(ModuleCreationRequest request){
         Module module =new Module();
         if(moduleRepository.existsByTitle(request.getTitle())){

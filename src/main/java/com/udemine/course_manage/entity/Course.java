@@ -42,11 +42,17 @@ public class Course {
     BigDecimal averageRating;
     LocalDateTime created_at;
     String videoDemo;
+    String imgVideoDemo;
+    @Column(name="Certification")
+    boolean is_certification;
     @Column(name = "total_time_duration")
     double totalTimeModules; // Tổng thời gian của tất cả các module trong khóa học, tính bằng giờ
     @ManyToOne
     @JoinColumn(name = "id_category", nullable = false)
     Category category; // <-- Đây là chỗ đặt @ManyToOne
+    @Lob
+    @Column(columnDefinition = "TEXT")
+    String description;
 
     @OneToMany(mappedBy = "course")
     List<Enrollment> enrollments = new ArrayList<>();

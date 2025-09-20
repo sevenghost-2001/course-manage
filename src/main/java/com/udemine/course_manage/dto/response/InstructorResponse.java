@@ -13,6 +13,7 @@ import lombok.experimental.FieldDefaults;
 @FieldDefaults(level = lombok.AccessLevel.PRIVATE)
 public class InstructorResponse {
     String name;
+    String avatar;
     String biography;
     int totalCourses;
     int totalStudents;

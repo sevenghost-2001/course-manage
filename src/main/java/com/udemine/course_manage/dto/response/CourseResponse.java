@@ -27,6 +27,7 @@ public class CourseResponse {
     String title;
     @Column(length = 5000)
     String shortDescription;
+    String description;
     @Digits(integer = 8, fraction = 2)
     @Column(precision = 10, scale = 2)
     BigDecimal discountedCost;
@@ -47,5 +48,7 @@ public class CourseResponse {
     List<ModuleResponse> modules;
     List<InstructorResponse> instructors;
     String videoDemo;
+    boolean isCertification;
     double totalTimeModules;
+
 }

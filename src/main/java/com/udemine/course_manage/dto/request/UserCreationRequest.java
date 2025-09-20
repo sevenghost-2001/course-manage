@@ -6,6 +6,7 @@ import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
+import org.springframework.web.multipart.MultipartFile;
 
 @Data
 @NoArgsConstructor
@@ -15,7 +16,7 @@ import lombok.experimental.FieldDefaults;
 public class UserCreationRequest {
     @Size(min = 3, message = "USERNAME_INVALID")
     String name;
-
+    MultipartFile avatar;
     @NotBlank(message = "EMAIL_REQUIRED")
     @Email(message = "INVALID_EMAIL_FORMAT") // checks proper email syntax
     String email;

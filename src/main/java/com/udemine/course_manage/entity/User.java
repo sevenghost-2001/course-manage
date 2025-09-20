@@ -23,6 +23,7 @@ public class User {
      int id;
     @Column(name = "fullname", nullable = false)
      String name;
+    String avatar;
     @Column(nullable = false, unique = true)
      String email;
     @Column(name = "passwords", nullable = false)
