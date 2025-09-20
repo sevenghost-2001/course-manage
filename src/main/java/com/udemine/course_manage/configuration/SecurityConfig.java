@@ -61,8 +61,8 @@ public class SecurityConfig {
         httpSecurity.oauth2ResourceServer(oauth2 ->
                 // jwt() dùng để xác thực token theo chuẩn JWT
                 oauth2.jwt(jwtConfigurer ->
-                        jwtConfigurer.decoder(jwtDecoder)
-                                .jwtAuthenticationConverter(jwtAuthenticationConverter))
+                                jwtConfigurer.decoder(jwtDecoder)
+                                        .jwtAuthenticationConverter(jwtAuthenticationConverter))
                         .authenticationEntryPoint(customAuthenticationEntryPoint) //Kiểm tra xem đã hết hạn token hay chưa, nếu hết hạn thì sẽ trả về lỗi 401 Unauthorized
         );
         return httpSecurity.build();

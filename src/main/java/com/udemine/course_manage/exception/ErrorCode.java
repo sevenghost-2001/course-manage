@@ -60,7 +60,8 @@ public enum ErrorCode {
     CAREER_PATH_NOT_FOUND(1049, "Career path not found"),
     FILE_SAVE_ERROR(1050, "Error saving file"),
     FILE_LOAD_ERROR(1051, "Error loading file"),
-    FILE_NOT_FOUND(1052, "File not found"),;
+    FILE_NOT_FOUND(1052, "File not found"),
+    FILE_DELETE_ERROR(1055, "File delete found"),;
 
 
     ErrorCode(int code, String message) {

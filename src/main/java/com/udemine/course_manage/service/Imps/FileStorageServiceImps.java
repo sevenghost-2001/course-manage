@@ -48,4 +48,19 @@ public class FileStorageServiceImps implements FileStorageService {
             throw new AppException(ErrorCode.FILE_LOAD_ERROR);
         }
     }
+
+    @Override
+    public void deleteFile(String filename) {
+        Path root = Paths.get(rootPath);
+        try {
+            Path file = root.resolve(filename);
+            if (Files.exists(file)) {
+                Files.delete(file);
+            } else {
+                throw new AppException(ErrorCode.FILE_NOT_FOUND);
+            }
+        } catch (Exception e) {
+            throw new AppException(ErrorCode.FILE_DELETE_ERROR);
+        }
+    }
 }

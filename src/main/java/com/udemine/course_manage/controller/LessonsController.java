@@ -1,9 +1,11 @@
 package com.udemine.course_manage.controller;
 import com.udemine.course_manage.dto.request.ApiResponse;
 import com.udemine.course_manage.dto.request.LessonsCreatonRequest;
+import com.udemine.course_manage.dto.response.LessonResponse;
 import com.udemine.course_manage.dto.response.LessonsCreatonResponse;
 import com.udemine.course_manage.entity.Lessons;
 import com.udemine.course_manage.exception.ErrorCode;
+import com.udemine.course_manage.mapper.LessonsMapper;
 import com.udemine.course_manage.service.Services.LessonService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -18,12 +20,18 @@ public class LessonsController {
 
     @Autowired
     private LessonService lessonsService;
-
+    @Autowired
+    private LessonsMapper lessonsMapper;
 
     @GetMapping
-    ApiResponse<List<Lessons>> getAllLessons(){
-        ApiResponse<List<Lessons>> apiResponse = new ApiResponse<>();
-        apiResponse.setResult(lessonsService.getAllLessons());
+    ApiResponse<List<LessonResponse>> getAllLessons(){
+        ApiResponse<List<LessonResponse>> apiResponse = new ApiResponse<>();
+
+        apiResponse.setResult(lessonsService.getAllLessons()
+                .stream()
+                .map(lesson -> lessonsMapper.toLessonResponse(lesson)) // hoặc sử dụng phương thức chuyển đổi phù hợp
+                .collect(java.util.stream.Collectors.toList()));
+
         return  apiResponse;
     }
 
