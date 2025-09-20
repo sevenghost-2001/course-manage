@@ -38,12 +38,12 @@ public class FileStorageServiceImps implements FileStorageService {
         Path root = Paths.get(rootPath);
         try{
             Path file = root.resolve(filename);
-           Resource resource = new UrlResource(file.toUri());
-              if(resource.exists() || resource.isReadable()){
+            Resource resource = new UrlResource(file.toUri());
+            if(resource.exists() || resource.isReadable()){
                 return resource;
-              } else {
+            } else {
                 throw new AppException(ErrorCode.FILE_NOT_FOUND);
-              }
+            }
         }catch (Exception e){
             throw new AppException(ErrorCode.FILE_LOAD_ERROR);
         }

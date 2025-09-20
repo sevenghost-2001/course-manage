@@ -1,6 +1,7 @@
 package com.udemine.course_manage.service.Imps;
 
-import com.udemine.coursemanage.service.MailService;
+import com.udemine.course_manage.dto.request.MailBody;
+import com.udemine.course_manage.service.Services.MailService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
@@ -10,15 +11,16 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 public class MailServiceImpl implements MailService {
 
-    private final JavaMailSender mailSender;
+    private final JavaMailSender javaMailSender;
 
-    @Override
-    public void sendPlainText(String to, String subject, String body) {
-        SimpleMailMessage msg = new SimpleMailMessage();
-        msg.setTo(to);
-        msg.setSubject(subject);
-        msg.setText(body);
-        mailSender.send(msg);
+    public void sendSimpleMessage(MailBody mailBody) {
+       SimpleMailMessage message = new SimpleMailMessage();
+       message.setTo(mailBody.to());
+       message.setFrom("skillgo.backend@gmail.com"); // the email configured in application.properties
+       message.setSubject(mailBody.subject());
+       message.setText(mailBody.body());
+
+       javaMailSender.send(message);
     }
 }
 

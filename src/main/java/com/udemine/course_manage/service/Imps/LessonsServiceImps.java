@@ -24,7 +24,7 @@ public class LessonsServiceImps implements LessonService {
     private ModuleRepository moduleRepository;
 
     @Autowired
-    private FileStorageServiceImp fileStorageServiceImp;
+    private FileStorageServiceImps fileStorageServiceImp;
 
     @Override
     public List<Lessons> getAllLessons(){
