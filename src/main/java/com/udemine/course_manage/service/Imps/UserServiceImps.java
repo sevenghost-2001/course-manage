@@ -61,12 +61,13 @@ public class UserServiceImps implements UserService {
         user.setPassword(passwordEncoder.encode(request.getPassword()));
 
         // Nếu role null thì mặc định là USER
+        //role: INSTRUCTOR01
         String roleName = request.getRole() != null ? request.getRole() : "USER";
         user.setIsInstructor(roleName.equalsIgnoreCase("INSTRUCTOR"));
 
         Role role = roleRepository.findByName(roleName)
                 .orElseThrow(() -> new AppException(ErrorCode.ROLE_NOT_FOUND));
-
+        // role(1,"User")
         // Lưu user trước để có ID
         User savedUser = userRepository.save(user);
 

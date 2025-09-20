@@ -4,6 +4,8 @@ import com.udemine.course_manage.dto.request.ModuleCreationRequest;
 import com.udemine.course_manage.dto.response.ModuleResponse;
 import com.udemine.course_manage.entity.Course;
 import com.udemine.course_manage.entity.Module;
+import com.udemine.course_manage.exception.AppException;
+import com.udemine.course_manage.exception.ErrorCode;
 import com.udemine.course_manage.repository.CourseRepository;
 import com.udemine.course_manage.repository.ModuleRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,11 +22,17 @@ public class ModuleMapper {
         Module module = new Module();
         module.setTitle(request.getTitle());
         module.setPosition(request.getPosition());
+        Course course = courseRepository.findById(request.getId_course())
+                .orElseThrow(() -> new AppException(ErrorCode.COURSE_NOT_FOUND));
+        module.setCourse(course);
         return module;
     }
     public void updateModule(Module module, ModuleCreationRequest request){
         module.setTitle(request.getTitle());
         module.setPosition(request.getPosition());
+        Course course = courseRepository.findById(request.getId_course())
+                .orElseThrow(() -> new AppException(ErrorCode.COURSE_NOT_FOUND));
+        module.setCourse(course);
     }
     public ModuleResponse toModuleResponse(Module module){
         ModuleResponse response = new ModuleResponse();
@@ -39,9 +47,6 @@ public class ModuleMapper {
         response.setTotalTimeLessons(totalTimeLessons);
         return response;
     }
-
-
-
 
 
 }

@@ -34,20 +34,14 @@ public class ModuleServiceImps implements ModuleService {
     @Override
     @Transactional
     public Module createModule(ModuleCreationRequest request){
-        Module module =new Module();
+        Module module = new Module();
         if(moduleRepository.existsByTitle(request.getTitle())){
                 throw new AppException(ErrorCode.TITLE_EXISTED);
             }
         if(moduleRepository.existsByPosition(request.getPosition())){
             throw new AppException(ErrorCode.POSITION_MODULE_EXISTED);
         }
-//        module.setTitle(request.getTitle());
-//        module.setPosition(request.getPosition());
         module = moduleMapper.toModule(request);
-        //Xử lý khóa ngoại
-        Course course = courseRepository.findById(request.getId_course())
-                .orElseThrow(() -> new AppException(ErrorCode.COURSE_NOT_FOUND));
-        module.setCourse(course);
         return moduleRepository.save(module);
     }
 
@@ -60,12 +54,7 @@ public class ModuleServiceImps implements ModuleService {
             throw new AppException(ErrorCode.MODULE_NOT_EXIST);
         }
         Module module = optionalModule.get();
-//        module.setTitle(request.getTitle());
-//        module.setPosition(request.getPosition());
         moduleMapper.updateModule(module,request);
-        Course course = courseRepository.findById(request.getId_course())
-                .orElseThrow(() -> new AppException(ErrorCode.COURSE_NOT_FOUND));
-        module.setCourse(course);
         return moduleRepository.save(module);
     }
 

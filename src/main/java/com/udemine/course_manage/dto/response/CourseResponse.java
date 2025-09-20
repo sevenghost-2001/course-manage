@@ -50,5 +50,4 @@ public class CourseResponse {
     String videoDemo;
     boolean isCertification;
     double totalTimeModules;
-
 }
