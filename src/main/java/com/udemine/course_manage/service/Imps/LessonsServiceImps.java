@@ -6,6 +6,7 @@ import com.udemine.course_manage.entity.Lessons;
 import com.udemine.course_manage.entity.Module;
 import com.udemine.course_manage.exception.AppException;
 import com.udemine.course_manage.exception.ErrorCode;
+import com.udemine.course_manage.mapper.ModuleMapper;
 import com.udemine.course_manage.repository.LessonRepository;
 import com.udemine.course_manage.repository.ModuleRepository;
 import com.udemine.course_manage.service.Services.LessonService;
@@ -24,7 +25,9 @@ public class LessonsServiceImps implements LessonService {
     private ModuleRepository moduleRepository;
 
     @Autowired
-    private FileStorageServiceImp fileStorageServiceImp;
+    private ModuleMapper moduleMapper;
+    @Autowired
+    private FileStorageServiceImps fileStorageServiceImps;
 
     @Override
     public List<Lessons> getAllLessons(){
@@ -34,12 +37,14 @@ public class LessonsServiceImps implements LessonService {
 
     @Override
     public Lessons createLessons(LessonsCreatonRequest request) {
-        fileStorageServiceImp.save(request.getVideo_url()); // lưu file
+        fileStorageServiceImps.save(request.getVideo_url()); // lưu file
         Lessons lessons = new Lessons();
+
         lessons.setTitle(request.getTitle());
         lessons.setVideoUrl(request.getVideo_url().getOriginalFilename()); // chính là tên file
         lessons.setDuration(request.getDuration());
         lessons.setWatchDuration(request.getWatch_duration());
+
         Module module = moduleRepository.findById(request.getId_module())
                 .orElseThrow(() -> new AppException(ErrorCode.MODULE_NOT_EXIST));
         lessons.setModule(module);
@@ -49,7 +54,7 @@ public class LessonsServiceImps implements LessonService {
     @Override
     public Lessons updateLessons(int id, LessonsCreatonRequest request) {
         Optional<Lessons> optionalLessons = lessonRepository.findById(id);
-        fileStorageServiceImp.save(request.getVideo_url());
+        fileStorageServiceImps.save(request.getVideo_url());
         if (optionalLessons.isEmpty()) {
             throw new AppException((ErrorCode.LESSONS_NOT_EXIST));
         }

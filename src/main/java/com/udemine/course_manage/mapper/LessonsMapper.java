@@ -1,7 +1,7 @@
 package com.udemine.course_manage.mapper;
 
-import com.udemine.course_manage.dto.request.LessonsCreatonRequest;
-import com.udemine.course_manage.dto.response.LessonsCreatonResponse;
+
+import com.udemine.course_manage.dto.response.LessonResponse;
 import com.udemine.course_manage.entity.Lessons;
 import com.udemine.course_manage.service.Services.FileStorageService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,13 +12,14 @@ public class LessonsMapper {
     @Autowired
     FileStorageService FileStorageService;
 
-    public LessonsCreatonResponse toLessonsCreationResponse(Lessons lessons) {
-        LessonsCreatonResponse response = new LessonsCreatonResponse();
+    public LessonResponse toLessonResponse(Lessons lessons) {
+        LessonResponse response = new LessonResponse();
         response.setTitle(lessons.getTitle());
+        response.setNameModule(lessons.getModule().getTitle());
+        response.setVideoUrl(lessons.getVideoUrl());
         response.setDuration(lessons.getDuration());
-        response.setVideo_url(lessons.getVideoUrl());
-        response.setWatch_duration(lessons.getWatchDuration());
-        response.setId_module(lessons.getModule().getId());
+        response.setWatchDuration(lessons.getWatchDuration());
+        response.setCompleted_at(lessons.getCompleted_at());
 
         return response;
     }

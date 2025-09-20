@@ -33,7 +33,7 @@ public class LessonsResourceServiceImps implements LessonResourceService {
     public LessonsResource createLessonResource(LessonResourceCreationRequest request) {
         LessonsResource lessonResource = new LessonsResource();
         lessonResource.setTitle(request.getTitle());
-        lessonResource.setFileUrl(request.getFileUrl());
+        lessonResource.setFileUrl(request.getFileUrl().getOriginalFilename());
 
         Lessons lesson = lessonRepository.findById(request.getId_lesson())
                 .orElseThrow(() -> new AppException(ErrorCode.LESSONS_NOT_EXIST));
@@ -46,7 +46,7 @@ public class LessonsResourceServiceImps implements LessonResourceService {
         LessonsResource lessonResource = lessonResourceRepository.findById(id)
                 .orElseThrow(() -> new AppException(ErrorCode.LESSON_RESOURCE_NOT_FOUND));
         lessonResource.setTitle(request.getTitle());
-        lessonResource.setFileUrl(request.getFileUrl());
+        lessonResource.setFileUrl(request.getFileUrl().getOriginalFilename());
 
         Lessons lesson = lessonRepository.findById(request.getId_lesson())
                 .orElseThrow(() -> new AppException(ErrorCode.LESSONS_NOT_EXIST));
