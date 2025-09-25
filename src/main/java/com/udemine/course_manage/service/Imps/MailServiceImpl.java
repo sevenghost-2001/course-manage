@@ -1,6 +1,7 @@
 package com.udemine.course_manage.service.Imps;
 
-import com.udemine.coursemanage.service.MailService;
+
+import com.udemine.course_manage.service.Services.MailService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;

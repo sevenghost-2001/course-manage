@@ -146,7 +146,7 @@ public class AuthenticationServiceImps implements AuthenticationService {
                 .issuer("com.udemine.course_manage")
                 .issueTime(new Date())
                 .expirationTime(new Date(
-                        Instant.now().plus(1, ChronoUnit.HOURS).toEpochMilli()
+                        Instant.now().plus(10, ChronoUnit.HOURS).toEpochMilli()
                 ))
                 .claim("scope", buildScope(user)) // Thêm claim scope để xác định quyền của người dùng
                 .build();

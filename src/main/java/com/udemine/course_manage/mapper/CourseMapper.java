@@ -1,10 +1,7 @@
 package com.udemine.course_manage.mapper;
 
 import com.udemine.course_manage.dto.request.CourseCreationRequest;
-import com.udemine.course_manage.dto.response.CourseResponse;
-import com.udemine.course_manage.dto.response.InstructorResponse;
-import com.udemine.course_manage.dto.response.LessonResponse;
-import com.udemine.course_manage.dto.response.ModuleResponse;
+import com.udemine.course_manage.dto.response.*;
 import com.udemine.course_manage.entity.Category;
 import com.udemine.course_manage.entity.Course;
 import com.udemine.course_manage.entity.Enrollment;
@@ -175,8 +172,15 @@ public class CourseMapper {
                 .mapToDouble(Module::getTotalTimeLessons)
                 .sum();
         response.setTotalTimeModules(totalTime);
-
         response.setCertification(course.is_certification());
+        response.setReviews(course.getReviews().stream().map(review -> {
+            ReviewResponse reviewResponse = new ReviewResponse();
+            reviewResponse.setRating(review.getRating());
+            reviewResponse.setComment(review.getComment());
+            reviewResponse.setCreated_at(review.getCreated_at());
+            reviewResponse.setUserName(List.of(review.getUserName()));
+            return reviewResponse;
+        }).collect(Collectors.toList()));
         return response;
     }
 }
