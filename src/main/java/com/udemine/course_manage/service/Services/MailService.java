@@ -1,5 +1,7 @@
 package com.udemine.course_manage.service.Services;
 
+import com.udemine.course_manage.dto.request.MailBody;
+
 public interface MailService {
-    void sendPlainText(String to, String subject, String body);
+    void sendSimpleMessage(MailBody mailBody);
 }

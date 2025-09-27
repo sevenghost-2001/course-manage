@@ -61,7 +61,8 @@ public enum ErrorCode {
     FILE_SAVE_ERROR(1050, "Error saving file"),
     FILE_LOAD_ERROR(1051, "Error loading file"),
     FILE_NOT_FOUND(1052, "File not found"),
-    FILE_DELETE_ERROR(1055, "File delete found"),;
+    FILE_DELETE_ERROR(1055, "File delete found"),
+    INVALID_OTP(1053, "Invalid OTP"),;
 
 
     ErrorCode(int code, String message) {

@@ -20,13 +20,16 @@ spring:
       max-file-size: 1GB
       max-request-size: 1GB
   mail:
-    host: smtp.sendgrid.net   # or smtp.gmail.com, etc.
+    host: smtp.gmail.com
     port: 587
-    username: apikey          # provider-specific
-    password: YOUR_API_KEY
+    username: "skillgo.backend@gmail.com"
+    password: "awtu xysp bplf ntbo"
     properties:
-      mail.smtp.auth: true
-      mail.smtp.starttls.enable: true
+      mail:
+        smtp:
+          auth: true
+          starttls:
+            enable: true
 server:
   port: 8080
   servlet:
