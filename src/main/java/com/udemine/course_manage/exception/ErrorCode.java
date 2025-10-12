@@ -64,7 +64,8 @@ public enum ErrorCode {
     FILE_DELETE_ERROR(1055, "File delete found"),
     EMPTY_CART(1053, "Cart is empty"),
     HMACSHA256(1054, "Error while generating HMACSHA256"),
-    USER_ALREADY_ENROLLED(1056, "User already enrolled in this course"),;
+    USER_ALREADY_ENROLLED(1056, "User already enrolled in this course"),
+    INVALID_OTP(1053, "Invalid OTP"),;
 
 
     ErrorCode(int code, String message) {

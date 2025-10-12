@@ -39,7 +39,8 @@ public class SecurityConfig {
             "/api/users",
             "/auth/token",
             "/auth/introspect",
-            "/api/career-paths"
+            "/api/career-paths",
+            "/forgot-password/**"
     };
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity httpSecurity) throws Exception {

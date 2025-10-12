@@ -29,6 +29,7 @@ public class LessonsServiceImps implements LessonService {
     private FileStorageService fileStorageService;
     private ModuleMapper moduleMapper;
 
+    private FileStorageServiceImps fileStorageServiceImp;
 
     @Override
     public List<Lessons> getAllLessons(){
