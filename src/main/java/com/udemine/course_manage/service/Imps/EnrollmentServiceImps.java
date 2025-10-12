@@ -38,6 +38,9 @@ public class EnrollmentServiceImps implements EnrollmentService {
         //        enrollment.setProgressPercent(0);
 //        boolean percent = request.getProgressPercent() == 100? true : false;
 //        enrollment.setCertificated(percent);
+        if (enrollmentRepository.existsByUserIdAndCourseId(request.getId_user(), request.getId_course())) {
+            throw new AppException(ErrorCode.USER_ALREADY_ENROLLED);
+        }
         Enrollment enrollment = new Enrollment();
         enrollment.setPaymentMethod(request.getPaymentMethod());
         enrollment.setEnrollStatus(request.getEnrollStatus());
@@ -55,6 +58,9 @@ public class EnrollmentServiceImps implements EnrollmentService {
     @Override
     public Enrollment updateEnrollment(int id, EnrollmentCreationRequest request){
         Optional<Enrollment> optionalEnrollment = enrollmentRepository.findById(id);
+        if (enrollmentRepository.existsByUserIdAndCourseId(request.getId_user(), request.getId_course())) {
+            throw new AppException(ErrorCode.USER_ALREADY_ENROLLED);
+        }
         if(optionalEnrollment.isEmpty()){
             throw new AppException(ErrorCode.ENROLLMENT_NOT_FOUND);
         }

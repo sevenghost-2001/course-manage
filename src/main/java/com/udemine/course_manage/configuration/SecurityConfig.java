@@ -47,6 +47,7 @@ public class SecurityConfig {
                 //Yêu cầu có quyền Admin để có thể truy cập lấy danh sách người dùng, thông tin cá nhân
                 request.requestMatchers(PUBLIC_ENDPOINTS).permitAll()
                         .requestMatchers("/api/courses/*").permitAll()
+                        .requestMatchers("/payment/ipn").permitAll()
                         .requestMatchers(HttpMethod.GET,"/api/users").hasAuthority("ROLE_ADMIN")
                         .requestMatchers("/auth/*").permitAll()
                         .requestMatchers(HttpMethod.POST,"/api/lessons").permitAll()

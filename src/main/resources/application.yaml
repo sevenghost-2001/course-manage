@@ -22,11 +22,17 @@ spring:
   mail:
     host: smtp.sendgrid.net   # or smtp.gmail.com, etc.
     port: 587
-    username: apikey          # provider-specific
-    password: YOUR_API_KEY
+    username: skillgo.backend@gmail.com          # provider-specific
+    password: awtu xysp bplf ntbo
     properties:
-      mail.smtp.auth: true
-      mail.smtp.starttls.enable: true
+      mail:
+        smtp:
+          auth: true
+          starttls:
+            enable: true
+  redis:
+    host: 127.0.0.1
+    port: 6379
 server:
   port: 8080
   servlet:
@@ -36,3 +42,4 @@ Jwt:
   signerKey: "Hj1qok1EhD77jwWz8aUuSXmCN4VC+WpMFDTqlwD73qkgTlKEIzqH2re9g/S06Vzc"
 file:
   root-path: D:\Theme02\Course02Theme\html.themegenix.com\skillgro\assets\img
+
