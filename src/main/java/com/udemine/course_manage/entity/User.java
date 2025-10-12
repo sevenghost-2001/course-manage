@@ -59,6 +59,7 @@ public class User {
     @OneToMany(mappedBy = "instructor")
     List<Teach> teaches;
 
+    // For password reset OTP
     @OneToOne(mappedBy = "user")
     ForgotPassword forgotPassword;
 

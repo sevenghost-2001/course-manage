@@ -40,7 +40,7 @@ public class SecurityConfig {
             "/auth/token",
             "/auth/introspect",
             "/api/career-paths",
-            "/forgot-password/**",
+            "/forgot-password/**"
     };
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity httpSecurity) throws Exception {

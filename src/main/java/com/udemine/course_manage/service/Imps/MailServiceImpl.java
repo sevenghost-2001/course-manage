@@ -16,7 +16,7 @@ public class MailServiceImpl implements MailService {
     public void sendSimpleMessage(MailBody mailBody) {
        SimpleMailMessage message = new SimpleMailMessage();
        message.setTo(mailBody.to());
-       message.setFrom("skillgo.backend@gmail.com"); // the email configured in application.properties
+       message.setFrom("backend.skillgo@gmail.com"); // the email configured in application.properties
        message.setSubject(mailBody.subject());
        message.setText(mailBody.body());
 

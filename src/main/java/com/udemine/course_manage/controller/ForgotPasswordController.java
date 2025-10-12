@@ -49,22 +49,24 @@ public class ForgotPasswordController {
 
         ForgotPassword fp = ForgotPassword.builder()
                 .otp(otp)
-                .expirationTime(new Date(System.currentTimeMillis() + 10 * 60 * 1000)) // 10 minutes from now
+                .expirationTime(new Date(System.currentTimeMillis() + 30 * 60 * 1000)) // 10 minutes from now
                 .user(user)
                 .build();
 
         mailService.sendSimpleMessage(mailBody);
         forgotPasswordRepository.save(fp);
-        return ResponseEntity.ok("OTP sent to user's email");
+        return ResponseEntity.ok("OTP sent to user's email.");
     }
 
     @PostMapping("/verify-otp/{otp}/{email}")
     public ResponseEntity<String> verifyOtp(@PathVariable Integer otp, @PathVariable String email) {
         User user = userRepository.findByEmailIgnoreCase(email)
                 .orElseThrow(() -> new AppException(ErrorCode.USER_NOT_EXIST));
+        // Check 1: OTP valid?
         ForgotPassword fp = forgotPasswordRepository.findByOtpAndUser(otp, user)
                 .orElseThrow(() -> new AppException(ErrorCode.INVALID_OTP));
 
+        // Check 2: OPT expired?
         if (fp.getExpirationTime().before(Date.from(Instant.now()))) {
             forgotPasswordRepository.deleteById(fp.getFpid());
             return new ResponseEntity<>("OTP expired. Please request a new one.", HttpStatus.EXPECTATION_FAILED);
@@ -76,7 +78,7 @@ public class ForgotPasswordController {
     public ResponseEntity<String> changePassword(@RequestBody ChangePassword changePassword,
                                                  @PathVariable String email) {
         if (!Objects.equals(changePassword.password(), changePassword.confirmPassword())) {
-            return new ResponseEntity<>("Passwords do not match", HttpStatus.EXPECTATION_FAILED);
+            return new ResponseEntity<>("Passwords do not match. Please re-enter the password.", HttpStatus.EXPECTATION_FAILED);
         }
         String encodedPassword = passwordEncoder.encode(changePassword.password());
         userRepository.updatePassword(email, encodedPassword);

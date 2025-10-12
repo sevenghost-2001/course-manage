@@ -22,8 +22,8 @@ spring:
   mail:
     host: smtp.gmail.com
     port: 587
-    username: "skillgo.backend@gmail.com"
-    password: "awtu xysp bplf ntbo"
+    username: "backend.skillgo@gmail.com"
+    password: "yjqj wpfw rqvx kdzk"
     properties:
       mail:
         smtp:
