@@ -1,11 +1,14 @@
 package com.udemine.course_manage.service.Imps;
 
 import com.udemine.course_manage.dto.request.LessonsCreatonRequest;
+import com.udemine.course_manage.dto.response.LessonResponse;
 import com.udemine.course_manage.dto.response.LessonsCreatonResponse;
 import com.udemine.course_manage.entity.Lessons;
+import com.udemine.course_manage.entity.LessonsResponse;
 import com.udemine.course_manage.entity.Module;
 import com.udemine.course_manage.exception.AppException;
 import com.udemine.course_manage.exception.ErrorCode;
+import com.udemine.course_manage.mapper.LessonsMapper;
 import com.udemine.course_manage.mapper.ModuleMapper;
 import com.udemine.course_manage.repository.LessonRepository;
 import com.udemine.course_manage.repository.ModuleRepository;
@@ -26,7 +29,11 @@ public class LessonsServiceImps implements LessonService {
     private ModuleRepository moduleRepository;
 
     @Autowired
+    private LessonsMapper lessonsMapper;
+
+    @Autowired
     private FileStorageService fileStorageService;
+    @Autowired
     private ModuleMapper moduleMapper;
 
 
@@ -35,6 +42,12 @@ public class LessonsServiceImps implements LessonService {
 
         return  lessonRepository.findAll();
     }
+
+    @Override
+    public LessonResponse toLessonResponse(Lessons lesson) {
+        return lessonsMapper.toLessonResponse(lesson);
+    }
+
 
     @Override
     public Lessons createLessons(LessonsCreatonRequest request) {

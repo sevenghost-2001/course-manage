@@ -64,6 +64,7 @@ public enum ErrorCode {
     FILE_DELETE_ERROR(1055, "File delete found"),;
 
 
+
     ErrorCode(int code, String message) {
         this.code = code;
         this.message = message;
