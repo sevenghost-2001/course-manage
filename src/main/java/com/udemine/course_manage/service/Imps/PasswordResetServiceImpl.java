@@ -1,5 +1,6 @@
 package com.udemine.course_manage.service.Imps;
 
+import com.udemine.course_manage.dto.request.MailBody;
 import com.udemine.course_manage.entity.PasswordResetToken;
 import com.udemine.course_manage.entity.User;
 import com.udemine.course_manage.repository.PasswordResetTokenRepository;
@@ -61,7 +62,12 @@ public class PasswordResetServiceImpl implements PasswordResetService {
                     If you didn't request this, you can ignore this email.
                     """.formatted(link);
 
-            mailService.sendPlainText(user.getEmail(), "Reset your password", body);
+            MailBody mailBody = new MailBody(
+                    user.getEmail(),
+                    "Password Reset Request",
+                    body
+            );
+            mailService.sendSimpleMessage(mailBody);
         });
     }
 

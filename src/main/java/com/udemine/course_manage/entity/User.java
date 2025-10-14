@@ -8,6 +8,7 @@ import lombok.*;
 import lombok.experimental.FieldDefaults;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -61,11 +62,14 @@ public class User {
     @OneToMany(mappedBy = "instructor")
     List<Teach> teaches;
 
+    // For password reset OTP
+    @OneToOne(mappedBy = "user")
+    ForgotPassword forgotPassword;
+
     @JsonProperty("Roles")
     public List<String> getRoles() {
         return userRoles != null ? userRoles.stream().map(UserRole::getNameRole).toList() : null;
     }
-
 
     @PrePersist
     public void onCreate(){

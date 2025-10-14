@@ -151,6 +151,7 @@ public class AuthenticationServiceImps implements AuthenticationService {
                 .expirationTime(new Date(
                         Instant.now().plus(10, ChronoUnit.HOURS).toEpochMilli()
                 ))
+                .claim("userId", user.getId())
                 .claim("scope", buildScope(user)) // Thêm claim scope để xác định quyền của người dùng
                 .build();
 

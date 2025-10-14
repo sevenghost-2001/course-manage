@@ -36,6 +36,7 @@ public class LessonsServiceImps implements LessonService {
     @Autowired
     private ModuleMapper moduleMapper;
 
+    private FileStorageServiceImps fileStorageServiceImp;
 
     @Override
     public List<Lessons> getAllLessons(){

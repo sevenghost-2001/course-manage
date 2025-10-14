@@ -61,7 +61,11 @@ public enum ErrorCode {
     FILE_SAVE_ERROR(1050, "Error saving file"),
     FILE_LOAD_ERROR(1051, "Error loading file"),
     FILE_NOT_FOUND(1052, "File not found"),
-    FILE_DELETE_ERROR(1055, "File delete found"),;
+    FILE_DELETE_ERROR(1055, "File delete found"),
+    EMPTY_CART(1053, "Cart is empty"),
+    HMACSHA256(1054, "Error while generating HMACSHA256"),
+    USER_ALREADY_ENROLLED(1056, "User already enrolled in this course"),
+    INVALID_OTP(1053, "Invalid OTP"),;
 
 
 
