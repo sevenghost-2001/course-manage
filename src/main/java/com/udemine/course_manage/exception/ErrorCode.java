@@ -68,6 +68,7 @@ public enum ErrorCode {
     INVALID_OTP(1053, "Invalid OTP"),;
 
 
+
     ErrorCode(int code, String message) {
         this.code = code;
         this.message = message;

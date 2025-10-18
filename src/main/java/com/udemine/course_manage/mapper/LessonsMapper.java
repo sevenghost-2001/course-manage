@@ -14,6 +14,7 @@ public class LessonsMapper {
 
     public LessonResponse toLessonResponse(Lessons lessons) {
         LessonResponse response = new LessonResponse();
+        response.setId(lessons.getId());
         response.setTitle(lessons.getTitle());
         response.setNameModule(lessons.getModule().getTitle());
         response.setVideoUrl(lessons.getVideoUrl());

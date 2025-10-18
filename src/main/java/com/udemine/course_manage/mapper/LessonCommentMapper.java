@@ -13,9 +13,35 @@ public class LessonCommentMapper {
 
     public LessonsCommentCreationResponse toLessonCommentCreationResponse(LessonsComment lessonsComment) {
         LessonsCommentCreationResponse response = new LessonsCommentCreationResponse();
-        response.setId_lesson(lessonsComment.getId());
+        response.setId(lessonsComment.getId());
         response.setContent(lessonsComment.getContent());
-        response.setId_user(lessonsComment.getUser().getId());
+
+        LessonsCommentCreationResponse.UserDto userDto =
+                LessonsCommentCreationResponse.UserDto.builder()
+                        .id(lessonsComment.getUser().getId())
+                        .name(lessonsComment.getUser().getName())
+                        .email(lessonsComment.getUser().getEmail())
+                     //   .avatar(lessonsComment.getUser().getAvatar())
+                        .build();
+        response.setUser(userDto);
+
+        LessonsCommentCreationResponse.LessonDto lessonDto =
+                LessonsCommentCreationResponse.LessonDto.builder()
+                        .id(lessonsComment.getLesson().getId())
+                        .title(lessonsComment.getLesson().getTitle())
+                        .build();
+        response.setLesson(lessonDto);
+
+        // replies đệ quy
+        if (lessonsComment.getReplies() != null && !lessonsComment.getReplies().isEmpty()) {
+            response.setReplies(
+                    lessonsComment.getReplies()
+                            .stream()
+                            .map(this::toLessonCommentCreationResponse)
+                            .toList()
+            );
+        }
         return response;
     }
 }
+

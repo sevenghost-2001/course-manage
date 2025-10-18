@@ -2,6 +2,7 @@ package com.udemine.course_manage.controller;
 
 import com.udemine.course_manage.dto.request.ApiResponse;
 import com.udemine.course_manage.dto.request.UserCreationRequest;
+import com.udemine.course_manage.dto.request.UserUpdateRequest;
 import com.udemine.course_manage.entity.User;
 import com.udemine.course_manage.exception.ErrorCode;
 import com.udemine.course_manage.service.Imps.UserServiceImps;
@@ -51,12 +52,15 @@ import java.util.List;
             return apiResponse;
         }
 
-        @PutMapping("/{id}")
-         ApiResponse<User> updateUser(@PathVariable Integer id, @RequestBody @Valid UserCreationRequest request){
-            ApiResponse<User> apiResponse = new ApiResponse<>();
-            apiResponse.setResult(userService.updateUser(id, request));
-            return apiResponse;
-        }
+    @PutMapping("/{id}")
+    public ApiResponse<User> updateUser(
+            @PathVariable Integer id,
+            @RequestBody @Valid UserUpdateRequest request
+    ) {
+        ApiResponse<User> apiResponse = new ApiResponse<>();
+        apiResponse.setResult(((UserServiceImps) userService).updateUserByAdmin(id, request));
+        return apiResponse;
+    }
 
         @DeleteMapping("/{id}")
         public ApiResponse<String> deleteUser(@PathVariable Integer id) {

@@ -125,6 +125,7 @@ public class CourseMapper {
                     List<LessonResponse> lessonResponseList = module.getLessons().stream()
                             .map(lesson -> {
                                 LessonResponse lessonResponse = new LessonResponse();
+                                lessonResponse.setId(lesson.getId());
                                 lessonResponse.setTitle(lesson.getTitle());
                                 lessonResponse.setDuration(lesson.getDuration());
                                 lessonResponse.setVideoUrl(lesson.getVideoUrl());

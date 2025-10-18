@@ -1,6 +1,7 @@
 package com.udemine.course_manage.service.Imps;
 
 import com.udemine.course_manage.dto.request.UserCreationRequest;
+import com.udemine.course_manage.dto.request.UserUpdateRequest;
 import com.udemine.course_manage.entity.Role;
 import com.udemine.course_manage.entity.User;
 import com.udemine.course_manage.entity.UserRole;
@@ -133,6 +134,23 @@ public class UserServiceImps implements UserService {
             throw  new AppException(ErrorCode.USER_NOT_EXISTED);
         }
         userRepository.deleteById(id);
+    }
+
+    @Transactional
+    public User updateUserByAdmin(Integer id, UserUpdateRequest request) {
+        User user = userRepository.findById(id)
+                .orElseThrow(() -> new AppException(ErrorCode.USER_NOT_EXISTED));
+
+        // Cập nhật các trường
+        user.setName(request.getName());
+        user.setEmail(request.getEmail());
+        user.setLevels(request.getLevels());
+        user.setRanks(request.getRanks());
+        user.setBiography(request.getBiography());
+        user.setIsInstructor(Boolean.TRUE.equals(request.getInstructor()));
+
+        // Không đụng tới password
+        return userRepository.save(user);
     }
 
     public List<User> getAllUsers(){

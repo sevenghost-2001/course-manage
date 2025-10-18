@@ -1,6 +1,7 @@
 package com.udemine.course_manage.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.*;
 import lombok.*;
@@ -17,6 +18,7 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
+@JsonIgnoreProperties(ignoreUnknown = true)
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class User {
     @Id
@@ -28,7 +30,7 @@ public class User {
     @Column(nullable = false, unique = true)
      String email;
     @Column(name = "passwords", nullable = false)
-     String password;
+    String password = "";
     @Column(name = "is_instructor", nullable = false)
      Boolean isInstructor = false;
 
