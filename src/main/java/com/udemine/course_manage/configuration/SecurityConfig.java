@@ -40,7 +40,9 @@ public class SecurityConfig {
             "/auth/token",
             "/auth/introspect",
             "/api/career-paths",
-            "/forgot-password/**"
+            "/forgot-password/**",
+            "/api/courses/homepage",
+            "/api/categories",
     };
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity httpSecurity) throws Exception {
@@ -50,6 +52,8 @@ public class SecurityConfig {
                         .requestMatchers("/api/courses/*").permitAll()
                         .requestMatchers("/payment/ipn").permitAll()
                         .requestMatchers(HttpMethod.GET,"/api/users").hasAuthority("ROLE_ADMIN")
+                        .requestMatchers(HttpMethod.POST, "/api/users/**").permitAll()
+                        .requestMatchers(HttpMethod.POST, "/api/courses/**").hasAuthority("ROLE_INSTRUCTOR")
                         .requestMatchers("/auth/*").permitAll()
                         .requestMatchers(HttpMethod.POST,"/api/lessons").permitAll()
                         .anyRequest().authenticated());

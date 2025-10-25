@@ -30,19 +30,16 @@ public class GlobalExceptionHandler {
     }
 
     @ExceptionHandler(value = MethodArgumentNotValidException.class)
-    ResponseEntity<ApiResponse>handlingRuntimeException(MethodArgumentNotValidException exception){
-        String enumKey = exception.getFieldError().getDefaultMessage();//"USERNAME_INVALID"
-        //Trường hợp key bị sai
-        ErrorCode errorCode = ErrorCode.UNCATEGORIZED_EXCEPTION;
-        try {
-            errorCode = ErrorCode.valueOf(enumKey);
-        }catch (IllegalArgumentException e){
+    ResponseEntity<ApiResponse> handlingRuntimeException(MethodArgumentNotValidException exception) {
+        // Get the default error message from the exception
+        String errorMessage = exception.getFieldError() != null
+                ? exception.getFieldError().getDefaultMessage()
+                : "Invalid input data";
 
-        }
-
+        // Create ApiResponse with a default or specific error code
         ApiResponse apiResponse = new ApiResponse();
-        apiResponse.setCode(errorCode.getCode());
-        apiResponse.setMessage(errorCode.getMessage());
+        apiResponse.setCode(ErrorCode.UNCATEGORIZED_EXCEPTION.getCode());
+        apiResponse.setMessage(errorMessage); // Use the system's error message
 
         return ResponseEntity.badRequest().body(apiResponse);
     }

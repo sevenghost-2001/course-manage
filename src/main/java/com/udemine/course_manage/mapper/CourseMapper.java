@@ -179,6 +179,13 @@ public class CourseMapper {
             reviewResponse.setComment(review.getComment());
             reviewResponse.setCreated_at(review.getCreated_at());
             reviewResponse.setUserName(List.of(review.getUserName()));
+            List<UserResponse> reviewResponseList = List.of(UserResponse.builder()
+                    .id(review.getUser().getId())
+                    .name(review.getUser().getName())
+                    .biography(review.getUser().getBiography())
+                    .avatar(review.getUser().getAvatar())
+                    .build());
+            reviewResponse.setReviewers(reviewResponseList);
             return reviewResponse;
         }).collect(Collectors.toList()));
         return response;

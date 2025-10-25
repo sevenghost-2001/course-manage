@@ -65,7 +65,10 @@ public enum ErrorCode {
     EMPTY_CART(1053, "Cart is empty"),
     HMACSHA256(1054, "Error while generating HMACSHA256"),
     USER_ALREADY_ENROLLED(1056, "User already enrolled in this course"),
-    INVALID_OTP(1053, "Invalid OTP"),;
+    INVALID_OTP(1053, "Invalid OTP"),
+    INVALID_LESSON_VIDEO(1054, "Invalid lesson video URL"),
+    FILE_SAVE_FAILED(1055, "File save failed"),
+    INVALID_INPUT(1056, "Invalid input data");
 
 
     ErrorCode(int code, String message) {

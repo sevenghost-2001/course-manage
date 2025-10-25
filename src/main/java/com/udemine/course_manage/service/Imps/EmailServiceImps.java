@@ -22,6 +22,7 @@ public class EmailServiceImps implements EmailService {
             message.setSubject(subject);
             message.setText(content);
             mailSender.send(message);
+            System.out.println("✅ Đã gửi email đến: " + toEmail);
         } catch (Exception e) {
             e.printStackTrace();
         }

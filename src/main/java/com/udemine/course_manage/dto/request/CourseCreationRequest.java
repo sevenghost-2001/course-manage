@@ -1,5 +1,6 @@
 package com.udemine.course_manage.dto.request;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.udemine.course_manage.entity.Status;
 import jakarta.persistence.Column;
 import jakarta.validation.constraints.DecimalMin;
@@ -11,6 +12,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Data
 @NoArgsConstructor
@@ -30,4 +32,16 @@ public class CourseCreationRequest {
     int id_category;
     MultipartFile videoDemo;
     Boolean isCertification;
+    List<ModuleCreationRequest> modules;
+    @JsonIgnore // Không ánh xạ trực tiếp từ form, chỉ dùng để nhận JSON
+    private String modulesJson;
+
+    // Getters, setters...
+    public void setModulesJson(String modulesJson) {
+        this.modulesJson = modulesJson;
+    }
+
+    public String getModulesJson() {
+        return modulesJson;
+    }
 }

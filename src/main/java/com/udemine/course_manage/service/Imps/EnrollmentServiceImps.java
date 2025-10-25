@@ -39,7 +39,8 @@ public class EnrollmentServiceImps implements EnrollmentService {
 //        boolean percent = request.getProgressPercent() == 100? true : false;
 //        enrollment.setCertificated(percent);
         if (enrollmentRepository.existsByUserIdAndCourseId(request.getId_user(), request.getId_course())) {
-            throw new AppException(ErrorCode.USER_ALREADY_ENROLLED);
+            System.out.println("⚠️ User đã đăng ký khóa học, bỏ qua Enrollment");
+            return enrollmentRepository.findByUserIdAndCourseId(request.getId_user(), request.getId_course()).orElse(null);
         }
         Enrollment enrollment = new Enrollment();
         enrollment.setPaymentMethod(request.getPaymentMethod());
