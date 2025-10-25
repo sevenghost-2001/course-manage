@@ -40,6 +40,7 @@ public class ForgotPasswordController {
     public ResponseEntity<String> verifyMail(@PathVariable String email) {
         User user = userRepository.findByEmailIgnoreCase(email)
                 .orElseThrow(() -> new AppException(ErrorCode.USER_NOT_EXIST));
+        forgotPasswordRepository.deleteByUserId(user.getId()); // drop older ones
         int otp = otpGenerator();
         MailBody mailBody = MailBody.builder()
                 .to(email)
@@ -49,7 +50,7 @@ public class ForgotPasswordController {
 
         ForgotPassword fp = ForgotPassword.builder()
                 .otp(otp)
-                .expirationTime(new Date(System.currentTimeMillis() + 30 * 60 * 1000)) // 10 minutes from now
+                .expirationTime(new Date(System.currentTimeMillis() + 20 * 1000)) // 10 minutes from now
                 .user(user)
                 .build();
 
@@ -69,8 +70,14 @@ public class ForgotPasswordController {
         // Check 2: OPT expired?
         if (fp.getExpirationTime().before(Date.from(Instant.now()))) {
             forgotPasswordRepository.deleteById(fp.getFpid());
-            return new ResponseEntity<>("OTP expired. Please request a new one.", HttpStatus.EXPECTATION_FAILED);
+            return new ResponseEntity<>(ErrorCode.OPT_EXPIRED.getMessage(), HttpStatus.EXPECTATION_FAILED);
         }
+
+        // after validating OTP, checking expiration, and updating the password:
+        forgotPasswordRepository.deleteByUserId(user.getId());
+        // or delete the specific row if you have it loaded:
+        // forgotPasswordRepository.delete(fp);
+
         return ResponseEntity.ok("OTP verified. You can now reset your password.");
     }
 
