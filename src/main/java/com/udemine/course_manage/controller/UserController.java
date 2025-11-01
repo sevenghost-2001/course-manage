@@ -52,15 +52,15 @@ import java.util.List;
             return apiResponse;
         }
 
-    @PutMapping("/{id}")
-    public ApiResponse<User> updateUser(
-            @PathVariable Integer id,
-            @RequestBody @Valid UserUpdateRequest request
-    ) {
-        ApiResponse<User> apiResponse = new ApiResponse<>();
-        apiResponse.setResult(((UserServiceImps) userService).updateUserByAdmin(id, request));
-        return apiResponse;
-    }
+        @PutMapping("/{id}")
+        public ApiResponse<User> updateUser(
+                @PathVariable Integer id,
+                @RequestBody @Valid UserUpdateRequest request
+        ) {
+            ApiResponse<User> apiResponse = new ApiResponse<>();
+            apiResponse.setResult(((UserServiceImps) userService).updateUserByAdmin(id, request));
+            return apiResponse;
+        }
 
         @DeleteMapping("/{id}")
         public ApiResponse<String> deleteUser(@PathVariable Integer id) {
