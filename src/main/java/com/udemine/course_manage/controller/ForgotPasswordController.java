@@ -50,7 +50,7 @@ public class ForgotPasswordController {
 
         ForgotPassword fp = ForgotPassword.builder()
                 .otp(otp)
-                .expirationTime(new Date(System.currentTimeMillis() + 20 * 1000)) // 10 minutes from now
+                .expirationTime(new Date(System.currentTimeMillis() + 5 * 60 * 1000)) // 5 minutes from now
                 .user(user)
                 .build();
 
@@ -87,9 +87,15 @@ public class ForgotPasswordController {
         if (!Objects.equals(changePassword.password(), changePassword.confirmPassword())) {
             return new ResponseEntity<>("Passwords do not match. Please re-enter the password.", HttpStatus.EXPECTATION_FAILED);
         }
+        MailBody mailBody = MailBody.builder()
+                .to(email)
+                .body("Your password has been successfully changed. If you did not perform this action, please contact support immediately. \n\nBest regards,\nSkillGro Team")
+                .subject("Password Changed Successfully")
+                .build();
+
         String encodedPassword = passwordEncoder.encode(changePassword.password());
         userRepository.updatePassword(email, encodedPassword);
-
+        mailService.sendSimpleMessage(mailBody);
         return ResponseEntity.ok("Password updated successfully");
     }
 
