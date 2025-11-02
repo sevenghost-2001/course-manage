@@ -1,5 +1,6 @@
 package com.udemine.course_manage.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.DecimalMin;
 import jakarta.validation.constraints.Digits;
@@ -21,6 +22,7 @@ import java.util.List;
 @Builder
 @FieldDefaults(level = AccessLevel.PRIVATE)
 @Table(name = "courses")
+@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
 public class Course {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -55,19 +57,25 @@ public class Course {
     String description;
 
     @OneToMany(mappedBy = "course")
+    @com.fasterxml.jackson.annotation.JsonIgnore
     List<Enrollment> enrollments = new ArrayList<>();
 
     @OneToMany(mappedBy = "course")
+    @com.fasterxml.jackson.annotation.JsonIgnore
     List<Review> reviews = new ArrayList<>();
 
     @OneToMany(mappedBy = "course")
+    @com.fasterxml.jackson.annotation.JsonIgnore
     List<Teach> teaches = new ArrayList<>();
 
     @OneToMany(mappedBy = "course")
+    @com.fasterxml.jackson.annotation.JsonIgnore
     List<Module> modules = new ArrayList<>();
 
     @OneToMany(mappedBy = "course")
+    @com.fasterxml.jackson.annotation.JsonIgnore
     List<CareerToCourse> careerToCourses = new ArrayList<>();
+
 
     @PrePersist
     void on_create(){

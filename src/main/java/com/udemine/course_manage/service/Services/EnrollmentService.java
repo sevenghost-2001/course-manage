@@ -7,6 +7,7 @@ import java.util.List;
 
 public interface EnrollmentService {
     List<Enrollment> getAllEnrollments();
+    List<Enrollment> getEnrollmentsByUser(int userId);
     Enrollment createEnrollment(EnrollmentCreationRequest request);
     Enrollment updateEnrollment(int id, EnrollmentCreationRequest request);
     void deleteEnrollment(int id);

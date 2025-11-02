@@ -10,7 +10,10 @@ import com.udemine.course_manage.service.Services.EnrollmentService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/api/enrollments")
@@ -24,6 +27,40 @@ public class EnrollmentController {
         ApiResponse<List<Enrollment>> apiResponse = new ApiResponse<>();
         apiResponse.setResult(enrollmentService.getAllEnrollments());
         return apiResponse;
+    }
+    @GetMapping("/user/{userId}")
+    public ApiResponse<List<Enrollment>> getEnrollmentsByUser(@PathVariable int userId) {
+        ApiResponse<List<Enrollment>> apiResponse = new ApiResponse<>();
+        apiResponse.setResult(enrollmentService.getEnrollmentsByUser(userId));
+        return apiResponse;
+    }
+    @GetMapping("/buyers")
+    public ApiResponse<List<Map<String, Object>>> getUsersWhoBought() {
+        List<Enrollment> enrollments = enrollmentService.getAllEnrollments();
+
+        // Dùng LinkedHashMap để giữ thứ tự
+        Map<Integer, Map<String, Object>> buyerMap = new LinkedHashMap<>();
+
+        for (Enrollment e : enrollments) {
+            if (e.getUser() == null) continue;
+
+            int userId = e.getUser().getId();
+            buyerMap.putIfAbsent(userId, new LinkedHashMap<>());
+
+            Map<String, Object> info = buyerMap.get(userId);
+            info.put("id", userId);
+            info.put("name", e.getUser().getName());
+            info.put("email", e.getUser().getEmail());
+            info.put("accountNonLocked", e.getUser().isAccountNonLocked());
+
+            // Nếu chưa có courseCount thì set = 1, nếu có rồi thì +1
+            info.put("courseCount", (int) info.getOrDefault("courseCount", 0) + 1);
+        }
+
+        ApiResponse<List<Map<String, Object>>> res = new ApiResponse<>();
+        res.setCode(1000);
+        res.setResult(new ArrayList<>(buyerMap.values()));
+        return res;
     }
 
     @PostMapping

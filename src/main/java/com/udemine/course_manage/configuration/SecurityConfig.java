@@ -36,7 +36,7 @@ public class SecurityConfig {
     //custom lại kiểu trả lỗi hết hạn token theo chuẩn ApiResponse
     private CustomAuthenticationEntryPoint customAuthenticationEntryPoint;
     private final String[] PUBLIC_ENDPOINTS = {
-            "/api/users",
+            "/api/users/**",
             "/auth/token",
             "/auth/introspect",
             "/api/career-paths",

@@ -22,4 +22,11 @@ public class UserUpdateRequest {
     Integer levels;
     Boolean instructor;
     String biography;
+    Integer id_role;
+
+    // === Lockout fields ===
+    Boolean accountNonLocked;
+    Integer failedAttempts;
+    Integer lockoutCount;
+    String lockTime;
 }

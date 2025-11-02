@@ -21,6 +21,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -88,6 +89,19 @@ public class UserServiceImps implements UserService {
 
         return savedUser;
     }
+    @Transactional
+    @PreAuthorize("hasRole('ADMIN')")
+    public User unlockUser(Integer id) {
+        User user = userRepository.findById(id)
+                .orElseThrow(() -> new AppException(ErrorCode.USER_NOT_EXISTED));
+
+        user.setAccountNonLocked(true);
+        user.setFailedAttempts(0);
+        user.setLockTime(null);
+        user.setLockoutCount(0);
+
+        return userRepository.save(user);
+    }
     @Override
     @PostAuthorize("ReturnObject.name == authentication.name or hasRole('ADMIN')") //Kiểm tra quyền truy cập
     public User updateUser(Integer id, UserCreationRequest request){
@@ -148,6 +162,18 @@ public class UserServiceImps implements UserService {
         user.setRanks(request.getRanks());
         user.setBiography(request.getBiography());
         user.setIsInstructor(Boolean.TRUE.equals(request.getInstructor()));
+        if (request.getAccountNonLocked() != null)
+            user.setAccountNonLocked(request.getAccountNonLocked());
+
+        if (request.getFailedAttempts() != null)
+            user.setFailedAttempts(request.getFailedAttempts());
+
+        if (request.getLockoutCount() != null)
+            user.setLockoutCount(request.getLockoutCount());
+
+        if (request.getLockTime() != null && !request.getLockTime().isEmpty()) {
+            user.setLockTime(LocalDateTime.parse(request.getLockTime()));
+        }
 
         // Không đụng tới password
         return userRepository.save(user);

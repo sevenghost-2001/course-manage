@@ -90,32 +90,33 @@ public class AuthenticationServiceImps implements AuthenticationService {
     }
 
     @Override
-    public AuthenticationResponse authenticate(AuthenticationRequest request){
-        //Không có findByName nên ta phải khai báo thêm findByName
-       User user = userRepository.findByName(request.getName())
+    public AuthenticationResponse authenticate(AuthenticationRequest request) {
+        User user = userRepository.findByName(request.getName())
                 .orElseThrow(() -> new AppException(ErrorCode.USER_NOT_EXISTED));
 
-        // Hard stop if user hit the permanent threshold
+        // 🔒 Kiểm tra nếu tài khoản bị khóa vĩnh viễn
         if (user.getLockoutCount() >= MAX_LOCKOUTS) {
             throw new AppException(ErrorCode.ACCOUNT_PERMANENTLY_LOCKED);
         }
 
-        // Check if account is locked
+        // 🔒 Kiểm tra tài khoản tạm thời bị khóa
         if (!user.isAccountNonLocked()) {
-            // If already permanently locked, never auto-unlock
-            if (user.getLockoutCount() >= MAX_LOCKOUTS) {
-                throw new AppException(ErrorCode.ACCOUNT_PERMANENTLY_LOCKED);
-            }
-            // Temporary lock window
-            if (user.getLockTime() != null &&
-                    user.getLockTime().plusMinutes(TEMP_LOCK_MINUTES).isBefore(LocalDateTime.now())) {
-                temporaryUnlock(user);
+            if (user.getLockTime() != null) {
+                LocalDateTime unlockTime = user.getLockTime().plusMinutes(TEMP_LOCK_MINUTES);
+
+                if (LocalDateTime.now().isBefore(unlockTime)) {
+                    // vẫn đang trong thời gian khóa
+                    throw new AppException(ErrorCode.ACCOUNT_LOCKED);
+                } else {
+                    // hết thời gian → tự mở khóa
+                    temporaryUnlock(user);
+                }
             } else {
                 throw new AppException(ErrorCode.ACCOUNT_LOCKED);
             }
         }
 
-        // Check password
+        // ✅ Xác thực mật khẩu
         PasswordEncoder passwordEncoder = new BCryptPasswordEncoder(10);
         boolean authenticated = passwordEncoder.matches(request.getPassword(), user.getPassword());
 
@@ -124,9 +125,10 @@ public class AuthenticationServiceImps implements AuthenticationService {
             throw new AppException(ErrorCode.WRONG_PASSWORD);
         }
 
-        // Successful login → reset counter
+        // ✅ Nếu đăng nhập thành công → reset trạng thái
         resetFailedAttempts(user);
 
+        // ✅ Sinh token
         String token = generateToken(user);
 
         return AuthenticationResponse.builder()
@@ -137,6 +139,7 @@ public class AuthenticationServiceImps implements AuthenticationService {
                 .role(buildScope(user))
                 .build();
     }
+
 
     @Override
     public String generateToken(User user) {

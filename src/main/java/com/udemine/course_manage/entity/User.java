@@ -52,7 +52,7 @@ public class User {
 
 
 
-    @OneToMany(mappedBy = "user", orphanRemoval = true,fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "user", orphanRemoval = true, fetch = FetchType.LAZY)
     @JsonIgnore
     List<UserRole> userRoles;
 
@@ -68,7 +68,19 @@ public class User {
 
     @JsonProperty("Roles")
     public List<String> getRoles() {
-        return userRoles != null ? userRoles.stream().map(UserRole::getNameRole).toList() : null;
+        if (userRoles == null || userRoles.isEmpty()) {
+            return List.of("USER"); //
+        }
+        return userRoles.stream()
+                .map(r -> {
+                    try {
+                        return r.getNameRole();
+                    } catch (Exception e) {
+                        return "USER";
+                    }
+                })
+                .filter(name -> name != null && !name.isBlank())
+                .toList();
     }
 
     @PrePersist

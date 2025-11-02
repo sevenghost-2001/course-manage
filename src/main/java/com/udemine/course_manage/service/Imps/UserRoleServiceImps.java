@@ -14,6 +14,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class UserRoleServiceImps implements UserRoleService {
@@ -25,29 +26,37 @@ public class UserRoleServiceImps implements UserRoleService {
     private UserRepository userRepository;
 
     @Override
-    public List<UserRole> getAllUserRoles(){
+    public List<UserRole> getAllUserRoles() {
         return userRoleRepository.findAll();
     }
+
     @Override
-    public UserRole createUserRole(UserRoleCreationRequest request){
-        //Kiểm xem cặp dữ liệu id_user và id_role đã tồn tại hay chưa
-        if(userRoleRepository.existsByUserIdAndRoleId(request.getId_user(), request.getId_role())){
+    public UserRole createUserRole(UserRoleCreationRequest request) {
+        // Kiểm tra trùng user-role
+        if (userRoleRepository.existsByUserIdAndRoleId(request.getId_user(), request.getId_role())) {
             throw new AppException(ErrorCode.USER_ROLE_EXISTED);
         }
+
         UserRole userRole = new UserRole();
-        Role role = roleRepository.findById(request.getId_user())
+
+        // Lấy role theo id_role
+        Role role = roleRepository.findById(request.getId_role())
                 .orElseThrow(() -> new AppException(ErrorCode.ROLE_NOT_FOUND));
         userRole.setRole(role);
 
+        // Lấy user theo id_user
         User user = userRepository.findById(request.getId_user())
                 .orElseThrow(() -> new AppException(ErrorCode.USER_NOT_EXISTED));
         userRole.setUser(user);
+
         return userRoleRepository.save(userRole);
     }
+
     @Override
-    public UserRole updateUserRole(int id, UserRoleCreationRequest request){
+    public UserRole updateUserRole(int id, UserRoleCreationRequest request) {
         UserRole userRole = userRoleRepository.findById(id)
                 .orElseThrow(() -> new AppException(ErrorCode.USER_ROLE_NOT_FOUND));
+
         Role role = roleRepository.findById(request.getId_role())
                 .orElseThrow(() -> new AppException(ErrorCode.ROLE_NOT_FOUND));
         userRole.setRole(role);
@@ -55,13 +64,17 @@ public class UserRoleServiceImps implements UserRoleService {
         User user = userRepository.findById(request.getId_user())
                 .orElseThrow(() -> new AppException(ErrorCode.USER_NOT_EXISTED));
         userRole.setUser(user);
+
         return userRoleRepository.save(userRole);
     }
+
     @Override
-    public void deleteUserRole(int id){
-        if(!userRoleRepository.existsById(id)){
+    public void deleteUserRole(int id) {
+        if (!userRoleRepository.existsById(id)) {
             throw new AppException(ErrorCode.USER_ROLE_NOT_FOUND);
         }
         userRoleRepository.deleteById(id);
     }
 }
+
+
