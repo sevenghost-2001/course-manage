@@ -152,7 +152,7 @@ public class ForgotPasswordController {
                 .body("Your password has been successfully changed. If you did not perform this action, please contact support immediately. \n\nBest regards,\nSkillGro Team")
                 .subject("Password Changed Successfully")
                 .build();
-        mailService.sendSimpleMessage(mailBod
+        mailService.sendSimpleMessage(mailBody);
         // E) (keep your existing mail notify)
         return ResponseEntity.ok("Password updated successfully");
     }
