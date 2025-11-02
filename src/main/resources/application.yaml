@@ -41,4 +41,4 @@ server:
 Jwt:
   signerKey: "Hj1qok1EhD77jwWz8aUuSXmCN4VC+WpMFDTqlwD73qkgTlKEIzqH2re9g/S06Vzc"
 file:
-  root-path:
+  root-path: #D:\Theme02\Course02Theme\html.themegenix.com\skillgro\assets\img
