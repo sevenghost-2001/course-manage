@@ -1,8 +1,11 @@
 package com.udemine.course_manage.dto.request;
 
+import com.udemine.course_manage.dto.response.LessonsResourceCreationResponse;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 import org.springframework.web.multipart.MultipartFile;
+
+import java.util.List;
 
 @Data
 @NoArgsConstructor
@@ -16,4 +19,5 @@ public class LessonsCreatonRequest {
     double duration;
     double watch_duration;
     int id_module;
+    List<LessonResourceCreationRequest> resources;
 }

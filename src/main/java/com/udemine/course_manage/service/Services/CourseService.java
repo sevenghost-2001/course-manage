@@ -9,7 +9,7 @@ import org.springframework.web.multipart.MultipartFile;
 import java.util.List;
 
 public interface CourseService {
-    Course createCourse(CourseCreationRequest request, MultipartFile[] lessonVideos);
+    Course createCourse(CourseCreationRequest request, MultipartFile[] lessonVideos,MultipartFile[] resourceFiles);
     Course updateCourse(Integer id,CourseCreationRequest request);
     void deleteCourse(Integer id);
     List<CourseResponse> getAllCourses();

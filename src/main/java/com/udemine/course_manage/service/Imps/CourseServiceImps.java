@@ -1,15 +1,11 @@
 package com.udemine.course_manage.service.Imps;
 
 import com.udemine.course_manage.dto.request.CourseCreationRequest;
+import com.udemine.course_manage.dto.request.LessonResourceCreationRequest;
 import com.udemine.course_manage.dto.request.LessonsCreatonRequest;
 import com.udemine.course_manage.dto.request.ModuleCreationRequest;
-import com.udemine.course_manage.dto.response.CareerPathResponse;
-import com.udemine.course_manage.dto.response.CategoryResponse;
-import com.udemine.course_manage.dto.response.CourseResponse;
-import com.udemine.course_manage.dto.response.HomePageResponse;
-import com.udemine.course_manage.entity.Category;
-import com.udemine.course_manage.entity.Course;
-import com.udemine.course_manage.entity.Lessons;
+import com.udemine.course_manage.dto.response.*;
+import com.udemine.course_manage.entity.*;
 import com.udemine.course_manage.entity.Module;
 import com.udemine.course_manage.exception.AppException;
 import com.udemine.course_manage.exception.ErrorCode;
@@ -46,17 +42,24 @@ public class CourseServiceImps implements CourseService {
     private FileStorageService fileStorageService;
     @Autowired
     private LessonRepository lessonRepository;
+    @Autowired
+    private LessonResourceRepository lessonResourceRepository;
     @Override
     @Transactional
-    public Course createCourse(CourseCreationRequest request, MultipartFile[] lessonVideos) {
+    public Course createCourse(CourseCreationRequest request, MultipartFile[] lessonVideos, MultipartFile[] resourceFiles) {
         log.info("Received lessonVideos in service: {}", (lessonVideos != null ? Arrays.toString(lessonVideos) : "null"));
-
+        log.info("Received assignmentFiles in service: {}", (resourceFiles != null ? Arrays.toString(resourceFiles) : "null"));
         // Kiểm tra null trước khi sử dụng
         if (lessonVideos == null) {
             log.warn("No lesson videos provided");
             lessonVideos = new MultipartFile[0]; // Khởi tạo mảng rỗng để tránh NullPointerException
         }
-
+        if (resourceFiles == null) {
+            log.warn("No assignmentFile provided");
+            resourceFiles = new MultipartFile[0]; // Khởi tạo mảng rỗng để tránh NullPointerException
+        }
+        int resourceIndex = 0; // Thay assignmentIndex bằng resourceIndex
+        List<LessonResourceCreationRequest> resourceRequests = new ArrayList<>();
         Course course = new Course();
         if (request.getTitle() != null && courseRepository.existsByTitle(request.getTitle())) {
             throw new AppException(ErrorCode.TITLE_EXISTED);
@@ -76,9 +79,9 @@ public class CourseServiceImps implements CourseService {
         if (request.getModules() != null && !request.getModules().isEmpty()) {
             int videoIndex = 0;
             for (ModuleCreationRequest moduleReq : request.getModules()) {
-                if (moduleRepository.existsByTitle(moduleReq.getTitle())) {
-                    throw new AppException(ErrorCode.TITLE_EXISTED);
-                }
+//                if (moduleRepository.existsByTitle(moduleReq.getTitle())) {
+//                    throw new AppException(ErrorCode.TITLE_EXISTED);
+//                }
                 int maxPosition = moduleRepository.findMaxPositionByCourseId(savedCourse.getId())
                         .orElse(0);
                 Module module = new Module();
@@ -112,9 +115,30 @@ public class CourseServiceImps implements CourseService {
                             log.warn("No video file provided for lesson: {}", lessonReq.getTitle());
                         }
 
-                        lessonRepository.save(lesson);
+                        Lessons savedLesson = lessonRepository.save(lesson);
                         log.info("lesson after save: {}", lesson);
+                        // Thêm resource từ lessonReq
+                        log.info("Resource in lessonReq: {}", lessonReq.getResources());
+                        // Thêm resources từ lessonReq
+                        if (lessonReq.getResources() != null && !lessonReq.getResources().isEmpty()) {
+                            resourceRequests.addAll(lessonReq.getResources()); // Thêm toàn bộ danh sách resources
+                        }
                     }
+                }
+            }
+            // Lưu resource sau khi tất cả lesson được tạo
+            for (int i = 0; i < resourceRequests.size() && resourceIndex < resourceFiles.length; i++) {
+                LessonResourceCreationRequest req = resourceRequests.get(i);
+                if (resourceFiles[resourceIndex] != null && !resourceFiles[resourceIndex].isEmpty()) {
+                    LessonsResource resource = LessonsResource.builder()
+                            .title(req.getTitle())
+                            .fileUrl(resourceFiles[resourceIndex].getOriginalFilename())
+                            .lesson(lessonRepository.findById(req.getId_lesson())
+                                    .orElseThrow(() -> new AppException(ErrorCode.LESSONS_NOT_EXIST)))
+                            .build();
+                    fileStorageService.save(resourceFiles[resourceIndex]);
+                    lessonResourceRepository.save(resource);
+                    resourceIndex++;
                 }
             }
         }

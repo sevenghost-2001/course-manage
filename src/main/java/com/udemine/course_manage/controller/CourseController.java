@@ -54,7 +54,8 @@ public class CourseController {
             @RequestParam(value = "modules", required = false) String modulesJson,
             @RequestPart(value = "image", required = false) MultipartFile image,
             @RequestPart(value = "videoDemo", required = false) MultipartFile videoDemo,
-            @RequestPart(value = "lessonVideos", required = false) MultipartFile[] lessonVideos) {
+            @RequestPart(value = "lessonVideos", required = false) MultipartFile[] lessonVideos,
+            @RequestPart(value = "resourceFiles", required = false) MultipartFile[] resourceFiles) {
         ApiResponse<CourseResponse> apiResponse = new ApiResponse<>();
 
         CourseCreationRequest request = new CourseCreationRequest();
@@ -80,7 +81,8 @@ public class CourseController {
         }
 
         log.info("Received lessonVideos: {}", (lessonVideos != null ? Arrays.toString(lessonVideos) : "null"));
-        Course course = courseService.createCourse(request, lessonVideos); // Truyền lessonVideos
+        log.info("Received resourceFiles: {}", (resourceFiles != null ? Arrays.toString(resourceFiles) : "null")); // Thay assignmentFiles bằng resourceFiles
+        Course course = courseService.createCourse(request, lessonVideos, resourceFiles);// Truyền lessonVideos
         CourseResponse courseResponse = courseMapper.toCourseResponse(course);
         apiResponse.setResult(courseResponse);
         return apiResponse;

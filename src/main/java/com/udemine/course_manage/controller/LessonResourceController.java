@@ -7,6 +7,7 @@ import com.udemine.course_manage.exception.ErrorCode;
 import com.udemine.course_manage.service.Services.LessonResourceService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
@@ -23,9 +24,16 @@ public class LessonResourceController {
         return apiResponse;
     }
 
-    @PostMapping
-    ApiResponse<LessonsResource> createLessonResource(@RequestBody LessonResourceCreationRequest request) {
+    @PostMapping()
+    public ApiResponse<LessonsResource> createLessonResource(
+            @RequestParam("title") String title,
+            @RequestParam("fileUrl") MultipartFile fileUrl,
+            @RequestParam("id_lesson") int id_lesson) {
         ApiResponse<LessonsResource> apiResponse = new ApiResponse<>();
+        LessonResourceCreationRequest request = new LessonResourceCreationRequest();
+        request.setTitle(title);
+        request.setFileUrl(fileUrl);
+        request.setId_lesson(id_lesson);
         apiResponse.setResult(lessonResourceService.createLessonResource(request));
         return apiResponse;
     }

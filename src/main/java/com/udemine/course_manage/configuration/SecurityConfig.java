@@ -49,10 +49,10 @@ public class SecurityConfig {
         httpSecurity.authorizeHttpRequests(request ->
                 //Yêu cầu có quyền Admin để có thể truy cập lấy danh sách người dùng, thông tin cá nhân
                 request.requestMatchers(PUBLIC_ENDPOINTS).permitAll()
-                        .requestMatchers("/api/courses/*").permitAll()
                         .requestMatchers("/payment/ipn").permitAll()
                         .requestMatchers(HttpMethod.GET,"/api/users").hasAuthority("ROLE_ADMIN")
                         .requestMatchers(HttpMethod.POST, "/api/users/**").permitAll()
+                        .requestMatchers(HttpMethod.GET, "/api/courses").permitAll()
                         .requestMatchers(HttpMethod.POST, "/api/courses/**").hasAuthority("ROLE_INSTRUCTOR")
                         .requestMatchers("/auth/*").permitAll()
                         .requestMatchers(HttpMethod.POST,"/api/lessons").permitAll()

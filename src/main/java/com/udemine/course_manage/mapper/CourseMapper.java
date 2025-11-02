@@ -37,6 +37,7 @@ public class CourseMapper {
 
         course.setTitle(request.getTitle());
         course.setShortDescription(request.getShortDescription());
+        course.setDescription(request.getDescription());
         course.setCost(request.getCost());
         course.setDiscountedCost(request.getDiscountedCost());
         Category category = categoryRepository.findById(request.getId_category())
