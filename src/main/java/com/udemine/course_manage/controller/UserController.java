@@ -1,6 +1,7 @@
 package com.udemine.course_manage.controller;
 
 import com.udemine.course_manage.dto.request.ApiResponse;
+import com.udemine.course_manage.dto.request.MailBody;
 import com.udemine.course_manage.dto.request.UserCreationRequest;
 import com.udemine.course_manage.dto.request.UserUpdateRequest;
 import com.udemine.course_manage.dto.request.UserRoleCreationRequest;
@@ -8,6 +9,7 @@ import com.udemine.course_manage.entity.User;
 import com.udemine.course_manage.exception.ErrorCode;
 import com.udemine.course_manage.repository.UserRepository;
 import com.udemine.course_manage.service.Imps.UserServiceImps;
+import com.udemine.course_manage.service.Services.MailService;
 import com.udemine.course_manage.service.Services.UserService;
 import com.udemine.course_manage.service.Services.UserRoleService;
 import jakarta.validation.Valid;
@@ -18,13 +20,18 @@ import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDateTime;
 import java.util.List;
+//    @CrossOrigin("http://localhost:63342")
+    //để inject logger vào class
+    @Slf4j
+    @RestController
+    @RequestMapping("/api/users")
+    public class UserController {
+        @Autowired
+        private UserService userService;
 
-@Slf4j
-@RestController
-@RequestMapping("/api/users")
-public class UserController {
-    @Autowired
-    private UserService userService;
+        @Autowired
+        private MailService mailService;
+
 
     @Autowired
     private UserRepository userRepository;
@@ -39,22 +46,33 @@ public class UserController {
         return apiResponse;
     }
 
-    @GetMapping("/{id}")
-    public ApiResponse<User> getUserById(@PathVariable Integer id) {
-        var authentication = SecurityContextHolder.getContext().getAuthentication();
-        log.info("Current user: {}", authentication.getName());
-        authentication.getAuthorities().forEach(authority -> log.info("Authority: {}", authority.getAuthority()));
-        ApiResponse<User> apiResponse = new ApiResponse<>();
-        apiResponse.setResult(userService.getUserById(id));
-        return apiResponse;
-    }
+        @GetMapping("/{id}")
+        public ApiResponse<User> getUserById(@PathVariable Integer id) {
+            //Dùng SecurityContextHolder để lấy thông tin người dùng hiện tại
+            var authentication = SecurityContextHolder.getContext().getAuthentication();
+            log.info("Current user: {}", authentication.getName());
+            authentication.getAuthorities().forEach(authority -> {
+                log.info("Authority: {}", authority.getAuthority());
+            });
+            ApiResponse<User> apiResponse = new ApiResponse<>();
+            apiResponse.setResult(userService.getUserById(id));
+            return apiResponse;
+        }
+        public ApiResponse<User> apiResponse = new ApiResponse<>();
 
-    @PostMapping
-    public ApiResponse<User> createUser(@Valid UserCreationRequest request) {
-        ApiResponse<User> apiResponse = new ApiResponse<>();
-        apiResponse.setResult(userService.createUser(request));
-        return apiResponse;
-    }
+        // This is signup endpoint, used to create a new user
+        @PostMapping
+        ApiResponse<User> createUser(@Valid UserCreationRequest request){
+            ApiResponse<User> apiResponse = new ApiResponse<>();
+            apiResponse.setResult(userService.createUser(request));
+            MailBody mailBody = MailBody.builder()
+                    .to(request.getEmail())
+                    .body("Welcome to our platform, " + request.getName() + "!")
+                    .subject("Welcome Email")
+                    .build();
+            mailService.sendSimpleMessage(mailBody);
+            return apiResponse;
+        }
     @PutMapping("/unlock/{id}")
     public ApiResponse<User> unlockUser(@PathVariable Integer id) {
         User user = userService.getUserById(id);
@@ -68,7 +86,6 @@ public class UserController {
         apiResponse.setResult(user);
         return apiResponse;
     }
-
     @PutMapping("/lock/{id}")
     public ApiResponse<User> lockUser(@PathVariable Integer id) {
         User user = userService.getUserById(id);
@@ -82,27 +99,24 @@ public class UserController {
         apiResponse.setResult(user);
         return apiResponse;
     }
+        @PutMapping("/{id}")
+        public ApiResponse<User> updateUser(
+                @PathVariable Integer id,
+                @RequestBody @Valid UserUpdateRequest request
+        ) {
+            ApiResponse<User> apiResponse = new ApiResponse<>();
+            apiResponse.setResult(((UserServiceImps) userService).updateUserByAdmin(id, request));
 
-
-    @PutMapping("/{id}")
-    public ApiResponse<User> updateUser(
-            @PathVariable Integer id,
-            @RequestBody @Valid UserUpdateRequest request
-    ) {
-        ApiResponse<User> apiResponse = new ApiResponse<>();
-        apiResponse.setResult(((UserServiceImps) userService).updateUserByAdmin(id, request));
-
-        // request có id_role (Admin gửi kèm role ID), cập nhật luôn user-role
-        if (request.getId_role() != null) {
-            UserRoleCreationRequest userRoleRequest = UserRoleCreationRequest.builder()
-                    .id_user(id)
-                    .id_role(request.getId_role())
-                    .build();
-            userRoleService.createUserRole(userRoleRequest);
+            // request có id_role (Admin gửi kèm role ID), cập nhật luôn user-role
+            if (request.getId_role() != null) {
+                UserRoleCreationRequest userRoleRequest = UserRoleCreationRequest.builder()
+                        .id_user(id)
+                        .id_role(request.getId_role())
+                        .build();
+                userRoleService.createUserRole(userRoleRequest);
+            }
+            return apiResponse;
         }
-
-        return apiResponse;
-    }
 
     @DeleteMapping("/{id}")
     public ApiResponse<String> deleteUser(@PathVariable Integer id) {
