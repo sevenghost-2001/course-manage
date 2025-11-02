@@ -23,4 +23,15 @@ public interface ForgotPasswordRepository extends JpaRepository<ForgotPassword, 
     @Transactional
     @Query("DELETE FROM ForgotPassword fp WHERE fp.expirationTime < CURRENT_TIMESTAMP")
     void deleteAllExpired();
+
+    @Modifying
+    @Query(value = "UPDATE users SET passwords = :hash WHERE email = :email", nativeQuery = true)
+    int updatePassword(@Param("email") String email, @Param("hash") String hash);
+
+
+    @Query(value = "SELECT id FROM users WHERE email = :email", nativeQuery = true)
+    Integer findUserIdByEmail(@Param("email") String email);
+
+    @Query(value = "SELECT passwords FROM users WHERE id = :userId", nativeQuery = true)
+    String findCurrentHash(@Param("userId") Integer userId);
 }
