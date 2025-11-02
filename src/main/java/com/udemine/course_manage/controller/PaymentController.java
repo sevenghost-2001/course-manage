@@ -37,6 +37,11 @@ public class PaymentController {
         String momoOrderId = (String) payload.get("orderId");
         String resultCode = String.valueOf(payload.get("resultCode"));
 
+//        // Verify chữ ký
+//        if (!momoService.verifySignature(payload)) {
+//            return ResponseEntity.badRequest().body("Invalid signature");
+//        }
+
         // Tách orderId trong DB
         String dbOrderIdStr = momoOrderId.split("_")[0];
         int dbOrderId = Integer.parseInt(dbOrderIdStr);

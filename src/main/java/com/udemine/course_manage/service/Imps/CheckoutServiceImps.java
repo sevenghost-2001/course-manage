@@ -59,9 +59,9 @@ public class CheckoutServiceImps implements CheckoutService {
         // Tạo order
         Order order = Order.builder()
                 .user(user)
-                .total_price(total)
+                .totalPrice(total)
                 .status("PENDING")
-                .created_at(LocalDateTime.now())
+                .createdAt(LocalDateTime.now())
                 .build();
         orderRepository.save(order);
 

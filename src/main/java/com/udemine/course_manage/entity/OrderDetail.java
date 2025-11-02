@@ -1,17 +1,13 @@
 package com.udemine.course_manage.entity;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
-import lombok.experimental.FieldDefaults;
+import lombok.*;
 
 @Entity
 @Table(name = "order_details")
 @Data
-@AllArgsConstructor
 @NoArgsConstructor
+@AllArgsConstructor
 @Builder
 public class OrderDetail {
     @Id
@@ -21,9 +17,12 @@ public class OrderDetail {
     @ManyToOne
     @JoinColumn(name = "id_order", nullable = false)
     private Order order;
+
     @ManyToOne
     @JoinColumn(name = "id_course", nullable = false)
     private Course course;
+
     private int quantity;
     private double price;
 }
+

@@ -8,10 +8,13 @@ import com.udemine.course_manage.dto.response.AuthenticationResponse;
 import com.udemine.course_manage.dto.response.IntrospectResponse;
 import com.udemine.course_manage.repository.UserRepository;
 import com.udemine.course_manage.service.Services.AuthenticationService;
+import jakarta.servlet.http.HttpServletRequest;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -19,7 +22,9 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.text.ParseException;
 import java.time.LocalDateTime;
+import java.util.Map;
 
+@CrossOrigin
 @RestController
 @RequestMapping("/auth")
 @RequiredArgsConstructor
@@ -50,5 +55,19 @@ public class AuthenticationController {
                 .code(1000)
                 .result(result_request)
                 .build();
+    }
+    @PostMapping("/logout")
+    public ResponseEntity<?> logout(HttpServletRequest request) {
+        String authHeader = request.getHeader("Authorization");
+        if (authHeader != null && authHeader.startsWith("Bearer ")) {
+            String token = authHeader.substring(7);
+            System.out.println("🔒 User logged out with token: " + token);
+        }
+
+        // Nếu lưu token trong DB, có thể xóa tại đây
+        return ResponseEntity.ok(Map.of(
+                "timestamp", LocalDateTime.now().toString(),
+                "message", "Logout successful"
+        ));
     }
 }

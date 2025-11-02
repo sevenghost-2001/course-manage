@@ -9,6 +9,9 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.experimental.FieldDefaults;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Entity
 @Table(name = "lesson_comments")
 @Data
@@ -23,13 +26,19 @@ public class LessonsComment {
     String content;
     @ManyToOne
     @JoinColumn(name = "id_user", nullable = false)
-    @JsonIgnore
     User user; // Người dùng đã bình luận
 
     @ManyToOne
-    @JoinColumn(name = "id_lesson", nullable = false)
+    @JoinColumn(name = "id_parent", nullable = true)   // cho phép null
     @JsonIgnore
+    LessonsComment parentComment = null;  // Bình luận cha (nếu có)
+
+
+    @ManyToOne
+    @JoinColumn(name = "id_lesson", nullable = false)
     Lessons lesson; // Bài học mà bình luận thuộc về
+
+
 
     @Transient
     @JsonProperty("User Name")
@@ -42,4 +51,8 @@ public class LessonsComment {
     public String getLessonTitle() {
         return lesson != null ? lesson.getTitle() : null;
     }
+
+    @OneToMany(mappedBy = "parentComment", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<LessonsComment> replies = new ArrayList<>();
+
 }

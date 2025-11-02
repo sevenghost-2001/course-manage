@@ -4,14 +4,12 @@ import lombok.*;
 import lombok.experimental.FieldDefaults;
 
 @Data
+@Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@Builder
 @FieldDefaults(level = AccessLevel.PRIVATE)
-public class AuthenticationResponse {
-    String token;
-    boolean authenticated;
-    Integer id;
-    String name;
-    String role;
+public class OrderDetailResponse {
+    String courseTitle;
+    int quantity;
+    double price;
 }

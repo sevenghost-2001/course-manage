@@ -36,7 +36,7 @@ public class SecurityConfig {
     //custom lại kiểu trả lỗi hết hạn token theo chuẩn ApiResponse
     private CustomAuthenticationEntryPoint customAuthenticationEntryPoint;
     private final String[] PUBLIC_ENDPOINTS = {
-            "/api/users",
+            "/api/users/**",
             "/auth/token",
             "/auth/introspect",
             "/api/career-paths",
@@ -86,7 +86,7 @@ public class SecurityConfig {
                 "http://localhost:63343",
                 "http://127.0.0.1:5500"
         ));
-        configuration.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS"));
+        configuration.setAllowedMethods(List.of("GET", "POST", "PUT","PATCH", "DELETE", "OPTIONS"));
         configuration.setAllowedHeaders(List.of("*"));
         configuration.setAllowCredentials(true);
 

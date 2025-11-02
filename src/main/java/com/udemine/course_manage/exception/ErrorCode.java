@@ -68,7 +68,10 @@ public enum ErrorCode {
     INVALID_OTP(1053, "Invalid OTP"),
     INVALID_LESSON_VIDEO(1054, "Invalid lesson video URL"),
     FILE_SAVE_FAILED(1055, "File save failed"),
-    INVALID_INPUT(1056, "Invalid input data");
+    INVALID_INPUT(1056, "Invalid input data"),
+    OPT_EXPIRED(1054, "OTP expired. Please request a new one.");
+
+
 
 
     ErrorCode(int code, String message) {

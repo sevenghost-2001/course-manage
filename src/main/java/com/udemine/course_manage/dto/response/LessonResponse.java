@@ -13,6 +13,7 @@ import java.time.LocalDateTime;
 @Builder
 @FieldDefaults(level = lombok.AccessLevel.PRIVATE)
 public class LessonResponse {
+    int id;
     String title;
     String videoUrl;
     double duration;
