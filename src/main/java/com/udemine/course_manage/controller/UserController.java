@@ -1,11 +1,13 @@
 package com.udemine.course_manage.controller;
 
 import com.udemine.course_manage.dto.request.ApiResponse;
+import com.udemine.course_manage.dto.request.MailBody;
 import com.udemine.course_manage.dto.request.UserCreationRequest;
 import com.udemine.course_manage.dto.request.UserUpdateRequest;
 import com.udemine.course_manage.entity.User;
 import com.udemine.course_manage.exception.ErrorCode;
 import com.udemine.course_manage.service.Imps.UserServiceImps;
+import com.udemine.course_manage.service.Services.MailService;
 import com.udemine.course_manage.service.Services.UserService;
 import jakarta.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
@@ -22,6 +24,8 @@ import java.util.List;
     public class UserController {
         @Autowired
         private UserService userService;
+        @Autowired
+        private MailService mailService;
 
         @GetMapping
         public ApiResponse<List<User>> getAllUsers(){
@@ -49,6 +53,12 @@ import java.util.List;
         ApiResponse<User> createUser(@Valid UserCreationRequest request){
             ApiResponse<User> apiResponse = new ApiResponse<>();
             apiResponse.setResult(userService.createUser(request));
+            MailBody mailBody = MailBody.builder()
+                    .to(request.getEmail())
+                    .body("Welcome to our platform, " + request.getName() + "!")
+                    .subject("Welcome Email")
+                    .build();
+            mailService.sendSimpleMessage(mailBody);
             return apiResponse;
         }
 
