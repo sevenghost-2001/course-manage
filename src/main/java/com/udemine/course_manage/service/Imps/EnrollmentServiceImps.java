@@ -47,7 +47,8 @@ public class EnrollmentServiceImps implements EnrollmentService {
         enrollment.setProgressPercent(request.getProgressPercent());
         enrollment.setCertificated(request.isCertificated());
         enrollment.setUsed(false); // mặc định
-        enrollment.setTimeExpired(LocalDateTime.now().plusMonths(6)); // ví dụ: 6 tháng hết hạn
+        enrollment.setTimeExpired(0);
+//        enrollment.setTimeExpired(LocalDateTime.now().plusMonths(6)); // ví dụ: 6 tháng hết hạn
 
         User user = userRepository.findById(request.getId_user())
                 .orElseThrow(() -> new AppException(ErrorCode.USER_NOT_EXISTED));

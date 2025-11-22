@@ -14,6 +14,8 @@ import com.udemine.course_manage.mapper.CourseMapper;
 import com.udemine.course_manage.repository.*;
 import com.udemine.course_manage.service.Services.CourseService;
 import com.udemine.course_manage.service.Services.FileStorageService;
+import com.udemine.course_manage.service.Services.LessonResourceService;
+import com.udemine.course_manage.service.Services.LessonService;
 import jakarta.transaction.Transactional;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -44,104 +46,57 @@ public class CourseServiceImps implements CourseService {
     private LessonRepository lessonRepository;
     @Autowired
     private LessonResourceRepository lessonResourceRepository;
+    @Autowired
+    private LessonService lessonService;
+    @Autowired
+    private LessonResourceService lessonResourceService;
+    private MultipartFile findFileByName(MultipartFile[] files, String filename) {
+        return Arrays.stream(files)
+                .filter(f -> f.getOriginalFilename().equals(filename))
+                .findFirst()
+                .orElse(null);
+    }
     @Override
     @Transactional
-    public Course createCourse(CourseCreationRequest request, MultipartFile[] lessonVideos, MultipartFile[] resourceFiles) {
-        log.info("Received lessonVideos in service: {}", (lessonVideos != null ? Arrays.toString(lessonVideos) : "null"));
-        log.info("Received assignmentFiles in service: {}", (resourceFiles != null ? Arrays.toString(resourceFiles) : "null"));
-        // Kiểm tra null trước khi sử dụng
-        if (lessonVideos == null) {
-            log.warn("No lesson videos provided");
-            lessonVideos = new MultipartFile[0]; // Khởi tạo mảng rỗng để tránh NullPointerException
-        }
-        if (resourceFiles == null) {
-            log.warn("No assignmentFile provided");
-            resourceFiles = new MultipartFile[0]; // Khởi tạo mảng rỗng để tránh NullPointerException
-        }
-        int resourceIndex = 0; // Thay assignmentIndex bằng resourceIndex
-        List<LessonResourceCreationRequest> resourceRequests = new ArrayList<>();
-        Course course = new Course();
-        if (request.getTitle() != null && courseRepository.existsByTitle(request.getTitle())) {
-            throw new AppException(ErrorCode.TITLE_EXISTED);
-        }
-        course = courseMapper.toCourse(request);
-        if (request.getImage() != null && !request.getImage().isEmpty()) {
-            course.setImage(request.getImage().getOriginalFilename());
-            fileStorageService.save(request.getImage());
-        }
-        if (request.getVideoDemo() != null && !request.getVideoDemo().isEmpty()) {
-            course.setImgVideoDemo(request.getVideoDemo().getOriginalFilename());
-            fileStorageService.save(request.getVideoDemo());
-        }
+    public Course createCourse(CourseCreationRequest request) {
+        Course course = courseMapper.toCourse(request);
+        log.info("requeset data: " + request);
+        log.info("course mapped from request {}", course);
         Course savedCourse = courseRepository.save(course);
-        log.info("course: {}", savedCourse);
 
-        if (request.getModules() != null && !request.getModules().isEmpty()) {
-            int videoIndex = 0;
+        List<Module> moduleList = new ArrayList<>();
+        if (request.getModules() != null) {
             for (ModuleCreationRequest moduleReq : request.getModules()) {
-//                if (moduleRepository.existsByTitle(moduleReq.getTitle())) {
-//                    throw new AppException(ErrorCode.TITLE_EXISTED);
-//                }
-                int maxPosition = moduleRepository.findMaxPositionByCourseId(savedCourse.getId())
-                        .orElse(0);
                 Module module = new Module();
                 module.setTitle(moduleReq.getTitle());
-                module.setPosition(maxPosition + 1);
+                module.setPosition(moduleRepository.findMaxPositionByCourseId(savedCourse.getId()).orElse(0) + 1);
                 module.setCourse(savedCourse);
-                log.info("module: {}", module);
                 Module savedModule = moduleRepository.save(module);
 
-                if (moduleReq.getLessons() != null && !moduleReq.getLessons().isEmpty()) {
+                if (moduleReq.getLessons() != null) {
+                    List<Lessons> lessonsList = new ArrayList<>();
                     for (LessonsCreatonRequest lessonReq : moduleReq.getLessons()) {
-                        Lessons lesson = new Lessons();
-                        lesson.setTitle(lessonReq.getTitle());
-                        lesson.setDuration((int) lessonReq.getDuration());
-                        lesson.setWatchDuration((int) lessonReq.getWatch_duration());
-                        lesson.setModule(savedModule);
-                        log.info("lesson before save: {}", lesson);
-
-                        // Kiểm tra và gán video
-                        if (videoIndex < lessonVideos.length && lessonVideos[videoIndex] != null && !lessonVideos[videoIndex].isEmpty()) {
-                            log.info("Saving video for lesson: {}, file: {}", lessonReq.getTitle(), lessonVideos[videoIndex].getOriginalFilename());
-                            try {
-                                fileStorageService.save(lessonVideos[videoIndex]);
-                                lesson.setVideoUrl(lessonVideos[videoIndex].getOriginalFilename());
-                                videoIndex++;
-                            } catch (Exception e) {
-                                log.error("Error saving file for lesson {}: {}", lessonReq.getTitle(), e.getMessage());
-                                throw new AppException(ErrorCode.FILE_SAVE_FAILED);
+                        lessonReq.setId_module(savedModule.getId()); // Gán ID module
+                        Lessons lesson = lessonService.createLessons(lessonReq);
+                        if (lessonReq.getResources() != null) {
+                           List<LessonsResource> resourcesList = new ArrayList<>();
+                            for (LessonResourceCreationRequest resourceReq : lessonReq.getResources()) {
+                                resourceReq.setId_lesson(lesson.getId()); // Gán ID lesson
+                                LessonsResource resource = lessonResourceService.createLessonResource(resourceReq);
+                                log.info("Created lesson resource with title: " + resourceReq.getTitle());
+                                resourcesList.add(resource);
                             }
-                        } else {
-                            log.warn("No video file provided for lesson: {}", lessonReq.getTitle());
+                            lesson.setResources(resourcesList);
                         }
-
-                        Lessons savedLesson = lessonRepository.save(lesson);
-                        log.info("lesson after save: {}", lesson);
-                        // Thêm resource từ lessonReq
-                        log.info("Resource in lessonReq: {}", lessonReq.getResources());
-                        // Thêm resources từ lessonReq
-                        if (lessonReq.getResources() != null && !lessonReq.getResources().isEmpty()) {
-                            resourceRequests.addAll(lessonReq.getResources()); // Thêm toàn bộ danh sách resources
-                        }
+                        lessonsList.add(lesson);
                     }
+                    savedModule.setLessons(lessonsList);
                 }
-            }
-            // Lưu resource sau khi tất cả lesson được tạo
-            for (int i = 0; i < resourceRequests.size() && resourceIndex < resourceFiles.length; i++) {
-                LessonResourceCreationRequest req = resourceRequests.get(i);
-                if (resourceFiles[resourceIndex] != null && !resourceFiles[resourceIndex].isEmpty()) {
-                    LessonsResource resource = LessonsResource.builder()
-                            .title(req.getTitle())
-                            .fileUrl(resourceFiles[resourceIndex].getOriginalFilename())
-                            .lesson(lessonRepository.findById(req.getId_lesson())
-                                    .orElseThrow(() -> new AppException(ErrorCode.LESSONS_NOT_EXIST)))
-                            .build();
-                    fileStorageService.save(resourceFiles[resourceIndex]);
-                    lessonResourceRepository.save(resource);
-                    resourceIndex++;
-                }
+                moduleList.add(savedModule);
             }
         }
+        savedCourse.setModules(moduleList);
+        log.info("course after save id: {}", savedCourse.getId());
         return savedCourse;
     }
 

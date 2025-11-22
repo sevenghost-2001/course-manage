@@ -40,10 +40,10 @@ public class Enrollment {
     boolean isCertificated;
 
     @Column(name = "used")
-    boolean used;
+    boolean used = false;
 
     @Column(name = "time_expired")
-    LocalDateTime timeExpired;
+    float timeExpired;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "id_user", nullable = false)

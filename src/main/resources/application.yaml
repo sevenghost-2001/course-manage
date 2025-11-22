@@ -3,10 +3,10 @@ spring:
     name: course-manage
 
   datasource:
-    url: jdbc:mysql://localhost:3307/course_manage
-    username: root
-    password: admin123
-    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: ${SPRING_DATASOURCE_URL:jdbc:mysql://localhost:3307/course_manage}
+    username:  ${SPRING_DATASOURCE_ROOT:root}
+    password:  ${SPRING_DATASOURCE_PASSWORD:admin123}
+    driver-class-name:  ${SPRING_DATASOURCE_NAME:com.mysql.cj.jdbc.Driver}
 
   jpa:
     hibernate:
@@ -24,7 +24,7 @@ spring:
     host: smtp.gmail.com
     port: 587
     username: "backend.skillgo@gmail.com"
-    password: "npjg ttgl hyii pula"
+    password: ""
     properties:
       mail:
         smtp:

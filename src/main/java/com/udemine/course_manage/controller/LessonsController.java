@@ -37,27 +37,25 @@ public class LessonsController {
 
     @PostMapping(consumes = {"multipart/form-data"})
     public ResponseEntity<Lessons> createLessons(
-            LessonsCreatonRequest request
+//            LessonsCreatonRequest request
 
-//            @RequestPart("video_url") MultipartFile video,
-//            @RequestParam("title") String title,
-//            @RequestParam("duration") double duration,
-//            @RequestParam("watch_duration") double watchDuration,
-//            @RequestParam("id_module") int idModule
+            @RequestPart("video_url") MultipartFile video,
+            @RequestParam("title") String title,
+            @RequestParam("duration") double duration,
+            @RequestParam("watch_duration") double watchDuration,
+            @RequestParam("id_module") int idModule
     ) {
-//        LessonsCreatonResponse response = LessonsCreatonResponse.builder()
-//                .title(title)
-//               .video_url(video.getOriginalFilename()) // lấy tên file
-//                .duration(duration)
-//                .watch_duration(watchDuration)
-//                .id_module(idModule)
-//                .build();
+        LessonsCreatonRequest request = LessonsCreatonRequest.builder()
+                .title(title)
+               .video_url(video)
+                .duration(duration)
+                .watch_duration(watchDuration)
+                .id_module(idModule)
+                .build();
 
         Lessons lessons = lessonsService.createLessons(request);
         return ResponseEntity.ok(lessons);
     }
-
-
 
 
     @PutMapping(value = "/{id}", consumes = {"multipart/form-data"})

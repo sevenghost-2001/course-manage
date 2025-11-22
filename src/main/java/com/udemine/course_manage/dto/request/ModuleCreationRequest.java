@@ -13,6 +13,6 @@ import java.util.List;
 public class ModuleCreationRequest {
     String title;
     int position;
-    int id_course;
+    Integer id_course;
     List<LessonsCreatonRequest> lessons;
 }

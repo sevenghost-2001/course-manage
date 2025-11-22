@@ -1,0 +1,12 @@
+services:
+  skillgo:
+    image: skillgo:v1
+    container_name: skillgo_container
+    ports:
+      - "8080:8080"
+    env_file:
+      - .env
+#    environment:
+#        SPRING_DATASOURCE_URL: jdbc:mysql://host.docker.internal:3307/course_manage
+#        SPRING_DATASOURCE_ROOT: root
+#        SPRING_DATASOURCE_PASSWORD: admin123

@@ -19,6 +19,6 @@ import java.util.List;
 public class LessonResourceCreationRequest {
     String title;
     MultipartFile fileUrl;
+    private String fileUrl_key; // Khóa để ánh xạ (ví dụ: fileUrl_1000002)
     int id_lesson;
-    LessonsCreatonRequest resources;
 }

@@ -51,5 +51,5 @@ public class CourseResponse {
     List<ModuleResponse> modules;
     List<InstructorResponse> instructors;
     List<ReviewResponse> reviews;
-    List<LessonsResourceCreationResponse> resources;
+//    List<LessonsResourceCreationResponse> resources;
 }

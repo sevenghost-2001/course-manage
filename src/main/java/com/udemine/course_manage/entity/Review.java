@@ -19,7 +19,7 @@ import java.time.LocalDateTime;
 public class Review {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    int id;
+    long id;
     double rating;
     String comment;
     LocalDateTime created_at;

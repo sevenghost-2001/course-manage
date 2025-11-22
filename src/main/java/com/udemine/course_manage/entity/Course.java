@@ -57,23 +57,23 @@ public class Course {
     String description;
 
     @OneToMany(mappedBy = "course")
-    @com.fasterxml.jackson.annotation.JsonIgnore
+//    @com.fasterxml.jackson.annotation.JsonIgnore
     List<Enrollment> enrollments = new ArrayList<>();
 
     @OneToMany(mappedBy = "course")
-    @com.fasterxml.jackson.annotation.JsonIgnore
+//    @com.fasterxml.jackson.annotation.JsonIgnore
     List<Review> reviews = new ArrayList<>();
 
     @OneToMany(mappedBy = "course")
-    @com.fasterxml.jackson.annotation.JsonIgnore
+//    @com.fasterxml.jackson.annotation.JsonIgnore
     List<Teach> teaches = new ArrayList<>();
 
     @OneToMany(mappedBy = "course")
-    @com.fasterxml.jackson.annotation.JsonIgnore
+//    @com.fasterxml.jackson.annotation.JsonIgnore
     List<Module> modules = new ArrayList<>();
 
     @OneToMany(mappedBy = "course")
-    @com.fasterxml.jackson.annotation.JsonIgnore
+//    @com.fasterxml.jackson.annotation.JsonIgnore
     List<CareerToCourse> careerToCourses = new ArrayList<>();
 
 

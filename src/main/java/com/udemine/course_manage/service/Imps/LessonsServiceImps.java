@@ -14,6 +14,7 @@ import com.udemine.course_manage.repository.LessonRepository;
 import com.udemine.course_manage.repository.ModuleRepository;
 import com.udemine.course_manage.service.Services.FileStorageService;
 import com.udemine.course_manage.service.Services.LessonService;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -21,6 +22,7 @@ import org.springframework.web.multipart.MultipartFile;
 import java.util.List;
 import java.util.Optional;
 
+@Slf4j
 @Service
 public class LessonsServiceImps implements LessonService {
     @Autowired
@@ -52,10 +54,18 @@ public class LessonsServiceImps implements LessonService {
 
     @Override
     public Lessons createLessons(LessonsCreatonRequest request) {
-        fileStorageService.save(request.getVideo_url()); // lưu file
+        if(request.getVideo_url() == null) {
+            log.info("File video_url is null,update after");
+        }else {
+            fileStorageService.save(request.getVideo_url());
+        }
         Lessons lessons = new Lessons();
         lessons.setTitle(request.getTitle());
-        lessons.setVideoUrl(request.getVideo_url().getOriginalFilename()); // chính là tên file
+        if(request.getVideo_url() == null){
+            log.info("No update because file is null");
+        }else{
+            lessons.setVideoUrl(request.getVideo_url().getOriginalFilename());
+        }
         lessons.setDuration(request.getDuration());
         lessons.setWatchDuration(request.getWatch_duration());
         Module module = moduleRepository.findById(request.getId_module())

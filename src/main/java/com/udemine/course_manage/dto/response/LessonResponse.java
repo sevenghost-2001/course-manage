@@ -6,6 +6,7 @@ import lombok.NoArgsConstructor;
 import lombok.experimental.FieldDefaults;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Data
 @NoArgsConstructor
@@ -20,4 +21,5 @@ public class LessonResponse {
     double watchDuration;
     LocalDateTime completed_at;
     String nameModule;
+    List<LessonsResourceCreationResponse> resources;
 }

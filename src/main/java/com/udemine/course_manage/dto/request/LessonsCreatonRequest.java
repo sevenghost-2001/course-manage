@@ -16,6 +16,7 @@ public class LessonsCreatonRequest {
     int id;
     String title;
     MultipartFile video_url;
+    private String video_url_key;// Khóa để ánh xạ (ví dụ: video_url_1000001)
     double duration;
     double watch_duration;
     int id_module;

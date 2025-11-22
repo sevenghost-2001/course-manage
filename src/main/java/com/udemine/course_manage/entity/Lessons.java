@@ -11,7 +11,8 @@ import java.util.List;
 
 @Entity
 @Table(name = "lessons")
-@Data
+@Getter
+@Setter
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
@@ -29,12 +30,15 @@ public class Lessons {
     LocalDateTime completed_at;
     @ManyToOne
     @JoinColumn(name = "id_module", nullable = false)
-    @JsonIgnore
+//    @JsonIgnore
     Module module;
 
     @OneToMany(mappedBy = "lesson", orphanRemoval = true)
-    @JsonIgnore
+//    @JsonIgnore
     List<Exercise> Exercises;
+
+    @OneToMany(mappedBy = "lesson")
+    List<LessonsResource> resources;
 
 //    @JsonProperty("lessons IT")
 //    public String getNameModule(){

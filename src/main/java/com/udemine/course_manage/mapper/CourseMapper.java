@@ -132,6 +132,17 @@ public class CourseMapper {
                                 lessonResponse.setVideoUrl(lesson.getVideoUrl());
                                 lessonResponse.setWatchDuration(lesson.getWatchDuration());
                                 lessonResponse.setCompleted_at(lesson.getCompleted_at());
+                                lessonResponse.setResources(
+                                        lesson.getResources().stream()
+                                                .map(resource -> {
+                                                    LessonsResourceCreationResponse resourceResponse = new LessonsResourceCreationResponse();
+                                                    resourceResponse.setId_lesson(resource.getId());
+                                                    resourceResponse.setTitle(resource.getTitle());
+                                                    resourceResponse.setFileUrl(resource.getFileUrl());
+                                                    return resourceResponse;
+                                                })
+                                                .collect(Collectors.toList())
+                                );
                                 return lessonResponse;
                             })
                             .collect(Collectors.toList());
@@ -188,8 +199,11 @@ public class CourseMapper {
                     .avatar(review.getUser().getAvatar())
                     .build());
             reviewResponse.setReviewers(reviewResponseList);
+
             return reviewResponse;
         }).collect(Collectors.toList()));
+        //Lấy ra tài nguyên của các bài học trong khóa học
+
         return response;
     }
 }

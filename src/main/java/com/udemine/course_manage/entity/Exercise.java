@@ -21,6 +21,8 @@ public class Exercise {
     int id;
     String title;
     String description;
+    @Column(name = "file_url")
+    String fileUrl;
     @Column(name = "created_at")
     LocalDateTime createdAt;
     LocalDateTime timestart;

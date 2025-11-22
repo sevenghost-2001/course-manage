@@ -3,9 +3,7 @@ package com.udemine.course_manage.controller;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.udemine.course_manage.dto.request.ApiResponse;
-import com.udemine.course_manage.dto.request.CourseCreationRequest;
-import com.udemine.course_manage.dto.request.ModuleCreationRequest;
+import com.udemine.course_manage.dto.request.*;
 import com.udemine.course_manage.dto.response.CourseResponse;
 import com.udemine.course_manage.dto.response.HomePageResponse;
 import com.udemine.course_manage.entity.Course;
@@ -44,6 +42,8 @@ public class CourseController {
 
     @PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ApiResponse<CourseResponse> createCourse(
+            @RequestPart(value = "image", required = false) MultipartFile image,
+            @RequestPart(value = "videoDemo", required = false) MultipartFile videoDemo,
             @RequestParam(value = "title") String title,
             @RequestParam(value = "shortDescription") String shortDescription,
             @RequestParam(value = "description") String description,
@@ -52,13 +52,12 @@ public class CourseController {
             @RequestParam(value = "id_category") int idCategory,
             @RequestParam(value = "isCertification") Boolean isCertification,
             @RequestParam(value = "modules", required = false) String modulesJson,
-            @RequestPart(value = "image", required = false) MultipartFile image,
-            @RequestPart(value = "videoDemo", required = false) MultipartFile videoDemo,
-            @RequestPart(value = "lessonVideos", required = false) MultipartFile[] lessonVideos,
-            @RequestPart(value = "resourceFiles", required = false) MultipartFile[] resourceFiles) {
+            @RequestPart(value = "video_url", required = false) List<MultipartFile> videoUrls,
+            @RequestPart(value = "fileUrl", required = false) List<MultipartFile> fileUrls
+    ) {
         ApiResponse<CourseResponse> apiResponse = new ApiResponse<>();
-
         CourseCreationRequest request = new CourseCreationRequest();
+
         request.setTitle(title);
         request.setShortDescription(shortDescription);
         request.setDescription(description);
@@ -68,21 +67,49 @@ public class CourseController {
         request.setIsCertification(isCertification);
         request.setImage(image);
         request.setVideoDemo(videoDemo);
+        request.setModulesJson(modulesJson);
 
-        if (modulesJson != null && !modulesJson.isEmpty()) {
+        if (modulesJson != null && !modulesJson.isBlank()) {
             try {
                 List<ModuleCreationRequest> modules = objectMapper.readValue(
-                        modulesJson, new TypeReference<List<ModuleCreationRequest>>(){});
+                        modulesJson,
+                        new TypeReference<List<ModuleCreationRequest>>() {}
+                );
+                // Gán videoUrls và fileUrls cho từng bài học trong modules
+                int videoIndex = 0;
+                int fileIndex = 0;
+                for (ModuleCreationRequest module : modules) {
+                    if (module.getLessons() != null) {
+                        for (var lesson : module.getLessons()) {
+                            if (videoUrls != null && videoIndex < videoUrls.size()) {
+                                lesson.setVideo_url(videoUrls.get(videoIndex));
+                                videoIndex++;
+                            }
+                            if(lesson.getResources() != null){
+                                for (LessonsCreatonRequest lessonReq : module.getLessons()) {
+//                                    if (videoIndex < videoUrls.size()) {
+//                                        lessonReq.setVideo_url(videoUrls.get(videoIndex++)); // Gán video_url
+//                                    }
+                                    if (lesson.getResources() != null) {
+                                        for (LessonResourceCreationRequest resource : lesson.getResources()) {
+                                            if (fileIndex < fileUrls.size()) {
+                                                resource.setFileUrl(fileUrls.get(fileIndex++)); // Gán fileUrl
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
                 request.setModules(modules);
             } catch (Exception e) {
-                log.error("Failed to parse modules JSON: {}", e.getMessage());
-                throw new RuntimeException("Failed to parse modules JSON: " + e.getMessage());
+                log.error("Parse modulesJson error: {}", e.getMessage());
+                throw new AppException(ErrorCode.INVALID_INPUT);
             }
         }
 
-        log.info("Received lessonVideos: {}", (lessonVideos != null ? Arrays.toString(lessonVideos) : "null"));
-        log.info("Received resourceFiles: {}", (resourceFiles != null ? Arrays.toString(resourceFiles) : "null")); // Thay assignmentFiles bằng resourceFiles
-        Course course = courseService.createCourse(request, lessonVideos, resourceFiles);// Truyền lessonVideos
+        Course course = courseService.createCourse(request);
         CourseResponse courseResponse = courseMapper.toCourseResponse(course);
         apiResponse.setResult(courseResponse);
         return apiResponse;
@@ -123,4 +150,3 @@ public class CourseController {
     }
 
 }
-

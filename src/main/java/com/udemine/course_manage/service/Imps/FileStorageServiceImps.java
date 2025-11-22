@@ -3,6 +3,7 @@ package com.udemine.course_manage.service.Imps;
 import com.udemine.course_manage.exception.AppException;
 import com.udemine.course_manage.exception.ErrorCode;
 import com.udemine.course_manage.service.Services.FileStorageService;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.UrlResource;
@@ -14,6 +15,7 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
 
+@Slf4j
 @Service
 public class FileStorageServiceImps implements FileStorageService {
     @Value("${file.root-path}")
@@ -24,7 +26,9 @@ public class FileStorageServiceImps implements FileStorageService {
         Path root = Paths.get(rootPath);
         try{
             if (!Files.exists(root)){
+                log.info("file checked {}",root);
                 Files.createDirectories(root);
+                log.info("file created {}",root);
             }
             //resolve: nối đường dẫn
             Files.copy(file.getInputStream(), root.resolve(file.getOriginalFilename()), StandardCopyOption.REPLACE_EXISTING);

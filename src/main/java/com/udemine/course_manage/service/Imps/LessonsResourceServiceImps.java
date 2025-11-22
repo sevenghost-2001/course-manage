@@ -10,12 +10,14 @@ import com.udemine.course_manage.exception.ErrorCode;
 import com.udemine.course_manage.repository.LessonRepository;
 import com.udemine.course_manage.repository.LessonResourceRepository;
 import com.udemine.course_manage.service.Services.LessonResourceService;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
+@Slf4j
 @Service
 public class LessonsResourceServiceImps implements LessonResourceService {
     @Autowired
@@ -33,8 +35,11 @@ public class LessonsResourceServiceImps implements LessonResourceService {
     public LessonsResource createLessonResource(LessonResourceCreationRequest request) {
         LessonsResource lessonResource = new LessonsResource();
         lessonResource.setTitle(request.getTitle());
-        lessonResource.setFileUrl(request.getFileUrl().getOriginalFilename());
-
+        if(request.getFileUrl() == null) {
+            log.info("File fileUrl is null,update after");
+        }else {
+            lessonResource.setFileUrl(request.getFileUrl().getOriginalFilename());
+        }
         Lessons lesson = lessonRepository.findById(request.getId_lesson())
                 .orElseThrow(() -> new AppException(ErrorCode.LESSONS_NOT_EXIST));
         lessonResource.setLesson(lesson);
